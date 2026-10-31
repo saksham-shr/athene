@@ -1,7 +1,7 @@
 # Example `.athene/state.md` — fresh project
 
 ## Active skill
-Athene: Product Discovery
+athene-product-discovery
 
 ## Current phase
 intake

@@ -13,8 +13,10 @@ Four fixed sections, in this order. Each is required; use "none" or "n/a" if
 empty, don't omit the heading.
 
 ### Active skill
-Which Athene skill owns the repo right now (Product Discovery, Athene build,
-Launch, Audit, Resume).
+Which Athene skill owns the repo right now. Use the skill's actual frontmatter
+`name` value, not a descriptive title, so Resume can resolve it to a real
+file: `athene-product-discovery`, `athene` (repo + build + architecture),
+`athene-launch`, `athene-audit`, or `athene-resume`.
 
 ### Current phase
 Where that skill is in its own lifecycle (e.g. "intake", "triage", "design",
