@@ -60,15 +60,20 @@ above found rather than overwriting a working existing convention:
 
 ## Bootstrap state
 
-Write `.athene/state.md` per `docs/state-schema.md` (Athene's own repo) so Resume can track the
-project going forward:
+Create `.athene/state.md` as a committed plain-Markdown file so Resume can track the project
+going forward — self-contained spec below, since `docs/state-schema.md` lives only in Athene's
+own repo and isn't packaged alongside this skill when mirrored into a target repo:
 
-- **Active skill:** `athene` — the skill's own frontmatter `name` (Athene: repo + build +
-  architecture), not a descriptive title. Resume reads this value and must find a skill file
-  named exactly that. Audit's job is retrofit, not ongoing ownership; hand off to the build skill
-  once the baseline above is written.
+- Four headings, in this exact order, each required — use `none`/`n/a` rather than omitting one:
+  `## Active skill`, `## Current phase`, `## Decisions made`, `## Open questions`.
+- **Active skill:** `athene` — the build skill's frontmatter `name` (Athene: repo + build +
+  architecture), not a descriptive title; Resume needs a real file to find. Audit's job is
+  retrofit, not ongoing ownership — hand off once the baseline above is written. **Caveat:** that
+  build skill isn't packaged in this repo yet (Phase 2+, not yet built). If no skill named `athene`
+  exists where this skill is installed, say so explicitly and report everything else in this file
+  as-is, rather than claiming a handoff that can't actually happen.
 - **Current phase:** intake.
-- **Decisions made:** list each baseline artifact written (or found already present and left
-  alone) in step order above.
-- **Open questions:** note that the variable governance layer (risk-tier scaling) is deferred
-  until Phase 2 exists — this is a known, intentional gap, not an oversight.
+- **Decisions made:** bullet list, append-only. List each baseline artifact written (or found
+  already present and left alone) in step order above — what was done and why.
+- **Open questions:** bullet list. Note that the variable governance layer (risk-tier scaling) is
+  deferred until Phase 2 exists — a known, intentional gap, not an oversight.
