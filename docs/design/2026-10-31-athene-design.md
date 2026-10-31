@@ -73,10 +73,12 @@ onboarding and session resume.
        test plan), standard issue templates (bug repro fields, feature request), and a rule that
        commit messages and PR descriptions never carry an AI attribution/co-author trailer
        regardless of which agent wrote them. On Claude Code specifically, Athene also sets
-       `includeCoAuthoredBy: false` in the repo's own `.claude/settings.json` so the trailer is
-       suppressed at the tool level, not just by instruction; Codex and Cursor have no equivalent
-       setting, so for those the no-attribution rule lives purely in this governance doc and the
-       skill's own commit/PR instructions.
+       `attribution.commit`/`attribution.pr` to empty strings (and `attribution.sessionUrl: false`
+       where session links are also prohibited) in the repo's own `.claude/settings.json` so the
+       trailer is suppressed at the tool level, not just by instruction — `includeCoAuthoredBy` is
+       deprecated and is ignored once either attribution key is already set, so it isn't reliable
+       for this; Codex and Cursor have no equivalent setting, so for those the no-attribution rule
+       lives purely in this governance doc and the skill's own commit/PR instructions.
      - *Variable layer* (scaled by project framing + risk tier from the existing merge-conditions
        table): how strictly enforced, and which extra docs exist — e.g. a solo/fun project skips
        CODEOWNERS and SECURITY.md; an opensource/startup project gets commitlint in CI, a full
