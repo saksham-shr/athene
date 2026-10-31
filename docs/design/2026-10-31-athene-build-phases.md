@@ -54,7 +54,10 @@ against them.
 **Deliverables:**
 - Fixed baseline, always written: Conventional Commits convention doc
   (`feat/fix/chore/docs/refactor/test/perf/ci/build`), standard PR template, standard issue
-  templates (bug repro fields, feature request).
+  templates (bug repro fields, feature request), and a no-AI-attribution-trailer rule for commits
+  and PRs. On Claude Code this also means setting `includeCoAuthoredBy: false` in the target
+  repo's `.claude/settings.json`; Codex and Cursor have no equivalent toggle, so the rule is
+  instruction-only there.
 - Variable layer: risk-tier → governance-doc-set mapping table (which extra docs appear for which
   combination of project framing — opensource/startup/personal/research — and risk tier from the
   existing merge-conditions table). Solo/fun stays light; opensource/startup gets the full set.
