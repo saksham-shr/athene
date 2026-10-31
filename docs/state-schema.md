@@ -31,4 +31,7 @@ answered (fold the answer into Decisions made).
 ## Update rule
 
 Whichever skill is active updates this file at the end of its turn/session,
-not mid-task. Resume and Audit only read it.
+not mid-task. Resume only reads it, never writes it. Audit is the one
+exception: it writes this file once, to bootstrap it where none exists yet —
+after that initial write, Audit's own involvement ends and the skill named in
+`Active skill` takes over updates.
