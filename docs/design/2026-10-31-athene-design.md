@@ -55,6 +55,13 @@ onboarding and session resume.
      (Builder note: this means an agent running inside someone else's target repo needs a way to
      file issues against Athene's own repo — cross-repo write access/credentials — which is a real
      constraint, not just a local file edit.)
+   - **Engineering quality bar (veteran-engineer posture):** every nontrivial build decision gets
+     pressure-tested the way a senior engineer would, not just matched against the curated source
+     file above. See the dedicated researched section below for the full checklist (non-functional
+     requirements, security, latency, server management, edge cases, review discipline) and how it
+     plugs into this skill's decision flow and the review/merge gate below. Scope note: this lives
+     in skill 2 (new builds), not Athene: Audit — Audit stays scoped to retrofitting process/
+     governance on existing repos (see Audit's section), it does not review existing code quality.
    - **MCP/connector setup:** once a stack choice is made, auto-detects whether a connector/MCP
      exists and is wired, by reading the current agent's own config (Claude Code `.mcp.json` /
      settings, Codex config, Cursor config). Only asks the user when detection is inconclusive. If
@@ -181,6 +188,84 @@ still-open risk-tier → governance-doc-set mapping table (see Left to the build
   - Self-hosted runners aren't isolated by environment protection — don't treat environment rules as
     a security boundary on self-hosted infra.
 
+## Engineering quality bar: veteran-engineer posture (researched 2026-10-31)
+
+Answers a scope question raised during Phase 0 build: does Athene review code quality and system
+design, or only repo process? Answer as designed: **process is Audit's job; engineering quality is
+skill 2's job**, exercised at each nontrivial build decision, not as a retroactive code audit. This
+section is the research backing that bar — not yet broken into a build issue; folds into skill 2's
+existing "Evidence-backed architecture" and "review/merge gate" bullets above when that phase is
+scoped.
+
+**Questioning requirements before building (ADR-style decision flow):**
+- For any decision a future engineer would reasonably ask "why was this done this way," write it
+  down: problem/constraints/requirements → options considered with tradeoffs → decision →
+  consequences → when to revisit. A short note, not an essay.
+- State requirements as measurable targets, not vague goals — "feed renders in under 200ms," not
+  "should be fast." Decisions get cited against these targets, not vibes.
+- Check reversibility before deliberating hard: a choice changeable in under a week of work doesn't
+  need the full ADR treatment — decide fast, don't stall on low-stakes choices waiting for perfect
+  information.
+
+**Non-functional requirements, narrowed and quantified per system (not a universal checklist):**
+Pick the 3-5 that actually matter for *this* system and put a number on each:
+- Scalability — expected traffic, and whether it's bursty (time-of-day, event-driven spikes).
+- Consistency vs. availability (CAP tradeoff) — which one this system gives up, and why, for this
+  specific data path.
+- Latency — a budget in ms for each critical path, not an overall "fast" goal.
+- Fault tolerance — timeouts, retries, and backoff on every call across a trust boundary; these
+  three are the standard toolkit for distributed-system resilience.
+- Durability, and compliance/data-protection where the domain requires it.
+- These requirements compete — e.g. meeting functional requirements is usually the easy part;
+  scalability and low latency simultaneously is where tradeoffs actually bite. Name the tradeoff
+  being accepted, don't pretend all of them are free.
+
+**Security — threat-model at design time, not after:**
+- Threat modeling happens during design, before the first line of code, not as a post-hoc review.
+- Baseline secure-coding checklist (OWASP): define security requirements up front, validate all
+  inputs, enforce access control, use vetted security libraries/frameworks over hand-rolled crypto
+  or auth, implement security logging and monitoring.
+- Specific known risks to check for: injection (SQL/XSS/command), broken auth, software/dependency
+  supply-chain integrity (checksums/signatures on updates and dependencies), rate limiting on auth
+  endpoints, MFA on privileged accounts.
+
+**Latency and performance:**
+- Set the latency budget per critical path at design time, before writing code against it.
+- Standard levers: caching + CDN for read-heavy paths (also reduces origin load and blast radius of
+  regional outages), async/queueing to decouple slow work off the critical path, batching to avoid
+  N+1 query patterns.
+- Don't over-optimize ahead of evidence — justify performance work with a measured number, not
+  guesswork; premature optimization that complicates code for no measured gain is a net loss.
+
+**Server management and operations (SRE posture):**
+- Define SLOs/SLIs per service before launch, not after an incident forces the question.
+- Observability from day one: the three pillars (metrics, logs, traces), wired in as the system is
+  built, not bolted on retroactively once something breaks.
+- Capacity planning from historical/measured data, revisited on a regular cadence — not a one-time
+  guess at launch.
+- Automate deployment and incident response where the project's risk tier justifies the investment
+  (ties into the variable governance layer above); run blameless postmortems when something breaks.
+
+**Edge cases and review discipline:**
+- Review checklist, not ad hoc reading — checklist-driven review measurably catches more defects
+  than unstructured review (a cited SmartBear study across 2,500 reviews found 36% more defects
+  caught with a checklist).
+- Explicitly probe: empty/null inputs, boundary conditions, maximum sizes, concurrent access — not
+  just the happy path. Tests must cover failure paths, not only success, or they give false
+  confidence.
+- Tier findings by severity: security, data loss, and crash bugs block merge; style nits are a
+  linter's job, not a reviewer's — don't spend review time there.
+
+**Where this plugs into the existing design:**
+- Extends skill 2's "Evidence-backed architecture" bullet above: the curated source file is one
+  input, this checklist is the other — both inform the same per-decision tradeoff table shown to
+  the user.
+- Extends the "review/merge gate" bullet above: the self-review subagent pass should check this
+  checklist (non-functional targets, security, edge cases), not just functional correctness.
+- New "Left to the builder" item: the concrete question set/template Athene asks at each
+  architecture decision point to operationalize this checklist, and how the review-gate subagent's
+  prompt encodes it.
+
 ## Platforms
 
 Claude Code, Codex, Cursor, for now. Each skill ships per-platform packaging:
@@ -223,6 +308,9 @@ not a special tool call.
   framing and risk tier) — the design above establishes the principle (fixed baseline + scaled
   variable layer) but not the literal table.
 - Fleshing out `agents/openai.yaml` for all five skills beyond the current placeholder.
+- The concrete question set/template Athene asks at each architecture decision point to
+  operationalize the engineering-quality-bar checklist above, and how the review-gate subagent's
+  prompt encodes that same checklist.
 
 ## Platform mechanics (researched 2026-10-31)
 
