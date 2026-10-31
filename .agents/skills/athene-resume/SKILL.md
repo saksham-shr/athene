@@ -11,11 +11,16 @@ anything already decided.
 
 ## Check for state
 
-Look for `.athene/state.md` at the repo root. Schema: `docs/state-schema.md` in Athene's own repo.
+Look for `.athene/state.md` at the repo root. It's a plain-Markdown file with four required
+headings in order — `## Active skill`, `## Current phase`, `## Decisions made`,
+`## Open questions` — using `none`/`n/a` rather than omitting one. (Full schema:
+`docs/state-schema.md` in Athene's own repo; not packaged with this skill, this summary is
+enough to act on.)
 
-- **Not found:** there is nothing to resume. Read and follow the Athene: Audit skill file
-  directly — a plain read-and-follow instruction, not a platform-specific invoke call. Stop here;
-  the rest of this skill doesn't apply.
+- **Not found:** there is nothing to resume. Read and follow the `athene-audit` skill file
+  directly — a plain read-and-follow instruction, not a platform-specific invoke call. If that
+  skill file isn't packaged where this one is installed, say so explicitly instead of guessing at
+  an audit. Stop here either way; the rest of this skill doesn't apply.
 - **Found:** continue below.
 
 ## Report and continue
@@ -35,9 +40,9 @@ Don't restart that skill's flow from its own beginning.
   value — Resume has no lifecycle phase of its own to resume into. Tell the user the state file
   looks wrong, show them `Decisions made` and `Open questions` as-is, and ask which skill should
   actually own the repo from here, rather than looping back into this check.
-- **If the named skill's file doesn't exist yet** (not every skill in `docs/state-schema.md`'s
-  list is built in every phase): say so explicitly, report everything the state file already
-  says, and stop there rather than guessing at that skill's behavior.
+- **If the named skill's file doesn't exist yet** (not every Athene skill is built or packaged in
+  every phase): say so explicitly, report everything the state file already says, and stop there
+  rather than guessing at that skill's behavior.
 
 ## Update rule
 
