@@ -42,9 +42,21 @@ above found rather than overwriting a working existing convention:
 4. **No-AI-attribution rule** — commit messages and PR descriptions never carry an AI attribution/
    co-author trailer, regardless of which agent wrote them. Document this in the commit convention
    doc from step 1, not a separate file.
-5. **Claude Code only:** set `includeCoAuthoredBy: false` in the target repo's
-   `.claude/settings.json` so the trailer is suppressed at the tool level, not just by instruction.
-   Codex and Cursor have no equivalent setting — for those, the rule lives in the doc only.
+5. **Claude Code only:** `includeCoAuthoredBy` is deprecated and is ignored once
+   `attribution.commit` or `attribution.pr` is already set — so setting it alone on a repo that
+   already has either key leaves attribution on. Set the current controls instead, in the target
+   repo's `.claude/settings.json`:
+   ```json
+   {
+     "attribution": {
+       "commit": "",
+       "pr": "",
+       "sessionUrl": false
+     }
+   }
+   ```
+   `sessionUrl: false` only if session links are also prohibited for this repo. Codex and Cursor
+   have no equivalent setting — for those, the rule lives in the doc only.
 
 ## Bootstrap state
 
