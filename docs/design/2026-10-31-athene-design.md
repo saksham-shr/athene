@@ -300,6 +300,12 @@ not a special tool call.
   engineering blogs/papers and the topics each is authoritative on) — needs real research to
   populate before first use, covering common domains (ecommerce, payments, auth, social,
   messaging/queueing, search, ML-serving, at minimum).
+  - Seed list for this: [kilimchoi/engineering-blogs](https://github.com/kilimchoi/engineering-blogs)
+    — ~218 company engineering blogs, alphabetized, not topic-tagged. Covers payments/fintech
+    (Stripe, PayPal, Square), distributed systems/infra (Cloudflare, Confluent, Databricks),
+    commerce (Shopify, Bigcommerce, Etsy-style retail), media/consumer (Netflix, Spotify, Slack),
+    and dev tools/languages. Useful as a raw source list to pull from; still needs the topic-mapping
+    work above done by hand — it ships flat, no per-entry subject tags.
 - Per-agent MCP/connector config file locations and detection logic for Claude Code, Codex, and
   Cursor specifically (paths, formats).
 - The exact wording/flow of the indirect project-framing question and the free/paid/tier question
