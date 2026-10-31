@@ -31,6 +31,14 @@ Read all four sections and report them to the user before doing anything else:
 Then read and follow whichever skill file `Active skill` names, picking up at `Current phase`.
 Don't restart that skill's flow from its own beginning.
 
+- **If `Active skill` is `athene-resume` (this skill) itself:** that's a stale or hand-edited
+  value — Resume has no lifecycle phase of its own to resume into. Tell the user the state file
+  looks wrong, show them `Decisions made` and `Open questions` as-is, and ask which skill should
+  actually own the repo from here, rather than looping back into this check.
+- **If the named skill's file doesn't exist yet** (not every skill in `docs/state-schema.md`'s
+  list is built in every phase): say so explicitly, report everything the state file already
+  says, and stop there rather than guessing at that skill's behavior.
+
 ## Update rule
 
 Resume only reads `.athene/state.md`. It never writes to it — updating state belongs to whichever
