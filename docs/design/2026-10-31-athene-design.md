@@ -143,6 +143,44 @@ issues — Athene's own repo follows its own rule.
   `gh`'s guess.
 - `Closes #N` lives inside this heredoc body, per the rule above — never in the commit message.
 
+## Tags, releases, packages, and deployment environments (researched 2026-10-31)
+
+Feeds the "release/tag policy doc" already named in the governance variable layer above and the
+still-open risk-tier → governance-doc-set mapping table (see Left to the builder).
+
+- **Tag ≠ release ≠ package — three different layers:**
+  - A **tag** is a fixed marker on one commit. Cheap, no notes, no assets. Use SemVer
+    (`vMAJOR.MINOR.PATCH`, pre-release suffix `-beta.N`/`-rc.N` where needed) — never ad hoc names
+    like `release-1` or `final-version`.
+  - A **release** sits on top of a tag and adds release notes, doc links, and downloadable assets —
+    this is the user-facing layer.
+  - A **package** (GitHub Packages / GHCR) is the built artifact itself (library, container image),
+    published by a workflow. Tag and package version are not guaranteed to match unless a workflow
+    enforces it — don't assume they stay in sync without that.
+  - Practical pattern: push an annotated SemVer tag → a workflow triggered on `v*` tags creates the
+    release and publishes the package. One tag push, not three manual steps.
+- **When each is worth it, by risk tier (informs the still-open mapping table):**
+  - Solo/fun project: tags only, if even that — no release notes, no package registry. Skip the
+    whole layer by default.
+  - Opensource/startup project: full chain — SemVer tags, releases with notes, packages published
+    via CI on tag push. This is what the existing "release/tag policy doc" variable-layer item
+    should generate for this tier.
+- **Packages via GitHub Actions:** publish from CI using the built-in `GITHUB_TOKEN`, not a
+  personal access token, for any registry that supports repo-scoped permissions — only fall back to
+  a PAT where the registry doesn't support that.
+- **Deployment environments** (GitHub Actions `environments`, separate from tags/releases/packages):
+  relevant only once Athene or a target repo actually deploys somewhere, not for a library/skill
+  repo like this one.
+  - Required reviewers gate a job behind manual approval before it runs — use for production
+    deploys specifically, not every environment.
+  - Environment secrets are scoped to the environment and withheld until a required reviewer
+    approves — this is how production credentials stay behind the approval gate, not just
+    documented policy.
+  - Admins bypass protection rules by default; disable that bypass for any environment meant to be
+    a real gate, not just a discipline-only step.
+  - Self-hosted runners aren't isolated by environment protection — don't treat environment rules as
+    a security boundary on self-hosted infra.
+
 ## Platforms
 
 Claude Code, Codex, Cursor, for now. Each skill ships per-platform packaging:
