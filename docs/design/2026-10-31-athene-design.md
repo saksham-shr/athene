@@ -124,6 +124,11 @@ Standard across most open-source repos, and used for Athene's own build issues f
   work, not several), **Acceptance criteria** (specific, observable, testable — not "write good
   code"), **Depends on** (links to issues that must land first, or "none").
 - PRs reference the issue they close (`Closes #N`) rather than restating its content.
+- **`Closes #N` goes in the PR description, never in a commit message.** GitHub auto-closes on
+  that keyword the moment the commit lands on the default branch — if work is committed straight
+  to `main` with no PR, the issue closes with no review step at all. Keep closing keywords out of
+  commit messages so every close actually passes through a PR. A commit message states what
+  changed, nothing about which issue it closes.
 
 This is the same shape the fixed-baseline issue templates (Phase 2) generate for target-repo
 issues — Athene's own repo follows its own rule.
