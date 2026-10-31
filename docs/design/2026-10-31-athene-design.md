@@ -112,6 +112,22 @@ Exact location/format (e.g. `.athene/state.md`) is left to the builder; constrai
 be readable by Resume and Audit, and should not block normal repo tooling (likely committed, plain
 markdown, not gitignored, so it survives across machines/agents/sessions).
 
+## Issue and PR conventions (for this repo's own build, researched 2026-10-31)
+
+Standard across most open-source repos, and used for Athene's own build issues from Phase 0 on:
+
+- **Title:** same type prefix as the Conventional Commits baseline (`feat/fix/chore/docs/refactor/
+  test/perf/ci/build`) plus a scope, e.g. `chore(state): define .athene/state.md schema`. Keeps
+  issue titles and the commits that close them readable as one vocabulary.
+- **Body:** four sections — **Context** (what and why, one or two sentences), **Tasks** (a
+  `- [ ]` checklist; GitHub renders it as progress and one issue should cover one coherent piece of
+  work, not several), **Acceptance criteria** (specific, observable, testable — not "write good
+  code"), **Depends on** (links to issues that must land first, or "none").
+- PRs reference the issue they close (`Closes #N`) rather than restating its content.
+
+This is the same shape the fixed-baseline issue templates (Phase 2) generate for target-repo
+issues — Athene's own repo follows its own rule.
+
 ## Platforms
 
 Claude Code, Codex, Cursor, for now. Each skill ships per-platform packaging:
