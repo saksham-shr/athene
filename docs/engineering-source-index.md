@@ -76,3 +76,15 @@ quality-bar section calls for. No entry found for:
 
 Per the existing rule: don't silently extend this file mid-build when a gap
 is hit — open an issue on Athene's own repo proposing the addition.
+
+## Considered and rejected
+
+[Engineering Atlas](https://engineering-atlas.in/system-design/) — an
+interview-prep course/reference site (71 generic design problems, a fixed
+requirements → API → estimates → HLD → deep-dives template), partially
+paywalled, partially unwritten ("Soon" pages). Rejected as a source for this
+file: it teaches idealized patterns for scoring well in an interview, not
+"here's what we actually built and why" — the opposite epistemic status from
+what "evidence-backed" means in the design doc. If a future decision point
+wants its interview-framework structure for organizing a writeup, that's a
+different use than citing it as evidence — don't conflate the two.
