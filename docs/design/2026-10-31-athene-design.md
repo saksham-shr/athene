@@ -142,13 +142,71 @@ not a special tool call.
   messaging/queueing, search, ML-serving, at minimum).
 - Per-agent MCP/connector config file locations and detection logic for Claude Code, Codex, and
   Cursor specifically (paths, formats).
-- Cursor packaging format for a skill (no existing convention in this project to extend).
 - The exact wording/flow of the indirect project-framing question and the free/paid/tier question
   at each stack decision point.
 - Risk-tier → governance-doc-set mapping table (which docs appear at which combination of project
   framing and risk tier) — the design above establishes the principle (fixed baseline + scaled
   variable layer) but not the literal table.
 - Fleshing out `agents/openai.yaml` for all five skills beyond the current placeholder.
+
+## Platform mechanics (researched 2026-10-31)
+
+How each target platform actually discovers/loads/triggers a skill — confirmed against official
+docs (`code.claude.com`, `learn.chatgpt.com`/`developers.openai.com`, `cursor.com`).
+
+**Claude Code**
+- Skill = folder `<name>/SKILL.md` under `.claude/skills/` (project, walks up to repo root) or
+  `~/.claude/skills/` (personal), or inside a plugin.
+- Frontmatter: `name`, `description` required. `description` is the only thing always in context —
+  it is what decides whether Claude auto-invokes the skill, so it must front-load trigger words.
+  Full SKILL.md body loads only once triggered (progressive disclosure).
+- Invocation: model-invoked automatically from the description match, or user-invoked via
+  `/<name>`. `user-invocable: false` hides it from the slash-command list but Claude can still
+  invoke it.
+- **Flat only** — nested category folders (`category/skill/SKILL.md`) are not discovered.
+- No always-loaded equivalent for skills themselves, but `CLAUDE.md` at repo root IS always loaded
+  every session — usable as the bootstrap hook (see below).
+
+**Codex CLI**
+- Skill = folder with `SKILL.md` under `.agents/skills/` (cwd + every parent up to repo root),
+  `$HOME/.agents/skills/` (user), `/etc/codex/skills` (admin), or bundled.
+- Frontmatter: `name`, `description` required. An optional `agents/openai.yaml` sets display
+  metadata, `policy.allow_implicit_invocation` (default `true`; set `false` to force explicit
+  `$skill`/`/skills` invocation only), and `dependencies.tools` (required MCP servers).
+- Discovery list (name+description only) is capped at ~2% of context / 8000 chars by default
+  (configurable up to 10k tokens via `skills.max_context_tokens`) — too many skills means some get
+  dropped or truncated, so skill count and description length both matter.
+- `AGENTS.md` is a **separate**, always-loaded instruction channel, not gated by trigger-matching:
+  Codex concatenates `~/.codex/AGENTS(.override).md` with every `AGENTS.md` from repo root down to
+  cwd (closer file wins on conflict, 32 KiB cap). This is the bootstrap hook for Codex.
+
+**Cursor**
+- Officially supports Agent Skills now: folder with `SKILL.md`, auto-discovered at startup from
+  `.agents/skills/` (same path Codex uses), `.cursor/skills/` (project), `~/.cursor/skills/`
+  (personal) — and, for cross-tool compatibility, Cursor *also* reads `.claude/skills/` and
+  `.codex/skills/` directly.
+- Unlike Claude Code, Cursor walks the skills root **recursively**, so nested folders are fine.
+- Invocation: automatic by context match, or manual via `/` + skill name in Agent chat.
+- Separately, `.cursor/rules/*.mdc` (`alwaysApply: true` or `description`/`globs`-gated) and
+  `AGENTS.md` are supported for always-loaded or glob-scoped instructions — `AGENTS.md` is Cursor's
+  bootstrap hook too, same file Codex reads.
+
+**What this means for packaging**
+- `.agents/skills/<name>/SKILL.md` is read natively by both Codex and Cursor — ship the canonical
+  copy there. Claude Code does not read that path, so it still needs its own copy/symlink at
+  `.claude/skills/<name>/SKILL.md`. No `agents/openai.yaml`-equivalent is needed for Cursor; the
+  Codex one is harmless extra metadata Cursor ignores.
+- The "each skill ends with an instruction to read and follow the next skill file directly"
+  chaining mechanism (above) holds up on all three — it's just a Read-and-follow instruction, not a
+  platform-specific invoke call.
+- **Stronger bootstrap for Resume/Audit routing than relying on description-matching alone:** all
+  three platforms have an always-loaded, non-probabilistic file — `CLAUDE.md` (Claude Code),
+  `AGENTS.md` (Codex, Cursor). Each should carry one short pointer: "before starting work, check
+  for `.athene/state.md`; if present, follow Athene: Resume; if absent and the request is about
+  building something, follow Athene: Audit first." This removes the risk of the router skill simply
+  not being auto-triggered because its description didn't match closely enough.
+- Skill `description` fields are the single highest-leverage thing to get right on every
+  platform — they are what's always in context and what every auto-invocation decision rests on.
 
 ## Suggested build order (for the upcoming phase-wise plan)
 
