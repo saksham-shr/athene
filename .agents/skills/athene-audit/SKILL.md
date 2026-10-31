@@ -51,8 +51,10 @@ above found rather than overwriting a working existing convention:
 Write `.athene/state.md` per `docs/state-schema.md` (Athene's own repo) so Resume can track the
 project going forward:
 
-- **Active skill:** Athene (repo + build + architecture) — audit's job is retrofit, not ongoing
-  ownership; hand off to the build skill once the baseline above is written.
+- **Active skill:** `athene` — the skill's own frontmatter `name` (Athene: repo + build +
+  architecture), not a descriptive title. Resume reads this value and must find a skill file
+  named exactly that. Audit's job is retrofit, not ongoing ownership; hand off to the build skill
+  once the baseline above is written.
 - **Current phase:** intake.
 - **Decisions made:** list each baseline artifact written (or found already present and left
   alone) in step order above.
