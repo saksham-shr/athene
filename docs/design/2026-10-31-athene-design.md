@@ -296,16 +296,17 @@ not a special tool call.
 ## Left to the builder
 
 - Exact state-file schema/location and how Discovery/Build/Launch each update it mid-phase.
-- Exact format and starter contents of the curated source-index reference file (list of
-  engineering blogs/papers and the topics each is authoritative on) — needs real research to
-  populate before first use, covering common domains (ecommerce, payments, auth, social,
-  messaging/queueing, search, ML-serving, at minimum).
-  - Seed list for this: [kilimchoi/engineering-blogs](https://github.com/kilimchoi/engineering-blogs)
-    — ~218 company engineering blogs, alphabetized, not topic-tagged. Covers payments/fintech
-    (Stripe, PayPal, Square), distributed systems/infra (Cloudflare, Confluent, Databricks),
-    commerce (Shopify, Bigcommerce, Etsy-style retail), media/consumer (Netflix, Spotify, Slack),
-    and dev tools/languages. Useful as a raw source list to pull from; still needs the topic-mapping
-    work above done by hand — it ships flat, no per-entry subject tags.
+- ~~Exact format and starter contents of the curated source-index reference file~~ — **done**, see
+  `docs/engineering-source-index.md`. Seeded from
+  [kilimchoi/engineering-blogs](https://github.com/kilimchoi/engineering-blogs) (~218 company
+  blogs, flat/alphabetical, no topic tags in the source repo), topic-mapped by hand, each entry
+  carrying its real RSS/atom feed URL (pulled from that repo's `engineering_blogs.opml`, not just
+  the blog homepage) so the skill fetches actual recent posts instead of guessing at a decision
+  point. Covers payments, auth, ecommerce/marketplace, social/feed systems, messaging, search,
+  ML-serving, distributed systems, CDN/latency, and security. Known gaps noted in that file: no
+  server-management/SRE/observability source in the seed list (no Datadog/PagerDuty/Honeycomb), and
+  some major distributed-systems blogs (Uber, LinkedIn) missing from the seed repo — flagged there
+  for a live search or a follow-up PR, not silently left unhandled.
 - Per-agent MCP/connector config file locations and detection logic for Claude Code, Codex, and
   Cursor specifically (paths, formats).
 - The exact wording/flow of the indirect project-framing question and the free/paid/tier question
