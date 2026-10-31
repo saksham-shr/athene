@@ -133,6 +133,16 @@ Standard across most open-source repos, and used for Athene's own build issues f
 This is the same shape the fixed-baseline issue templates (Phase 2) generate for target-repo
 issues — Athene's own repo follows its own rule.
 
+**Creating a PR via `gh` CLI (researched 2026-10-31):**
+- Push the branch first — `git push -u origin <branch>` — the branch must exist on the remote
+  before `gh pr create` can target it.
+- Pass the body through a single-quoted heredoc, not an inline string: `gh pr create --body "$(cat
+  <<'EOF' ... EOF)"`. The quoted delimiter (`<<'EOF'`, not `<<EOF`) stops the shell from expanding
+  `$`, backticks, or other special characters inside the markdown body.
+- Pass `--base <branch>` explicitly whenever the target isn't the default branch; don't rely on
+  `gh`'s guess.
+- `Closes #N` lives inside this heredoc body, per the rule above — never in the commit message.
+
 ## Platforms
 
 Claude Code, Codex, Cursor, for now. Each skill ships per-platform packaging:
