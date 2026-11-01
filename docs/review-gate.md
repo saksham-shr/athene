@@ -23,7 +23,10 @@ actual GitHub branch-protection rule — a documented convention that can be ski
   satisfies the rule regardless of this setting. The script warns on stderr if it can't find a
   `CODEOWNERS` file before enabling, rather than silently granting a guarantee it can't back. Stale
   approvals are dismissed on new pushes (`dismiss_stale_reviews: true` — without it, pushing new
-  commits after approval and merging without a fresh review is a real bypass).
+  commits after approval and merging without a fresh review is a real bypass). Preserves an
+  existing `dismissal_restrictions` setting (who can dismiss a required review) rather than
+  dropping it — without that, enabling the gate would let anyone with push access dismiss a
+  review that was supposed to be restricted.
 - `enforce_admins: true`: closes the default admin-bypass hole. Branch protection without this
   is cosmetic — admins (including whoever's driving the AI agent) can merge around it by default.
 - Preserves the branch's existing protection settings where GitHub's API allows reading them back
@@ -73,8 +76,8 @@ directly, and `CODEOWNERS` is GitHub's own format. Other hosts (GitLab, Bitbucke
 their own equivalent script and ownership-file format; that's explicitly out of v1 scope, not a
 silent gap.
 
-## Not yet wired into Audit
+## Wired into Audit
 
-Same note as the risk-tier mapping table: Athene: Audit's current scope stays limited to the
-fixed baseline. Wiring this toggle and the CODEOWNERS template into Audit's actual generation
-flow is a follow-up, not part of this doc.
+Athene: Audit offers this toggle at the end of its run (copies the script, explains it) but
+never runs it itself — turning it on is always the user's call. Still not wired into the eventual
+`athene` build skill (doesn't exist in this repo yet) — that's the remaining follow-up.

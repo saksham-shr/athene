@@ -311,15 +311,31 @@ not a special tool call.
   for a live search or a follow-up PR, not silently left unhandled.
 - Per-agent MCP/connector config file locations and detection logic for Claude Code, Codex, and
   Cursor specifically (paths, formats).
-- The exact wording/flow of the indirect project-framing question and the free/paid/tier question
-  at each stack decision point.
-- Risk-tier → governance-doc-set mapping table (which docs appear at which combination of project
-  framing and risk tier) — the design above establishes the principle (fixed baseline + scaled
-  variable layer) but not the literal table.
+- ~~The exact wording/flow of the indirect project-framing question~~ — **done** for Audit, see
+  `skills/athene-audit/SKILL.md`'s "Determine framing and risk tier" section (infer from scan
+  first, ask once conversationally if ambiguous, never recite the four category names). Still
+  open: the free/paid/tier question at each stack decision point (Phase 3, not Audit's job).
+- ~~Risk-tier → governance-doc-set mapping table~~ — **done**, see
+  `docs/governance-doc-set-mapping.md`, wired into Audit as of #19/PR #22.
 - Fleshing out `agents/openai.yaml` for all five skills beyond the current placeholder.
 - The concrete question set/template Athene asks at each architecture decision point to
   operationalize the engineering-quality-bar checklist above, and how the review-gate subagent's
   prompt encodes that same checklist.
+- **Known limitations surfaced during #19/PR #22's review, deliberately deferred rather than
+  fixed — watch for these causing a real issue later:**
+  - `scripts/set-review-gate.sh off` removes the entire branch-protection rule rather than
+    restoring exactly what existed before `on` was ever run (no snapshot of that earlier state).
+    A branch with unrelated protection before this script touched it loses that too on `off`.
+  - The same script only manages classic GitHub branch protection, not the newer Rulesets API —
+    a repo using rulesets could still require review after this script reports the gate "off".
+  - Athene: Audit's commitlint step skips adding the generated CI workflow (rather than trying to
+    support it) whenever an existing alternate commitlint config is in a format
+    `wagoid/commitlint-github-action@v6` doesn't support (confirmed: only `.mjs`, not plain `.js`
+    despite commitlint itself accepting it), or extends a third-party shareable config/plugin that
+    needs the repo's own dependencies installed and exposed via `NODE_PATH` — building real
+    package-manager detection and dependency installation for every possible setup was judged out
+    of scope for a template workflow. In both cases Audit flags the gap in Decisions made instead
+    of silently doing nothing, but commitlint-in-CI simply doesn't get set up for those repos.
 
 ## Platform mechanics (researched 2026-10-31)
 
