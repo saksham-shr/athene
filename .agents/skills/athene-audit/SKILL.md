@@ -135,8 +135,13 @@ copy-if-not-already-present rule as the fixed baseline:
   `templates/workflows/commitlint.yml` unmodified — `wagoid/commitlint-github-action@v6` with no
   `configFile` set only checks `./commitlint.config.mjs`; if an alternate-named config exists and
   isn't pointed to, the action silently falls back to `@commitlint/config-conventional` instead
-  of the repo's real rules; wire the detected path into `with: configFile:` before copying. If CI
-  already runs commitlint some other way, skip adding the workflow entirely.
+  of the repo's real rules. Wire the detected path into `with: configFile:` only when that
+  action's own docs confirm it supports the format — `.mjs` is confirmed, **`.js` is explicitly
+  not supported by this action** even though commitlint itself accepts it, so a detected
+  `commitlint.config.js` can't just be pointed to here. If the detected format isn't supported by
+  this action, or CI already runs commitlint some other way, skip adding this workflow entirely
+  and flag it in Decisions made rather than generating a workflow that silently checks the wrong
+  rules.
 - **`templates/RELEASE.md`** → target repo's `RELEASE.md` — release/tag policy doc.
 
 ## Offer the review-gate toggle
