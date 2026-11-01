@@ -115,7 +115,14 @@ copy-if-not-already-present rule as the fixed baseline:
   in Decisions made as still needing a real channel — don't advertise one you haven't verified.
 - **`templates/commitlint.config.mjs`** → target repo's `commitlint.config.mjs`, plus
   **`templates/workflows/commitlint.yml`** → target repo's `.github/workflows/commitlint.yml` —
-  both together; the config alone does nothing without the CI step that runs it.
+  both together; the config alone does nothing without the CI step that runs it. First check for
+  *any* existing commitlint config in its many possible forms — `commitlint.config.js`,
+  `commitlint.config.cjs`, `.commitlintrc`, `.commitlintrc.json`, `.commitlintrc.yml`, or a
+  `commitlint` key in `package.json` — not just a literal `commitlint.config.mjs` match. Adding
+  a second config alongside an existing one doesn't merge rules; commitlint resolves to whichever
+  one its config search finds, which can silently override a different existing policy. If any
+  form already exists, leave it alone — same "don't overwrite a working existing convention" rule
+  as everything else here.
 - **`templates/RELEASE.md`** → target repo's `RELEASE.md` — release/tag policy doc.
 
 ## Offer the review-gate toggle
