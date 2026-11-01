@@ -129,8 +129,14 @@ copy-if-not-already-present rule as the fixed baseline:
   rather than assuming. Adding
   a second config alongside an existing one doesn't merge rules; commitlint resolves to whichever
   one its config search finds, which can silently override a different existing policy. If any
-  form already exists, leave it alone — same "don't overwrite a working existing convention" rule
-  as everything else here.
+  form already exists, leave the config alone — same "don't overwrite a working existing
+  convention" rule as everything else here. **The workflow needs the same care, separately:**
+  if an alternate config was found and CI doesn't already run commitlint, don't copy
+  `templates/workflows/commitlint.yml` unmodified — `wagoid/commitlint-github-action@v6` with no
+  `configFile` set only checks `./commitlint.config.mjs`; if an alternate-named config exists and
+  isn't pointed to, the action silently falls back to `@commitlint/config-conventional` instead
+  of the repo's real rules; wire the detected path into `with: configFile:` before copying. If CI
+  already runs commitlint some other way, skip adding the workflow entirely.
 - **`templates/RELEASE.md`** → target repo's `RELEASE.md` — release/tag policy doc.
 
 ## Offer the review-gate toggle
