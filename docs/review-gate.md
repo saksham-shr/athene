@@ -16,25 +16,35 @@ For experienced users who want this enforced, not just followed. Flipping it on 
 actual GitHub branch-protection rule — a documented convention that can be skipped isn't a gate.
 
 `scripts/set-review-gate.sh <owner/repo> <branch> on` sets:
-- `required_pull_request_reviews`: at least one approval required before merge, from a configured
-  code owner specifically (`require_code_owner_reviews: true` — otherwise any writer's approval
-  satisfies the rule, which doesn't actually enforce the `CODEOWNERS` map above), and stale
+- `required_pull_request_reviews`: at least one approval required before merge — more if the
+  branch already required more (never silently lowers an existing stricter count). Owner-specific
+  approval is requested via `require_code_owner_reviews: true`, but **this only applies to paths a
+  `CODEOWNERS` file actually matches** (see Ownership below) — without one, any writer's approval
+  satisfies the rule regardless of this setting. The script warns on stderr if it can't find a
+  `CODEOWNERS` file before enabling, rather than silently granting a guarantee it can't back. Stale
   approvals are dismissed on new pushes (`dismiss_stale_reviews: true` — without it, pushing new
   commits after approval and merging without a fresh review is a real bypass).
 - `enforce_admins: true`: closes the default admin-bypass hole. Branch protection without this
   is cosmetic — admins (including whoever's driving the AI agent) can merge around it by default.
-- Preserves whatever `required_status_checks` and push `restrictions` the branch already had —
-  turning this gate on shouldn't silently drop unrelated protection a repo already configured.
+- Preserves the branch's existing protection settings where GitHub's API allows reading them back
+  and converting them to the shape the update endpoint expects — `required_status_checks`,
+  `restrictions`, and the flat booleans (`required_linear_history`, `allow_force_pushes`,
+  `allow_deletions`, `block_creations`, `required_conversation_resolution`, `lock_branch`,
+  `allow_fork_syncing`). GitHub's GET and PUT shapes for these disagree (GET returns richer
+  objects than PUT accepts), so the script converts rather than round-trips the raw GET response.
+- Distinguishes "branch genuinely has no protection yet" (HTTP 404) from a transient API/auth/
+  network failure while checking existing settings — a failure of the latter kind stops the
+  script instead of being silently treated as "nothing to preserve."
 
 `scripts/set-review-gate.sh <owner/repo> <branch> off` removes the protection rule entirely, back
-to discipline-only — only when a rule actually exists; it doesn't swallow a failed removal as
-success. Known limitation: `on` preserves whatever unrelated `required_status_checks`/
-`restrictions` existed *at the moment it's turned on*, but `off` removes the whole rule rather
-than restoring exactly what was there before `on` was ever run — there's no snapshot of that
-earlier state. If a branch had unrelated protection before this script touched it, turning the
-gate off removes that too, not just this gate's additions.
+to discipline-only — same existence-check logic: a 404 means "already off" and exits cleanly,
+anything else (including a failed DELETE) stops the script rather than claiming success. Known
+limitation: `on` preserves whatever unrelated protection existed *at the moment it's turned on*,
+but `off` removes the whole rule rather than restoring exactly what was there before `on` was ever
+run — there's no snapshot of that earlier state. If a branch had unrelated protection before this
+script touched it, turning the gate off removes that too, not just this gate's additions.
 
-Requires `jq` (used to URL-encode the branch name and merge the protection payload).
+Requires `jq` (used to URL-encode the branch name and convert the protection payload).
 
 ## Ownership
 
