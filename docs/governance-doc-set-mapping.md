@@ -34,7 +34,7 @@ anxiety of shipping production code.
 | personal | Medium | none |
 | personal | High | `SECURITY.md` |
 | research | Low | none |
-| research | Medium | `SECURITY.md` (only if handling real user data) |
+| research | Medium | none |
 | research | High | `SECURITY.md`, release/tag policy doc |
 | opensource | Low | `CODEOWNERS` (lightweight) |
 | opensource | Medium | `CODEOWNERS`, commitlint in CI |
