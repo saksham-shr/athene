@@ -92,17 +92,21 @@ if [ "$mode" = "on" ]; then
           ($e.required_pull_request_reviews.dismissal_restrictions // null) as $d
           | if $d == null then {}
             else {dismissal_restrictions: {
-              users: [($d.users // [])[] | .login],
-              teams: [($d.teams // [])[] | .slug],
-              apps:  [($d.apps  // [])[] | .slug]
+              users: [($d.users // [])[] | select(.login != null) | .login],
+              teams: [($d.teams // [])[] | select(.slug != null) | .slug],
+              apps:  [($d.apps  // [])[] | select(.slug != null) | .slug]
             }} end
         )),
         restrictions: (
           if ($e.restrictions // null) == null then null
           else {
-            users: [($e.restrictions.users // [])[] | .login],
-            teams: [($e.restrictions.teams // [])[] | .slug],
-            apps: [($e.restrictions.apps // [])[] | .slug]
+            # select(... != null) drops a stale/deleted user, team, or app that
+            # the GET response still lists without a resolvable login/slug -
+            # an unguarded null here gets rejected by the PUT and aborts the
+            # whole run with no clear cause.
+            users: [($e.restrictions.users // [])[] | select(.login != null) | .login],
+            teams: [($e.restrictions.teams // [])[] | select(.slug != null) | .slug],
+            apps: [($e.restrictions.apps // [])[] | select(.slug != null) | .slug]
           }
           end
         ),

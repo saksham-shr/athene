@@ -45,14 +45,10 @@ bureaucratic or like an interrogation.
   category yourself; don't make the user pick a label.
 - Record the result and why in `.athene/state.md`'s Decisions made, same as any other decision.
 
-**Risk tier** (`Low`, `Medium`, `High` — per `references/governance-doc-set-mapping.md`'s own
-criteria — use the full criteria below, not a subset, or the wrong doc set gets selected):
-- `High`: auth/credential handling, payment integration, PII in the data model, a CI/release-
-  policy surface (deploy credentials, signing, publish pipelines), or real paying/external users
-  depending on the project.
-- `Medium`: user-visible API changes or schema migrations happen, but none of the `High` signals
-  above apply.
-- `Low`: neither — internal-only, no sensitive surface, no migrations/API changes of consequence.
+**Risk tier** (`Low`, `Medium`, `High`): use `references/governance-doc-set-mapping.md`'s own
+criteria directly — don't restate or paraphrase them here, that creates two copies that can drift
+out of sync. Infer from the scan against those criteria; use the full set, not a subset, or the
+wrong doc set gets selected.
 - Fine to ask directly if ambiguous — it's a technical question, not a social one, so the
   indirect-phrasing rule above doesn't apply here. Ask broadly enough to separate all three tiers,
   not just High from everything else: *"Does this handle payments, user credentials, other
