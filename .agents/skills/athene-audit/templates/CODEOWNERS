@@ -1,0 +1,12 @@
+# Path-to-owner map. GitHub requires review from the matching owner before merge,
+# once branch protection requires it (see docs/review-gate.md for the toggle).
+#
+# Last matching pattern wins, same as .gitignore. Keep broad defaults first,
+# specific overrides after.
+
+# Default owner for everything not matched below.
+*       @REPLACE_WITH_DEFAULT_OWNER
+
+# Example sensitive-path overrides - replace or remove per repo:
+# /.github/                @REPLACE_WITH_CI_OWNER
+# /security/               @REPLACE_WITH_SECURITY_OWNER
