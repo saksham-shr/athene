@@ -139,9 +139,12 @@ copy-if-not-already-present rule as the fixed baseline:
   action's own docs confirm it supports the format — `.mjs` is confirmed, **`.js` is explicitly
   not supported by this action** even though commitlint itself accepts it, so a detected
   `commitlint.config.js` can't just be pointed to here. If the detected format isn't supported by
-  this action, or CI already runs commitlint some other way, skip adding this workflow entirely
-  and flag it in Decisions made rather than generating a workflow that silently checks the wrong
-  rules.
+  this action, the detected config extends a third-party shareable config/plugin that needs the
+  repo's own dependencies installed (this generic workflow only checks out the repo, it doesn't
+  install anything — wiring up package-manager detection and `NODE_PATH` for every possible setup
+  is real scope beyond a template workflow), or CI already runs commitlint some other way, skip
+  adding this workflow entirely and flag it in Decisions made rather than generating one that
+  silently checks the wrong rules or fails on a clean runner.
 - **`templates/RELEASE.md`** → target repo's `RELEASE.md` — release/tag policy doc.
 
 ## Offer the review-gate toggle
