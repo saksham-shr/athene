@@ -116,9 +116,13 @@ copy-if-not-already-present rule as the fixed baseline:
 - **`templates/commitlint.config.mjs`** → target repo's `commitlint.config.mjs`, plus
   **`templates/workflows/commitlint.yml`** → target repo's `.github/workflows/commitlint.yml` —
   both together; the config alone does nothing without the CI step that runs it. First check for
-  *any* existing commitlint config in its many possible forms — `commitlint.config.js`,
-  `commitlint.config.cjs`, `.commitlintrc`, `.commitlintrc.json`, `.commitlintrc.yml`, or a
-  `commitlint` key in `package.json` — not just a literal `commitlint.config.mjs` match. Adding
+  *any* existing commitlint config — don't match the literal filename `commitlint.config.mjs`
+  only; commitlint's own config search covers every `commitlint.config.*` and `.commitlintrc*`
+  file regardless of extension (`.js`, `.cjs`, `.mjs`, `.ts`, `.json`, `.yaml`, `.yml`, no
+  extension), plus a `commitlint` key in `package.json` or `package.yaml`. Match by that pattern,
+  not a hand-maintained exact-name list — commitlint's supported forms can grow, and an exact list
+  goes stale. If the target repo already has `commitlint` as a dependency, that's itself a strong
+  signal a config exists somewhere in this search; find and respect it rather than assuming. Adding
   a second config alongside an existing one doesn't merge rules; commitlint resolves to whichever
   one its config search finds, which can silently override a different existing policy. If any
   form already exists, leave it alone — same "don't overwrite a working existing convention" rule
