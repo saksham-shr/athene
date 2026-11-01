@@ -28,8 +28,9 @@ Report what's found before changing anything — don't overwrite an existing con
 
 This is the scope of this skill for now — not the full variable governance layer (risk-tier-scaled
 docs like CODEOWNERS maps, SECURITY.md, release/tag policy) described in Athene's own design doc.
-That layer depends on a risk-tier → governance-doc-set mapping table that doesn't exist yet
-(Phase 2, not yet built). Write only what's concretely specified below; don't invent the rest.
+That layer's mapping table now exists (`docs/governance-doc-set-mapping.md`), but this skill
+doesn't consume it yet — wiring it in is a follow-up. Write only what's concretely specified
+below; don't invent the rest.
 
 Copy these template files from this skill's own `templates/` directory into the target repo if
 not already present there, adapting wording to fit what the scan above found rather than
@@ -80,4 +81,5 @@ own repo and isn't packaged alongside this skill when mirrored into a target rep
 - **Decisions made:** bullet list, append-only. List each baseline artifact written (or found
   already present and left alone) in step order above — what was done and why.
 - **Open questions:** bullet list. Note that the variable governance layer (risk-tier scaling) is
-  deferred until Phase 2 exists — a known, intentional gap, not an oversight.
+  deferred — the mapping table exists (`docs/governance-doc-set-mapping.md`) but this skill
+  doesn't apply it yet. A known, intentional gap, not an oversight.
