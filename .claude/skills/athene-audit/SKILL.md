@@ -36,21 +36,28 @@ bureaucratic or like an interrogation.
   `CONTRIBUTING.md` reads as `opensource`. Billing/payments code, a pricing page, or a SaaS-shaped
   structure reads as `startup`. Heavy `.ipynb`/LaTeX/citations with one author reads as `research`.
   A single committer, no license, hobby-project structure reads as `personal`.
-- If genuinely ambiguous, ask once, conversationally — never list the four category names
-  themselves, that reads as a form: *"One thing before I go further — who's this really for: just
-  you right now, outside contributors or users you don't control, a team or customers depending
-  on it, or is it feeding research or coursework?"* Map the answer to a category yourself; don't
-  make the user pick a label.
+- If genuinely ambiguous, **or the scan matches signals for more than one category** (e.g. a
+  public license with contributors *and* billing code — `opensource` vs. `startup` pick different
+  doc sets at Medium risk, so don't guess), ask once, conversationally — never list the four
+  category names themselves, that reads as a form: *"One thing before I go further — who's this
+  really for: just you right now, outside contributors or users you don't control, a team or
+  customers depending on it, or is it feeding research or coursework?"* Map the answer to a
+  category yourself; don't make the user pick a label.
 - Record the result and why in `.athene/state.md`'s Decisions made, same as any other decision.
 
 **Risk tier** (`Low`, `Medium`, `High` — per `references/governance-doc-set-mapping.md`'s own
-criteria):
-- Infer from the scan: auth/credential handling, payment integration, or PII in the data model
-  means `High`. User-visible API changes or schema migrations with no sensitive-data surface
-  means `Medium`. Neither means `Low`.
-- This one's fine to ask directly if ambiguous — it's a technical question, not a social one, so
-  the indirect-phrasing rule above doesn't apply here: *"Does this handle payments, user
-  credentials, or other personal data?"*
+criteria — use the full criteria below, not a subset, or the wrong doc set gets selected):
+- `High`: auth/credential handling, payment integration, PII in the data model, a CI/release-
+  policy surface (deploy credentials, signing, publish pipelines), or real paying/external users
+  depending on the project.
+- `Medium`: user-visible API changes or schema migrations happen, but none of the `High` signals
+  above apply.
+- `Low`: neither — internal-only, no sensitive surface, no migrations/API changes of consequence.
+- Fine to ask directly if ambiguous — it's a technical question, not a social one, so the
+  indirect-phrasing rule above doesn't apply here. Ask broadly enough to separate all three tiers,
+  not just High from everything else: *"Does this handle payments, user credentials, other
+  personal data, or deploy/release credentials — or does it change APIs or run schema migrations
+  without any of that?"*
 - Record the result and why alongside framing.
 
 ## Write the fixed baseline
@@ -95,13 +102,18 @@ invent extra docs because it feels more thorough.
 
 Template files for each possible doc, all in this skill's own `templates/` directory, same
 copy-if-not-already-present rule as the fixed baseline:
-- **`templates/CODEOWNERS`** → target repo's `CODEOWNERS` (or `.github/CODEOWNERS`) — replace
-  `@REPLACE_WITH_DEFAULT_OWNER` with a real owner who has write access; the placeholder alone
-  satisfies nothing.
-- **`templates/SECURITY.md`** → target repo's `SECURITY.md` — fill in the real reporting contact
-  if the scan found one (an existing security contact, email, or org), otherwise leave the
-  placeholder and flag it in Decisions made as still needing a real address.
-- **`templates/commitlint.config.js`** → target repo's `commitlint.config.js`, plus
+- **`templates/CODEOWNERS`** → GitHub reads `.github/CODEOWNERS`, then root `CODEOWNERS`, then
+  `docs/CODEOWNERS`, first match wins — check all three, in that order, before creating a new
+  one. If one already exists anywhere in that order, it's authoritative; leave it alone rather
+  than creating a root file that silently takes precedence over it. Only write to
+  `.github/CODEOWNERS` when none of the three already exist. Replace `@REPLACE_WITH_DEFAULT_OWNER`
+  with a real owner who has write access; the placeholder alone satisfies nothing.
+- **`templates/SECURITY.md`** → target repo's `SECURITY.md` — only list a channel that actually
+  works: keep the GitHub line only if private vulnerability reporting is confirmed enabled for
+  the target repo, keep the email line only if the scan found a real address (never ship the
+  placeholder domain as if it were live). If neither is confirmed, say so in the doc and flag it
+  in Decisions made as still needing a real channel — don't advertise one you haven't verified.
+- **`templates/commitlint.config.mjs`** → target repo's `commitlint.config.mjs`, plus
   **`templates/workflows/commitlint.yml`** → target repo's `.github/workflows/commitlint.yml` —
   both together; the config alone does nothing without the CI step that runs it.
 - **`templates/RELEASE.md`** → target repo's `RELEASE.md` — release/tag policy doc.

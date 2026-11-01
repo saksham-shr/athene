@@ -55,7 +55,6 @@ anxiety of shipping production code.
 
 ## Where this plugs in
 
-Not yet wired into Athene: Audit's generation step — Audit's current scope (per its own SKILL.md)
-is deliberately limited to the fixed baseline, with this variable layer named as a known,
-deferred gap. Wiring this table into Audit (and the eventual `athene` build skill) is a follow-up,
-not part of this doc.
+Wired into Athene: Audit's generation step: Audit determines framing and risk tier, looks up the
+row here, and writes exactly that doc set. Still not wired into the eventual `athene` build skill
+(doesn't exist in this repo yet) — that's the remaining follow-up.

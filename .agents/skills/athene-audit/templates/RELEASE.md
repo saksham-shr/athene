@@ -16,7 +16,9 @@
 
 ## Process
 
-1. Tag the commit: `git tag -a vX.Y.Z -m "..."` then `git push --tags`.
+1. Tag the commit: `git tag -a vX.Y.Z -m "..."` then `git push origin vX.Y.Z` — push that one
+   tag explicitly, not `git push --tags`, which pushes every unpushed local tag and can trigger
+   an unintended release if another one matches a release workflow.
 2. A workflow triggered on `v*` tags creates the GitHub release and publishes any package —
    one tag push, not three manual steps. (Wire this up in CI once the repo actually ships a
    package; a tag-only release is fine until then.)

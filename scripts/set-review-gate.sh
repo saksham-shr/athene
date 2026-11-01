@@ -81,14 +81,22 @@ if [ "$mode" = "on" ]; then
           end
         ),
         enforce_admins: true,
-        required_pull_request_reviews: {
+        required_pull_request_reviews: ({
           required_approving_review_count:
             ([1, ($e.required_pull_request_reviews.required_approving_review_count // 0)] | max),
           require_code_owner_reviews: true,
           dismiss_stale_reviews: true,
           require_last_push_approval:
             ($e.required_pull_request_reviews.require_last_push_approval // false)
-        },
+        } + (
+          ($e.required_pull_request_reviews.dismissal_restrictions // null) as $d
+          | if $d == null then {}
+            else {dismissal_restrictions: {
+              users: [($d.users // [])[] | .login],
+              teams: [($d.teams // [])[] | .slug],
+              apps:  [($d.apps  // [])[] | .slug]
+            }} end
+        )),
         restrictions: (
           if ($e.restrictions // null) == null then null
           else {
