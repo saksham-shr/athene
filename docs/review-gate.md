@@ -34,7 +34,18 @@ actual GitHub branch-protection rule — a documented convention that can be ski
   objects than PUT accepts), so the script converts rather than round-trips the raw GET response.
 - Distinguishes "branch genuinely has no protection yet" (HTTP 404) from a transient API/auth/
   network failure while checking existing settings — a failure of the latter kind stops the
-  script instead of being silently treated as "nothing to preserve."
+  script instead of being silently treated as "nothing to preserve." The same distinction applies
+  on `off`: a 404 on the protection endpoint also happens for a nonexistent branch or a repo the
+  token can't access, so the script confirms the branch itself resolves before reporting "already
+  off" — it won't claim the gate is off just because it couldn't read the branch at all.
+
+**Known limitation — rulesets not handled.** This script only manages the classic branch-
+protection API (`branches/:branch/protection`). GitHub's newer Rulesets feature is a separate
+mechanism that can also require reviews on a branch, independently of classic protection — a
+repo using rulesets could still require review after this script reports the gate "off" (classic
+protection genuinely removed, but a ruleset still enforcing). Checking and reporting on rulesets
+is out of scope here; if a repo uses them, verify review enforcement directly in GitHub's branch
+rules UI/API, not through this script's output alone.
 
 `scripts/set-review-gate.sh <owner/repo> <branch> off` removes the protection rule entirely, back
 to discipline-only — same existence-check logic: a 404 means "already off" and exits cleanly,

@@ -65,12 +65,14 @@ if [ "$mode" = "on" ]; then
     | {
         required_status_checks: (
           if ($e.required_status_checks // null) == null then null
-          else {
+          elif (($e.required_status_checks.checks // []) | length) > 0 then {
             strict: ($e.required_status_checks.strict // false),
-            contexts: ($e.required_status_checks.contexts // []),
             checks: [($e.required_status_checks.checks // [])[] |
               if .app_id == null then {context: .context}
               else {context: .context, app_id: .app_id} end]
+          } else {
+            strict: ($e.required_status_checks.strict // false),
+            contexts: ($e.required_status_checks.contexts // [])
           }
           end
         ),
@@ -116,7 +118,16 @@ elif [ "$mode" = "off" ]; then
   else
     status=$?
     if [ "$status" -eq 1 ]; then
-      echo "Review gate already off for $repo@$branch (no protection rule found)."
+      # A 404 on the protection endpoint also happens for a nonexistent branch
+      # or a repo the token can't access - neither means "confirmed
+      # unprotected". Check the branch itself resolves before reporting off.
+      if gh api "repos/$repo/branches/$encoded_branch" >/dev/null 2>&1; then
+        echo "Review gate already off for $repo@$branch (no protection rule found)."
+      else
+        echo "Could not confirm $repo@$branch is a real, accessible branch -" \
+             "not reporting the gate as off." >&2
+        exit 1
+      fi
     else
       exit "$status"
     fi
