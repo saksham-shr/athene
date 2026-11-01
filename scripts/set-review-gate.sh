@@ -18,10 +18,11 @@ err_file="$(mktemp)"
 trap 'rm -f "$err_file"' EXIT
 
 # Prints the existing protection JSON and returns 0 if a rule exists; returns 1
-# only when GitHub confirms there is none (404). Any other failure (auth,
-# rate-limit, network) stops the script instead of being treated as "no rule" -
-# that distinction matters on both the enable path (would wipe real settings)
-# and the disable path (would falsely report the gate as already off).
+# only when GitHub confirms there is none (404); returns 2 for any other
+# failure (auth, rate-limit, network). Callers must branch on that distinction
+# themselves - treating a real failure the same as "no rule" would wipe real
+# settings on the enable path and falsely report the gate as already off on
+# the disable path.
 fetch_existing_protection() {
   local out
   if out="$(gh api "$protection_path" 2>"$err_file")"; then
@@ -32,19 +33,24 @@ fetch_existing_protection() {
     return 1
   fi
   echo "Could not read branch protection for $repo@$branch: $(cat "$err_file")" >&2
-  exit 1
+  return 2
 }
 
 if [ "$mode" = "on" ]; then
   if existing="$(fetch_existing_protection)"; then
     :
   else
-    existing='null'
+    status=$?
+    if [ "$status" -eq 1 ]; then
+      existing='null'
+    else
+      exit "$status"
+    fi
   fi
 
-  if ! gh api "repos/$repo/contents/.github/CODEOWNERS" >/dev/null 2>&1 \
-     && ! gh api "repos/$repo/contents/CODEOWNERS" >/dev/null 2>&1 \
-     && ! gh api "repos/$repo/contents/docs/CODEOWNERS" >/dev/null 2>&1; then
+  if ! gh api "repos/$repo/contents/.github/CODEOWNERS?ref=$encoded_branch" >/dev/null 2>&1 \
+     && ! gh api "repos/$repo/contents/CODEOWNERS?ref=$encoded_branch" >/dev/null 2>&1 \
+     && ! gh api "repos/$repo/contents/docs/CODEOWNERS?ref=$encoded_branch" >/dev/null 2>&1; then
     echo "Warning: no CODEOWNERS file found at .github/CODEOWNERS, CODEOWNERS, or" >&2
     echo "docs/CODEOWNERS. require_code_owner_reviews only applies to paths matched in" >&2
     echo "CODEOWNERS - without one, any writer's approval satisfies this rule." >&2
@@ -61,6 +67,7 @@ if [ "$mode" = "on" ]; then
           if ($e.required_status_checks // null) == null then null
           else {
             strict: ($e.required_status_checks.strict // false),
+            contexts: ($e.required_status_checks.contexts // []),
             checks: [($e.required_status_checks.checks // [])[] |
               if .app_id == null then {context: .context}
               else {context: .context, app_id: .app_id} end]
@@ -72,7 +79,9 @@ if [ "$mode" = "on" ]; then
           required_approving_review_count:
             ([1, ($e.required_pull_request_reviews.required_approving_review_count // 0)] | max),
           require_code_owner_reviews: true,
-          dismiss_stale_reviews: true
+          dismiss_stale_reviews: true,
+          require_last_push_approval:
+            ($e.required_pull_request_reviews.require_last_push_approval // false)
         },
         restrictions: (
           if ($e.restrictions // null) == null then null
@@ -105,7 +114,12 @@ elif [ "$mode" = "off" ]; then
     gh api --method DELETE "$protection_path"
     echo "Review gate OFF for $repo@$branch: back to discipline-only convention, no technical block."
   else
-    echo "Review gate already off for $repo@$branch (no protection rule found)."
+    status=$?
+    if [ "$status" -eq 1 ]; then
+      echo "Review gate already off for $repo@$branch (no protection rule found)."
+    else
+      exit "$status"
+    fi
   fi
 
 else
