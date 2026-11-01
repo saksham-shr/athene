@@ -31,18 +31,22 @@ docs like CODEOWNERS maps, SECURITY.md, release/tag policy) described in Athene'
 That layer depends on a risk-tier → governance-doc-set mapping table that doesn't exist yet
 (Phase 2, not yet built). Write only what's concretely specified below; don't invent the rest.
 
-Write these into the target repo if not already present, adapting wording to fit what the scan
-above found rather than overwriting a working existing convention:
+Copy these template files from this skill's own `templates/` directory into the target repo if
+not already present there, adapting wording to fit what the scan above found rather than
+overwriting a working existing convention. (These templates are the one real source of this
+content — mirroring copies each skill's directory independently, so there's no shared-at-runtime
+location across skills yet. When the `athene` build skill is built, copy these same files into
+its own `templates/` directory rather than re-authoring the content.)
 
-1. **Commit convention doc** — Conventional Commits: `feat/fix/chore/docs/refactor/test/perf/ci/
-   build`.
-2. **PR template** (`.github/pull_request_template.md`) — three sections: Summary, Why, Test plan.
-3. **Issue templates** (`.github/ISSUE_TEMPLATE/`) — bug report (repro steps, expected vs. actual,
-   environment) and feature request.
-4. **No-AI-attribution rule** — commit messages and PR descriptions never carry an AI attribution/
-   co-author trailer, regardless of which agent wrote them. Document this in the commit convention
-   doc from step 1, not a separate file.
-5. **Claude Code only:** `includeCoAuthoredBy` is deprecated and is ignored once
+1. **`templates/CONTRIBUTING.md`** → target repo's `CONTRIBUTING.md` — Conventional Commits
+   convention (`feat/fix/chore/docs/refactor/test/perf/ci/build`) and the no-AI-attribution rule
+   together in one doc, not split across files.
+2. **`templates/pull_request_template.md`** → target repo's `.github/pull_request_template.md` —
+   three sections: Summary, Why, Test plan.
+3. **`templates/ISSUE_TEMPLATE/bug_report.md`** and **`templates/ISSUE_TEMPLATE/feature_request.md`**
+   → target repo's `.github/ISSUE_TEMPLATE/` — copy both, unchanged unless the scan found a reason
+   to adapt wording.
+4. **Claude Code only:** `includeCoAuthoredBy` is deprecated and is ignored once
    `attribution.commit` or `attribution.pr` is already set — so setting it alone on a repo that
    already has either key leaves attribution on. Set the current controls instead, in the target
    repo's `.claude/settings.json`:
