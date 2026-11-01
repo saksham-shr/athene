@@ -68,10 +68,10 @@ if [ "$mode" = "on" ]; then
           elif (($e.required_status_checks.checks // []) | length) > 0 then {
             strict: ($e.required_status_checks.strict // false),
             checks: [($e.required_status_checks.checks // [])[] |
-              # app_id: null on GET means "any app satisfies this check" - but
+              # app_id null on GET means any app satisfies this check, but
               # omitting app_id on PUT binds it to whichever app calls this
-              # endpoint instead, narrowing it. -1 is GitHub's explicit
-              # "any app" sentinel for PUT; it's the only way to preserve that.
+              # endpoint instead, narrowing it. -1 is the explicit any-app
+              # sentinel PUT expects; it is the only way to preserve that.
               if .app_id == null then {context: .context, app_id: -1}
               else {context: .context, app_id: .app_id} end]
           } else {
