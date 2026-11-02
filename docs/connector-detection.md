@@ -31,22 +31,33 @@ organization admin deploys (not project- or user-scoped), at a fixed OS path:
 | Linux/WSL | `/etc/claude-code/managed-mcp.json` |
 | Windows | `C:\Program Files\ClaudeCode\managed-mcp.json` |
 
-If this file exists, it has **exclusive control**: Claude Code loads only the servers it
-defines (plus `managedMcpServers`, see below) — `claude mcp add` is rejected outright with
-`Cannot add MCP server: enterprise MCP configuration is active and has exclusive control over
-MCP servers`. **If this file is present, stop — don't attempt auto-setup at all**, regardless of
-what the project/user/local scopes below say. Tell the user their organization controls MCP
-servers centrally and point them to their admin, don't try `claude mcp add` and fail, or worse,
-silently report "missing" for a server the org already provides or blocks on purpose.
+If this file can be read and parsed, it has **exclusive control**: Claude Code loads only the
+servers it defines, plus `managedMcpServers` (below), in-process servers the launching app
+registers (e.g. an IDE extension's own server), and specific built-ins (Claude in Chrome) when
+explicitly allowed — every other user-added or plugin-provided server is blocked, and
+`claude mcp add` is rejected outright with `Cannot add MCP server: enterprise MCP configuration
+is active and has exclusive control over MCP servers`. **If this file is readable and parseable,
+stop — don't attempt auto-setup at all**, regardless of what the project/user/local scopes below
+say. Tell the user their organization controls MCP servers centrally and point them to their
+admin, don't try `claude mcp add` and fail, or worse, silently report "missing" for a server the
+org already provides or blocks on purpose.
+
+If the path exists but the file can't be read or fails to parse, that's **Inconclusive**, not
+exclusive control — a stale-but-valid file still activates the hard stop above, but a broken one
+shouldn't block setup on a false premise.
 
 Separately, `managedMcpServers` (organization-provided, additive — doesn't take exclusive
 control the way `managed-mcp.json` does) ranks above Local/Project/User when present but doesn't
 block adding other servers the way `managed-mcp.json` does.
 
-Precedence when the same server name appears in more than one source (once `managed-mcp.json`'s
-exclusive-control case above doesn't apply): `managedMcpServers` → **Local → Project → User** →
-plugin-provided → claude.ai connectors. The whole entry from the highest-precedence source wins;
-fields don't merge across scopes.
+Precedence (once `managed-mcp.json`'s exclusive-control case above doesn't apply):
+`managedMcpServers` → **Local → Project → User** → plugin-provided → claude.ai connectors. The
+whole entry from the highest-precedence source wins; fields don't merge across scopes. Duplicate
+matching isn't uniform across sources, though — don't assume name-matching applies everywhere:
+Local/Project/User/`managedMcpServers` are matched **by name**, but plugin-provided and
+claude.ai-connector entries are matched **by endpoint** (same URL or command counts as a
+duplicate even under a different name; a different endpoint under the same name is not a
+duplicate and both can load).
 
 Detection below only covers the three **file-backed** scopes (Local, Project, User) — a server
 provided only by `managedMcpServers`, a plugin, or a claude.ai connector isn't visible to a file
@@ -106,12 +117,16 @@ current OS/install, say so rather than asserting a location that might be wrong.
 ## Setup path — what v1 actually covers
 
 Don't imply universal auto-setup. v1 covers exactly:
-- **Claude Code and Codex:** both have a documented CLI add command (`claude mcp add`,
-  `codex mcp add`) that takes a transport type and command/URL — use it when the server's
-  command/URL is already known from the stack decision, rather than hand-editing the config
-  file. **Claude Code specifically:** check for `managed-mcp.json` first (see above) — if
-  present, don't run `claude mcp add` at all, it will be rejected; go straight to telling the
-  user their org controls this centrally.
+- **Claude Code and Codex:** both have a documented CLI add command, but the syntax differs —
+  don't apply Claude Code's flags to Codex or vice versa:
+  - Claude Code: `claude mcp add --transport <http|stdio|...> <name> <command-or-url>`.
+  - Codex: no `--transport` flag at all — the form implies the transport. Stdio:
+    `codex mcp add <name> -- <command> [args...]`. Remote: `codex mcp add <name> --url <url>`
+    (add `--oauth-client-id`/`--oauth-client-secret` if the server needs OAuth).
+  Use whichever form matches the server's actual command/URL from the stack decision, rather
+  than hand-editing the config file. **Claude Code specifically:** check for `managed-mcp.json`
+  first (see above) — if present, don't run `claude mcp add` at all, it will be rejected; go
+  straight to telling the user their org controls this centrally.
 - **Cursor:** no confirmed CLI add command across the sources checked — treat Cursor setup as
   manual-guide only for v1, not AI-configurable. Don't claim auto-setup capability that isn't
   verified.
