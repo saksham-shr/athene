@@ -309,8 +309,11 @@ not a special tool call.
   server-management/SRE/observability source in the seed list (no Datadog/PagerDuty/Honeycomb), and
   some major distributed-systems blogs (Uber, LinkedIn) missing from the seed repo — flagged there
   for a live search or a follow-up PR, not silently left unhandled.
-- Per-agent MCP/connector config file locations and detection logic for Claude Code, Codex, and
-  Cursor specifically (paths, formats).
+- ~~Per-agent MCP/connector config file locations and detection logic for Claude Code, Codex, and
+  Cursor~~ — **done** as a spec, see `docs/connector-detection.md` (#21). Claude Code's paths
+  confirmed against its own docs; Codex's and Cursor's are community-sourced with known gaps
+  (Cursor's Windows global path conflicts across sources) flagged explicitly in that file, not
+  silently asserted. Not yet wired into any skill — same gap as the other Phase 3 pieces.
 - ~~The exact wording/flow of the indirect project-framing question~~ — **done** for Audit, see
   `skills/athene-audit/SKILL.md`'s "Determine framing and risk tier" section (infer from scan
   first, ask once conversationally if ambiguous, never recite the four category names).
