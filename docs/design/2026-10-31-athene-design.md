@@ -21,7 +21,7 @@ budget-aware stack decisions backed by real engineering sources, MCP/connector a
 generated repo-governance artifacts, a PR review gate, and two new skills for legacy-repo
 onboarding and session resume.
 
-## Skills (5) and the flow
+## Skills (6) and the flow
 
 1. **Athene: Product Discovery** — turns an idea into an approved product brief (problem, user,
    outcome, now/later/not-now scope, constraints, validation plan). Asks an indirect
@@ -112,6 +112,13 @@ onboarding and session resume.
    - **Found:** reports where the work last left off (current phase, decisions already made, open
      questions) and continues from there.
    - **Not found:** hands off to Athene: Audit instead, since there's nothing to resume.
+
+6. **Athene: Code Health** (new, added 2026-11-02 — see "Code-quality audit" below) — distinct
+   from Athene: Audit. Audit retrofits *process* (governance docs, ownership, CI) onto a repo;
+   Code Health reviews the *code itself* — bugs, security, scale, missing tests, speed, lean —
+   and ranks findings most-important-first. One-shot report, changes nothing. User-invoked
+   (`/athene-code-health` or similar), not part of the Discovery → Build → Launch chain — doesn't
+   hand off to or from any other skill.
 
 ## Persistent state
 
@@ -324,13 +331,75 @@ hand-patched just desyncs again on the next generation run).
 `.agents/skills/`/`.claude/skills/`. `skills/athene-audit/references/*.md` and
 `templates/set-review-gate.sh` become one-line include-marker stubs instead of literal copies —
 `docs/*.md` and `scripts/set-review-gate.sh` stay the only place the actual content is written.
-Not yet implemented — tracked as its own issue so it doesn't block #21.
+**Done** — implemented in #25/#26.
+
+## Prior-art review: `DietrichGebert/ponytail` (researched 2026-11-02)
+
+Cloned and read before starting the `athene` build skill — a mature, published multi-agent skill
+repo (same "lazy senior dev" persona active in this session). Findings and the decisions made
+from them:
+
+1. **Code-quality audit — closes a real gap.** `skills/ponytail-audit/SKILL.md` reviews a whole
+   repo for bugs, security holes, scale limits, missing tests, slow paths, and bloat — ranked
+   most-important-first, each finding with four parts (what it is / problem / fix / what happens
+   if skipped). Athene had nothing like this: Athene: Audit only retrofits *process* (governance
+   docs, ownership, CI), never the code itself — a gap flagged earlier in this project's own
+   history and now closed by adding **Athene: Code Health** as skill 6 (see above). Scope
+   borrowed directly from ponytail's structure: map first (entry points, data flow, expected
+   load) → find in ranked categories → 4-part findings, capped at 20 → verdict line.
+2. **`shortcut:` comment + debt-ledger convention.** Ponytail marks every deliberate
+   simplification with `shortcut: <ceiling>, <upgrade path>` and a `/ponytail-debt` command greps
+   the repo into a ledger, flagging any marker with no upgrade trigger as rot risk. Athene has
+   been doing this by hand all through its own build (hand-written "Known limitation" sections in
+   this very doc and others) with no systematic convention. Adopting the same marker convention
+   for Athene's own build going forward, and for code Athene writes in target repos — tracked as
+   a build-order item below. Athene's marker word: `athene:` (parallel to ponytail's own), to stay
+   distinguishable in a repo that might use both skills.
+3. **Compact bootstrap snippet should carry real content, not just route.** Ponytail's `AGENTS.md`
+   is a condensed copy of the *actual ruleset* `SKILL.md` carries, so a platform that never loads
+   the full skill still gets real behavior. Athene's current bootstrap snippets
+   (`docs/templates/claude-md-snippet.md`/`agents-md-snippet.md`) are pure routing pointers ("check
+   `.athene/state.md`, go to Resume/Audit") — they carry none of the engineering-quality-bar
+   checklist. Decision: expand them to also carry a condensed version of that checklist, so it
+   applies even on a session that never triggers full-skill loading via description-matching.
+   Tracked below.
+4. **Invariant-phrase drift-check — noted, not adopted now.** Ponytail's
+   `scripts/check-rule-copies.js` doesn't byte-diff its ~7 near-duplicate rule-file copies across
+   platforms; it asserts specific load-bearing phrases survive verbatim in each, because those
+   copies are *compact adaptations* of the full prompt, not exact copies. Athene's own duplication
+   problem (#25) was exact-copy, so the include-marker fix already in place is the right-sized
+   tool for it — byte-identical, verified by diff. If Athene ever ships a short-vs-long variant
+   (e.g. a condensed `AGENTS.md` ruleset per point 3 above, diverging in wording from the full
+   skill body), this is the technique to reach for instead of trying to keep two different-length
+   texts byte-identical. Not needed yet — noted for when it is.
+5. **Measured benchmarking harness — deferred, real gap.** Ponytail ships a full benchmark suite
+   (`benchmarks/`) comparing the same agent with and without the skill across repeated runs:
+   lines of code, cost, time, tokens, test coverage — published numbers back every claim in its
+   README. Athene has zero empirical validation that any of its process/governance overhead
+   actually improves outcomes. Real gap, but building a benchmark harness needs the `athene`
+   build skill to exist first (nothing to measure yet) — deferred until after that skill ships,
+   not blocking it.
+6. **Broader platform reach + marketplace distribution — deferred, lower priority.** Ponytail
+   ships to ~20 agent hosts via npm and platform-native plugin marketplaces; Athene targets 3
+   (Claude Code, Codex, Cursor) via a local `skills/` + mirror-script convention, with no external
+   distribution channel at all yet. Lower priority than the above — Athene isn't close to being
+   ready to ship externally, and the packaging convention (#1, #25) would need real rework to
+   support compact per-platform adaptations (point 4) before broader reach is worth pursuing.
 
 ## Left to the builder
 
-- Implement the include-directive expansion in `scripts/mirror-skills.sh` described above, and
-  convert the existing hand-copied bundled files (`skills/athene-audit/references/*.md`,
-  `templates/set-review-gate.sh`) to include-marker stubs.
+- ~~Implement the include-directive expansion in `scripts/mirror-skills.sh`~~ — **done**, #25/#26.
+- Build `skills/athene-code-health/SKILL.md` (skill 6) — bugs/security/scale/missing-test/speed/
+  lean, ranked, 4-part findings, per the ponytail-audit structure reviewed above.
+- Define the `athene:` shortcut-comment convention (parallel to ponytail's `shortcut:`/`ponytail:`)
+  and a debt-ledger command/skill to grep it into a report, flagging markers with no upgrade
+  trigger.
+- Expand `docs/templates/claude-md-snippet.md`/`agents-md-snippet.md` to carry a condensed copy of
+  the engineering-quality-bar checklist, not just the state-file routing pointer.
+- Benchmark harness comparing Athene-assisted vs. unassisted builds (deferred until the `athene`
+  build skill exists — nothing to measure yet).
+- Broader platform packaging (beyond Claude Code/Codex/Cursor) and external distribution
+  (npm/marketplace) — deferred, lower priority than shipping the build skill itself.
 - Exact state-file schema/location and how Discovery/Build/Launch each update it mid-phase.
 - ~~Exact format and starter contents of the curated source-index reference file~~ — **done**, see
   `docs/engineering-source-index.md`. Seeded from
@@ -446,5 +515,11 @@ docs (`code.claude.com`, `learn.chatgpt.com`/`developers.openai.com`, `cursor.co
    Athene (build).
 5. Curated source-index file + self-growing fetch behavior.
 6. Chaining: Discovery → Athene (build) → Launch handoff instructions, tested end-to-end.
-7. Cursor packaging, then Codex `agents/openai.yaml` fleshing-out, last — once behavior is proven
-   on one platform.
+7. Athene: Code Health (skill 6) — independent of the chain above, can land any time after the
+   `shortcut:`/debt convention exists (item 8) since its findings should respect that convention.
+8. `athene:` shortcut-comment convention + debt-ledger command.
+9. Condensed quality-bar content in the bootstrap snippets.
+10. Cursor packaging, then Codex `agents/openai.yaml` fleshing-out, last — once behavior is
+    proven on one platform.
+11. Benchmark harness, then broader platform reach/distribution — both after the build skill
+    ships and is stable, not before.
