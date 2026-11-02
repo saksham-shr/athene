@@ -22,17 +22,19 @@ Confirmed against Claude Code's own MCP docs (`code.claude.com/docs/en/mcp`).
 | User (all projects) | `~/.claude.json` | top-level `mcpServers` |
 | Local (default, this project only) | `~/.claude.json` | `projects["<absolute project path>"].mcpServers` |
 
-Precedence when the same server name appears in more than one scope: **Local → Project → User**
-→ plugin-provided → claude.ai connectors. The whole entry from the highest-precedence source
-wins; fields don't merge across scopes.
+Precedence when the same server name appears in more than one source: managed configuration
+(`managedMcpServers`, organization-set) → **Local → Project → User** → plugin-provided →
+claude.ai connectors. The whole entry from the highest-precedence source wins; fields don't
+merge across scopes.
 
 Detection below only covers the three **file-backed** scopes (Local, Project, User) — a server
-provided only by a plugin or a claude.ai connector isn't visible to a file scan, and this method
-can't see it.
+provided only by managed configuration, a plugin, or a claude.ai connector isn't visible to a
+file scan, and this method can't see it.
 
 **Present:** the needed server name exists in any of the three file-backed scopes above.
 **Missing:** it exists in none of those three files. This is **not** proof no server exists at
-all — a plugin or claude.ai connector could still provide it. Don't claim "missing" with full
+all — managed configuration, a plugin, or a claude.ai connector could still provide it. Don't
+claim "missing" with full
 confidence or attempt setup that would create a duplicate; if a file-scan "missing" result
 matters for a setup decision, confirm the effective server list inside a live session (`/mcp`)
 before acting, not from the file scan alone.
