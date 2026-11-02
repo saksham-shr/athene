@@ -4,5 +4,53 @@ Skills that make an AI coding agent follow proper engineering practices — disc
 thing to build, build it with real repo hygiene, launch small, learn, and resume or retrofit onto
 any repo, old or new.
 
-Design doc: see conversation history / linked design document for full spec. Build happens
-issue-by-issue.
+Design doc: [`docs/design/2026-10-31-athene-design.md`](docs/design/2026-10-31-athene-design.md).
+Phase breakdown: [`docs/design/2026-10-31-athene-build-phases.md`](docs/design/2026-10-31-athene-build-phases.md).
+Build happens issue-by-issue.
+
+## Status
+
+Phases 0–3 (repo scaffold, Resume/Audit, governance generation, stack-decision flow) are built
+and merged. Phase 4 (self-growing engineering source index) and three items from a prior-art
+review are open as issues now. The core `athene` build skill that ties everything below together
+doesn't exist yet — that's the next real target.
+
+## Skills
+
+Live, in [`skills/`](skills/):
+- **`athene-resume`** — picks up an Athene-tracked repo where it left off.
+- **`athene-audit`** — onboards Athene onto an existing repo: scans it, determines project
+  framing + risk tier, writes the right governance docs, offers a review-gate toggle.
+
+Planned, not yet built:
+- **`athene`** (skill 2, repo + build + architecture) — the core build skill: stack decisions,
+  evidence-backed architecture, connector setup, governance generation, review gate, Launch
+  handoff. Everything else in `docs/` is a standalone spec waiting to be wired into this.
+- **Athene: Product Discovery**, **Athene: Launch** — turn an idea into a brief, and define the
+  smallest launchable slice.
+- **Athene: Code Health** — ranked bug/security/scale/test/speed/lean audit of the code itself,
+  distinct from `athene-audit`'s process-only scope.
+
+## Reference specs (not yet wired into a skill)
+
+- [`docs/governance-doc-set-mapping.md`](docs/governance-doc-set-mapping.md) — risk-tier × framing
+  → governance doc set.
+- [`docs/review-gate.md`](docs/review-gate.md) + [`scripts/set-review-gate.sh`](scripts/set-review-gate.sh)
+  — real branch-protection toggle.
+- [`docs/stack-decision-process.md`](docs/stack-decision-process.md) — options table + tier
+  question format for build decisions.
+- [`docs/connector-detection.md`](docs/connector-detection.md) — MCP/connector detection and setup
+  per platform.
+- [`docs/engineering-source-index.md`](docs/engineering-source-index.md) — topic-mapped real
+  engineering blogs with RSS feeds, for evidence-backed decisions.
+- [`docs/state-schema.md`](docs/state-schema.md) — `.athene/state.md` schema.
+- [`docs/skill-packaging.md`](docs/skill-packaging.md) — skill directory convention and the
+  include-marker build step (`scripts/mirror-skills.sh`).
+- [`docs/skill-description-style-guide.md`](docs/skill-description-style-guide.md) — how to write
+  a skill's always-loaded description.
+
+## Contributing
+
+Conventional Commits types, PR template, issue templates: see
+[`skills/athene-audit/templates/`](skills/athene-audit/templates/) — the same baseline Athene
+writes into target repos.
