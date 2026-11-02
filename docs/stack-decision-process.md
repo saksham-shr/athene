@@ -22,10 +22,13 @@ entry covers the topic, search live per that file's existing fallback rule, don'
 
 ## The tier question
 
-Asked **after** the table, never before it, and never as a raw budget figure:
+Asked **after** the table, never before it, and never as a raw budget figure. Two separate
+choices, not one combined question — deployment model and pricing tier are different decisions
+with different operational implications, don't conflate them:
 
-*"Free, paid, or paid-and-which-tier?"* — adapted to the specific choice, e.g. for a database:
-*"Free tier/self-hosted, a paid managed plan, or a specific paid tier you already know you need?"*
+1. **Deployment:** self-hosted, or a managed service?
+2. **Pricing tier** (only if managed): *"Free tier, paid, or a specific paid tier you already
+   know you need?"*
 
 Never ask "what's your budget." The options table already showed the cost-relevant tradeoffs;
 this question just picks where on that table the user wants to land.
@@ -41,10 +44,13 @@ from day one, per Stripe's blog post on connection pooling at scale"), not "best
 | Candidate | Pros | Cons |
 |---|---|---|
 | PostgreSQL | Real concurrent writes, mature tooling, works for almost any workload | Needs a managed instance or self-hosting; more setup than SQLite |
-| SQLite | Zero setup, file-based, great for low-traffic/single-writer apps | No real concurrent writes; wrong choice once multiple processes write at once |
+| SQLite | Zero setup, file-based, great for low-traffic/single-writer apps | Multiple processes can connect, but writes serialize — contention under concurrent writers; wrong choice once write concurrency is actually high |
 | MongoDB | Flexible schema, easy horizontal scaling for document-shaped data | Wrong tool if the data is actually relational; weaker consistency guarantees by default |
 
-Tier question: *"Free tier/self-hosted Postgres, or a managed paid plan (and if so, which tier)?"*
+Deployment question: *"Self-hosted Postgres, or a managed service?"* → user picks self-hosted.
+(Pricing-tier question skipped — only asked when the user picks managed.)
 
 Recorded decision (example): *"Stack: Postgres over SQLite — need concurrent writes from day
-one; self-hosted for now per user's free-tier answer."*
+one, SQLite serializes writers under contention per
+[SQLite's own FAQ](https://www.sqlite.org/faq.html). Deployment: self-hosted, per user's
+answer."*
