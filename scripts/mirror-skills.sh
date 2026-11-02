@@ -21,7 +21,7 @@ expand_includes() {
   local dest_dir="$1"
   local file marker target
   while IFS= read -r -d '' file; do
-    marker="$(head -n1 "$file" 2>/dev/null || true)"
+    marker="$(head -n1 "$file" 2>/dev/null | tr -d '\r' || true)"
     target=""
     if [[ "$marker" =~ ^\<!--\ include:\ (.+)\ --\>$ ]]; then
       target="${BASH_REMATCH[1]}"
