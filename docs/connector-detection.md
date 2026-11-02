@@ -22,18 +22,40 @@ Confirmed against Claude Code's own MCP docs (`code.claude.com/docs/en/mcp`).
 | User (all projects) | `~/.claude.json` | top-level `mcpServers` |
 | Local (default, this project only) | `~/.claude.json` | `projects["<absolute project path>"].mcpServers` |
 
-Precedence when the same server name appears in more than one source: managed configuration
-(`managedMcpServers`, organization-set) → **Local → Project → User** → plugin-provided →
-claude.ai connectors. The whole entry from the highest-precedence source wins; fields don't
-merge across scopes.
+**Check for `managed-mcp.json` first, before anything else.** It's a system-level file an
+organization admin deploys (not project- or user-scoped), at a fixed OS path:
+
+| Platform | Path |
+|---|---|
+| macOS | `/Library/Application Support/ClaudeCode/managed-mcp.json` |
+| Linux/WSL | `/etc/claude-code/managed-mcp.json` |
+| Windows | `C:\Program Files\ClaudeCode\managed-mcp.json` |
+
+If this file exists, it has **exclusive control**: Claude Code loads only the servers it
+defines (plus `managedMcpServers`, see below) — `claude mcp add` is rejected outright with
+`Cannot add MCP server: enterprise MCP configuration is active and has exclusive control over
+MCP servers`. **If this file is present, stop — don't attempt auto-setup at all**, regardless of
+what the project/user/local scopes below say. Tell the user their organization controls MCP
+servers centrally and point them to their admin, don't try `claude mcp add` and fail, or worse,
+silently report "missing" for a server the org already provides or blocks on purpose.
+
+Separately, `managedMcpServers` (organization-provided, additive — doesn't take exclusive
+control the way `managed-mcp.json` does) ranks above Local/Project/User when present but doesn't
+block adding other servers the way `managed-mcp.json` does.
+
+Precedence when the same server name appears in more than one source (once `managed-mcp.json`'s
+exclusive-control case above doesn't apply): `managedMcpServers` → **Local → Project → User** →
+plugin-provided → claude.ai connectors. The whole entry from the highest-precedence source wins;
+fields don't merge across scopes.
 
 Detection below only covers the three **file-backed** scopes (Local, Project, User) — a server
-provided only by managed configuration, a plugin, or a claude.ai connector isn't visible to a
-file scan, and this method can't see it.
+provided only by `managedMcpServers`, a plugin, or a claude.ai connector isn't visible to a file
+scan, and this method can't see it.
 
 **Present:** the needed server name exists in any of the three file-backed scopes above.
 **Missing:** it exists in none of those three files. This is **not** proof no server exists at
-all — managed configuration, a plugin, or a claude.ai connector could still provide it. Don't
+all — `managedMcpServers`, a plugin, or a claude.ai connector could still provide it (and
+`managed-mcp.json`, checked separately above, could mean "missing" here is moot anyway). Don't
 claim "missing" with full
 confidence or attempt setup that would create a duplicate; if a file-scan "missing" result
 matters for a setup decision, confirm the effective server list inside a live session (`/mcp`)
@@ -86,7 +108,10 @@ current OS/install, say so rather than asserting a location that might be wrong.
 Don't imply universal auto-setup. v1 covers exactly:
 - **Claude Code and Codex:** both have a documented CLI add command (`claude mcp add`,
   `codex mcp add`) that takes a transport type and command/URL — use it when the server's
-  command/URL is already known from the stack decision, rather than hand-editing the config file.
+  command/URL is already known from the stack decision, rather than hand-editing the config
+  file. **Claude Code specifically:** check for `managed-mcp.json` first (see above) — if
+  present, don't run `claude mcp add` at all, it will be rejected; go straight to telling the
+  user their org controls this centrally.
 - **Cursor:** no confirmed CLI add command across the sources checked — treat Cursor setup as
   manual-guide only for v1, not AI-configurable. Don't claim auto-setup capability that isn't
   verified.
