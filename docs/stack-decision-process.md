@@ -50,7 +50,9 @@ from day one, per Stripe's blog post on connection pooling at scale"), not "best
 Deployment question: *"Self-hosted Postgres, or a managed service?"* → user picks self-hosted.
 (Pricing-tier question skipped — only asked when the user picks managed.)
 
-Recorded decision (example): *"Stack: Postgres over SQLite — need concurrent writes from day
-one, SQLite serializes writers under contention per
-[SQLite's own FAQ](https://www.sqlite.org/faq.html). Deployment: self-hosted, per user's
-answer."*
+Recorded decisions (example) — one entry per decision, per `docs/state-schema.md`'s append-only
+format:
+
+- *"Stack: Postgres over SQLite — need concurrent writes from day one, SQLite serializes
+  writers under contention per [SQLite's own FAQ](https://www.sqlite.org/faq.html)."*
+- *"Deployment: self-hosted — per user's answer."*
