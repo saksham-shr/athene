@@ -295,8 +295,42 @@ not a special tool call.
   the current `athene/references/` folder were planning-only research and are not part of the
   shipped skill content).
 
+## Reference-copy duplication: the problem, and how to reduce it (researched 2026-11-02)
+
+**The problem, concretely.** Every skill is mirrored wholesale into `.agents/skills/` and
+`.claude/skills/` by `scripts/mirror-skills.sh` — that layer is already a proper generator, not a
+duplication risk, since it's automated and nothing ever hand-edits the mirrored copies. The real
+duplication is one layer up: `skills/athene-audit/references/*.md` and
+`skills/athene-audit/templates/set-review-gate.sh` are bundled copies of `docs/*.md` and
+`scripts/set-review-gate.sh` (made because a skill needs to be self-contained once mirrored
+elsewhere — the source repo's own `docs/` folder doesn't travel with it). Those bundled copies
+were kept in sync by hand (`cp` run manually after editing the source), not by any automated
+step. This caused real bugs during #19/#22's review: the bundled
+`governance-doc-set-mapping.md`/`review-gate.md` copies kept saying "not yet wired into Audit"
+after the source files were updated to say they were, and `athene-audit/SKILL.md` separately
+restated the risk-tier criteria from `governance-doc-set-mapping.md` in its own words, creating a
+second copy that could (and did almost) drift from the table it was paraphrasing.
+
+**Researched pattern: single source + include-directive expansion at build time.** Established
+docs-as-code practice (e.g. the docs-ssot project's `<!-- @include: path -->` resolver, DocFX's
+remote-include extension) is: content exists in exactly one canonical file; anything that needs
+it elsewhere holds an include marker, not a copy; a build step resolves markers into the real
+content; the resolved output is clearly generated and never hand-edited (the same convention this
+repo already follows for `.agents/skills/`/`.claude/skills/` — a generated file that gets silently
+hand-patched just desyncs again on the next generation run).
+
+**Applying it here:** extend `scripts/mirror-skills.sh` to expand a simple
+`<!-- include: path/to/docs/file.md -->` marker before copying a skill's files into
+`.agents/skills/`/`.claude/skills/`. `skills/athene-audit/references/*.md` and
+`templates/set-review-gate.sh` become one-line include-marker stubs instead of literal copies —
+`docs/*.md` and `scripts/set-review-gate.sh` stay the only place the actual content is written.
+Not yet implemented — tracked as its own issue so it doesn't block #21.
+
 ## Left to the builder
 
+- Implement the include-directive expansion in `scripts/mirror-skills.sh` described above, and
+  convert the existing hand-copied bundled files (`skills/athene-audit/references/*.md`,
+  `templates/set-review-gate.sh`) to include-marker stubs.
 - Exact state-file schema/location and how Discovery/Build/Launch each update it mid-phase.
 - ~~Exact format and starter contents of the curated source-index reference file~~ — **done**, see
   `docs/engineering-source-index.md`. Seeded from
