@@ -26,8 +26,16 @@ Precedence when the same server name appears in more than one scope: **Local →
 → plugin-provided → claude.ai connectors. The whole entry from the highest-precedence source
 wins; fields don't merge across scopes.
 
-**Present:** the needed server name exists in any of these three locations.
-**Missing:** it exists nowhere above.
+Detection below only covers the three **file-backed** scopes (Local, Project, User) — a server
+provided only by a plugin or a claude.ai connector isn't visible to a file scan, and this method
+can't see it.
+
+**Present:** the needed server name exists in any of the three file-backed scopes above.
+**Missing:** it exists in none of those three files. This is **not** proof no server exists at
+all — a plugin or claude.ai connector could still provide it. Don't claim "missing" with full
+confidence or attempt setup that would create a duplicate; if a file-scan "missing" result
+matters for a setup decision, confirm the effective server list inside a live session (`/mcp`)
+before acting, not from the file scan alone.
 **Inconclusive:** `.mcp.json` or `~/.claude.json` exists but fails to parse as JSON, or the
 server name is ambiguous (e.g. matches a different provider under a similar name) — ask the user
 in this case, not before.
@@ -42,8 +50,11 @@ verify against the current Codex docs before relying on exact field names.
 | User | `~/.codex/config.toml` (`%USERPROFILE%\.codex\config.toml` on Windows) |
 | Project (trusted projects only) | `.codex/config.toml` |
 
-Format: TOML, one table per server: `[mcp_servers.<name>]` (snake_case), with `command`/`args`
-for a local process or `url` for a remote server. Secrets via `env_vars`/`bearer_token_env_var`,
+Format: TOML, one table per server: `[mcp_servers.<name>]` — `mcp_servers` itself is snake_case,
+but `<name>` is whatever the server was actually added as (e.g. `openaiDeveloperDocs` in OpenAI's
+own example is camelCase); match the exact table key, don't force-lowercase or re-case it when
+looking for a match. Each table has `command`/`args` for a local process, or `url` for a remote
+server. Secrets via `env_vars`/`bearer_token_env_var`,
 not hardcoded into the file. Precedence: CLI flags → project config → profile → user config.
 
 **Present/missing:** same logic as Claude Code, applied to this file's tables.
@@ -88,6 +99,6 @@ A real guide, not a vague pointer. Minimum content:
 2. The exact JSON/TOML snippet to add, with the server's actual name/command/URL filled in —
    not a placeholder the user has to figure out themselves.
 3. How to verify it worked (e.g. Claude Code: `/mcp` in a session; Codex: `codex mcp list`;
-   Cursor: the Output panel's MCP channel).
+   Cursor: Output panel → MCP Logs).
 
 Hand this to the user directly in the conversation — don't just say "see the docs."
