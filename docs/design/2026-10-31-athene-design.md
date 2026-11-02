@@ -313,8 +313,11 @@ not a special tool call.
   Cursor specifically (paths, formats).
 - ~~The exact wording/flow of the indirect project-framing question~~ — **done** for Audit, see
   `skills/athene-audit/SKILL.md`'s "Determine framing and risk tier" section (infer from scan
-  first, ask once conversationally if ambiguous, never recite the four category names). Still
-  open: the free/paid/tier question at each stack decision point (Phase 3, not Audit's job).
+  first, ask once conversationally if ambiguous, never recite the four category names).
+- ~~The free/paid/tier question wording and options-table format at each stack decision point~~
+  — **done** as a spec, see `docs/stack-decision-process.md` (#20). Not yet wired into any skill
+  — `athene` (the build skill this feeds) doesn't exist in this repo yet, same gap Audit had
+  before #19 closed it for the governance layer.
 - ~~Risk-tier → governance-doc-set mapping table~~ — **done**, see
   `docs/governance-doc-set-mapping.md`, wired into Audit as of #19/PR #22.
 - Fleshing out `agents/openai.yaml` for all five skills beyond the current placeholder.
