@@ -50,7 +50,7 @@ checklist to consult, not a form every box must be filled on:
 
 ## Recording it
 
-The full template's content becomes one entry in `.athene/state.md`'s Decisions made — the
+The chosen decision becomes one entry in `.athene/state.md`'s Decisions made — the
 template is how the decision gets *made*, not a separate file that sits alongside state.md.
 Record the decision and its one-line why there, same as any other decision; keep the full
 template's reasoning in the conversation/PR description if it's worth preserving at length, not
