@@ -40,9 +40,10 @@ model this project's planning already settled on:
    actionable.
 3. **Design** — require an issue/RFC for public API, behavior, architecture, format,
    performance-contract, or security changes. Capture problem, non-goals, alternatives,
-   compatibility/migration, tests, rollback. **This is where stack decisions, evidence-backed
-   architecture, and the engineering quality bar apply — not yet wired into this skeleton, see
-   the follow-up issue that wires them in.**
+   compatibility/migration, tests, rollback. This is where stack decisions and connector setup
+   apply — see the dedicated section below. Evidence-backed architecture and the engineering
+   quality bar also apply here, but aren't wired into this skeleton yet — see the follow-up
+   issue that wires those in.
 4. **Implementation** — supported toolchains, reproducible bootstrap/lint/targeted-test/docs-
    preview/debugging paths. Focused diffs, risk-proportionate tests, docs/release impact
    assessed.
@@ -80,6 +81,20 @@ never let a label change grant privileges or suppress a required check.
 
 Version workflow generators, reusable actions, runner selection, test configuration, dependency
 pins. Never expose secrets to untrusted fork PRs.
+
+## Stack decisions and connector setup
+
+At every material choice during Design (language, hosting, DB, domain, CI/CD tool, at minimum),
+follow `references/stack-decision-process.md`: present an options table (2-3 real candidates,
+pros/cons), then two ordered questions — self-hosted or managed first, pricing tier only if
+managed — never a raw budget figure — and cite real evidence for the decision, recorded in
+`.athene/state.md`'s Decisions made.
+
+Once a stack choice is made, follow `references/connector-detection.md`: detect whether the
+matching MCP/connector exists per the current platform (Claude Code, Codex, Cursor), auto-set it
+up when that's supported (Claude Code and Codex have a CLI add command; Cursor doesn't — manual
+guide only there), and hand over a real, usable manual guide otherwise — never claim auto-setup
+for a connector that isn't actually AI-configurable.
 
 ## Governance artifacts
 
