@@ -66,8 +66,11 @@ location across skills yet. When the `athene` build skill is built, copy these s
 its own `templates/` directory rather than re-authoring the content.)
 
 1. **`templates/CONTRIBUTING.md`** → target repo's `CONTRIBUTING.md` — Conventional Commits
-   convention (`feat/fix/chore/docs/refactor/test/perf/ci/build`) and the no-AI-attribution rule
-   together in one doc, not split across files.
+   convention (`feat/fix/chore/docs/refactor/test/perf/ci/build`), the no-AI-attribution rule, and
+   the `athene:` shortcut-marker convention, together in one doc, not split across files.
+   **`templates/debt-ledger.sh`** → target repo's `scripts/debt-ledger.sh` — copy this alongside
+   CONTRIBUTING.md, not separately; CONTRIBUTING.md names the command, so it has to actually exist
+   in the target repo or the instruction points at nothing.
 2. **`templates/pull_request_template.md`** → target repo's `.github/pull_request_template.md` —
    three sections: Summary, Why, Test plan.
 3. **`templates/ISSUE_TEMPLATE/bug_report.md`** and **`templates/ISSUE_TEMPLATE/feature_request.md`**
