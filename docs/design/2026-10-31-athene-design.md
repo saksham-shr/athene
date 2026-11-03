@@ -386,6 +386,58 @@ from them:
    ready to ship externally, and the packaging convention (#1, #25) would need real rework to
    support compact per-platform adaptations (point 4) before broader reach is worth pursuing.
 
+## Behavioral continuity across sessions (researched 2026-11-03)
+
+**The problem.** A fresh session in a repo the user has already been working in shouldn't feel
+like starting over — but actually *continuing* the old session (replaying its context) burns
+tokens and context for no good reason. The goal is behavioral continuity on a cheap new session,
+not context carryover. This is distinct from `.athene/state.md` (that's project task state —
+*what* was decided) and purely about *how* the AI behaves: pace, autonomy, what it does without
+being asked again, matching the pattern already established in this repo. Entirely behind the
+scenes — it changes default AI behavior at session start, never adds a user-facing step, a
+question to answer, or a workflow change. If it's not working silently, it's not working.
+
+**Two scopes, both needed (per the earlier memory-taxonomy research above):**
+- **User-level (cross-repo):** how this person works regardless of project — pace, autonomy
+  preference, risk tolerance, how they like to be asked things. New territory for Athene — lives
+  outside any single repo, unlike everything built so far.
+- **Repo-level:** the working rhythm actually established *in this specific repo* — e.g. this
+  user always checks `git status` and open issues before touching code in this repo, or always
+  wants fixes verified by actually running them before committing. Derived from this repo's own
+  session history, not carried from other projects.
+
+**How it's learned — signal-triggered, not blanket summarization (Reflexion, 2023; matches this
+session's own `feedback`-memory trigger rule already in use):** write a reflection only on a
+crisp signal — a correction, an explicit confirmation of something non-obvious, or a repeated
+friction point (the user had to re-ask or redo a step). Never on an end-of-session timer, and
+never by stopping to ask "should I remember this?" — that's the ceremony pattern the research
+flags as the wrong design. Background, non-blocking, silent when there's nothing worth keeping.
+
+**Trust boundary, non-negotiable:** only ever promote the *user's own* signal — their correction,
+their confirmation — never anything encountered incidentally during the session (a fetched page,
+another contributor's PR, an issue someone else filed). Passive capture that doesn't enforce this
+is a documented poisoning vector for long-term memory. Explicit instructions and governance
+*always* outrank an inferred pattern — an inferred "this user usually skips review" must never
+override an actually-requested gate.
+
+**Cold start — Claude Code only, v1:** Claude Code writes raw session transcripts to
+`~/.claude/projects/<encoded-path>/<session-id>.jsonl` (confirmed, one file per session, 30-day
+default retention) — a real, accessible format a setup step could scan once to seed a rough
+starting profile, cheaper than starting from nothing (ponytail's own `/ponytail band import`
+already reads this same format for a different purpose — real precedent it works). Codex and
+Cursor don't have a confirmed equivalent researched yet. **Decision: gate this whole feature to
+Claude Code for v1, not just the cold-start seed — revisit Codex/Cursor once a way to read their
+session data (or some other mechanism) is found.** Without the history-seed, a Codex/Cursor
+session would otherwise just start the incremental signal-triggered building from empty — but
+until a platform-appropriate mechanism exists at all, the simpler call is not shipping a
+half-working version there.
+
+**Where this plugs in:** closest existing home is Athene: Resume — it already runs at session
+start and already reads repo state; this would be an additional silent read alongside
+`.athene/state.md`, not a new user-facing step. Not yet scoped into a build issue — this section
+is the research and the decision record, per the user's explicit ask to research further before
+turning it into one.
+
 ## Left to the builder
 
 - ~~Implement the include-directive expansion in `scripts/mirror-skills.sh`~~ — **done**, #25/#26.
