@@ -13,8 +13,8 @@ Build happens issue-by-issue.
 Phases 0–4 (repo scaffold, Resume/Audit, governance generation, stack-decision flow, self-growing
 source index) are built and merged, along with the items from a prior-art review (Code Health
 skill, `athene:` shortcut-comment convention, condensed bootstrap snippets). `athene`, the core
-build skill, is now scaffolded (trigger, lifecycle, state handling, Launch handoff) but doesn't
-yet consume the specs below — wiring those in is the current work (#36, #37, #38).
+build skill, is now fully wired: lifecycle, ownership, CI/CD, stack decisions, evidence-backed
+architecture, governance generation, the review gate, and Launch handoff (#35–#38).
 
 ## Skills
 
@@ -25,28 +25,32 @@ Live, in [`skills/`](skills/):
 - **`athene-code-health`** — ranked bug/security/scale/test/speed/lean audit of the code itself,
   distinct from `athene-audit`'s process-only scope. One-shot report, changes nothing.
 - **`athene`** (skill 2, repo + build + architecture) — the core build skill: lifecycle, ownership,
-  CI/CD, Launch handoff. Scaffolded; stack decisions, evidence-backed architecture, the
-  engineering quality bar, governance generation, and the review gate are specced (see below) but
-  not yet wired in.
+  CI/CD, stack decisions, evidence-backed architecture + the engineering quality bar, governance
+  generation, the review gate, and Launch handoff.
 
 Planned, not yet built:
 - **Athene: Product Discovery**, **Athene: Launch** — turn an idea into a brief, and define the
   smallest launchable slice.
 
-## Reference specs (not yet wired into a skill)
+## Reference specs
 
+Consumed by a skill via `references/` include-marker stubs (see
+[`docs/skill-packaging.md`](docs/skill-packaging.md)), not cross-cutting on their own:
 - [`docs/governance-doc-set-mapping.md`](docs/governance-doc-set-mapping.md) — risk-tier × framing
-  → governance doc set.
+  → governance doc set. Wired into `athene-audit` and `athene`.
 - [`docs/review-gate.md`](docs/review-gate.md) + [`scripts/set-review-gate.sh`](scripts/set-review-gate.sh)
-  — real branch-protection toggle.
+  — real branch-protection toggle. Wired into `athene-audit` and `athene`.
 - [`docs/stack-decision-process.md`](docs/stack-decision-process.md) — options table + tier
-  question format for build decisions.
+  question format for build decisions. Wired into `athene`.
 - [`docs/connector-detection.md`](docs/connector-detection.md) — MCP/connector detection and setup
-  per platform.
+  per platform. Wired into `athene`.
 - [`docs/engineering-source-index.md`](docs/engineering-source-index.md) — topic-mapped real
-  engineering blogs with RSS feeds, for evidence-backed decisions.
+  engineering blogs with RSS feeds, for evidence-backed decisions. Wired into `athene`.
 - [`docs/source-index-live-search.md`](docs/source-index-live-search.md) — live-search fallback
-  and issue-drafting flow for a topic the source index doesn't cover.
+  and issue-drafting flow for a topic the source index doesn't cover. Wired into `athene`.
+
+Repository-wide maintainer documentation — not bundled via include-marker, not mirrored into any
+skill:
 - [`docs/state-schema.md`](docs/state-schema.md) — `.athene/state.md` schema.
 - [`docs/skill-packaging.md`](docs/skill-packaging.md) — skill directory convention and the
   include-marker build step (`scripts/mirror-skills.sh`).

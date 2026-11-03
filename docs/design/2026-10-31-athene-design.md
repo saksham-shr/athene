@@ -509,13 +509,19 @@ turning it into one.
   "Stack decisions and connector setup" section (#36), bundled as
   `references/stack-decision-process.md` via the include-marker convention.
 - ~~Risk-tier → governance-doc-set mapping table~~ — **done**, see
-  `docs/governance-doc-set-mapping.md`, wired into Audit as of #19/PR #22.
+  `docs/governance-doc-set-mapping.md`, wired into Audit as of #19/PR #22, and into `athene`'s
+  "Governance artifacts" section (#38), bundled as `references/governance-doc-set-mapping.md` via
+  the include-marker convention.
 - Fleshing out `agents/openai.yaml` for all five skills beyond the current placeholder.
 - ~~The concrete question set/template Athene asks at each architecture decision point to
   operationalize the engineering-quality-bar checklist above~~ — **done**, see
   `docs/architecture-decision-template.md` (#37), wired into `athene`'s "Evidence-backed
-  architecture and the engineering quality bar" section. Still open: how the review-gate
-  subagent's prompt encodes that same checklist — that's #38's territory, not yet built.
+  architecture and the engineering quality bar" section.
+- ~~The review-gate toggle and self-review-then-wait-on-reviewer queue discipline~~ — **done** for
+  `athene`, see `docs/review-gate.md`, wired into `athene`'s "Governance artifacts" section (#38),
+  bundled as `references/review-gate.md` via the include-marker convention. The self-review
+  subagent pass still just means "run this skill's own reviewer convention before waiting on a
+  human" — no separate review-gate-specific subagent prompt was needed beyond that.
 - **Known limitations surfaced during #19/PR #22's review, deliberately deferred rather than
   fixed — watch for these causing a real issue later:**
   - `scripts/set-review-gate.sh off` removes the entire branch-protection rule rather than

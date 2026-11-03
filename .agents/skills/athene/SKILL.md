@@ -49,10 +49,11 @@ model this project's planning already settled on:
 5. **PR intake** — drafts until ready. Non-trivial external work needs an accepted issue or a
    named sponsor, a concise human-written summary, compatibility disclosure, performance
    evidence where relevant. Run CLA/license/security checks early.
-6. **Review** — route by path ownership plus fallback. Evaluate correctness, tests, operations,
-   docs, compatibility, performance, security, maintainability. Re-review when the approved
-   surface materially changes. **The self-review-then-wait-on-reviewer gate described in the
-   design doc isn't wired into this skeleton yet — see the follow-up issue.**
+6. **Review** — route by path ownership plus fallback (see Governance artifacts below for the
+   ownership map and the review/merge gate). Evaluate correctness, tests, operations, docs,
+   compatibility, performance, security, maintainability. Re-review when the approved surface
+   materially changes. Self-review with a subagent pass before waiting on the configured reviewer
+   — queue discipline that holds whether or not the technical gate is switched on.
 7. **CI and merge** — cheap deterministic checks first; platform/integration/performance
    coverage chosen from paths and risk; PR gates separate from scheduled/nightly/release
    qualification. Protect default branches with verified requirements, approvals, a merge queue
@@ -110,10 +111,56 @@ live-search + issue-drafting flow instead of skipping evidence.
 
 ## Governance artifacts
 
-**Not yet wired into this skeleton** — see the follow-up issue that wires in the fixed baseline
-(Conventional Commits, PR/issue templates, no-AI-attribution, `athene:` shortcut markers) and the
-risk-scaled variable layer, both already built for Athene: Audit and meant to be reused here, not
-re-authored.
+Write these once, early — during Design, before Implementation starts generating real diffs — not
+retrofitted later. `templates/` below holds this skill's own copies of Audit's governance files
+(copied, not re-authored, per Audit's own note that these are the one real source of this
+content); mirroring keeps each skill's `templates/` independent, so there's no shared-at-runtime
+location across skills.
+
+**Fixed baseline — always written, regardless of framing or risk tier:**
+1. **`templates/CONTRIBUTING.md`** → target repo's `CONTRIBUTING.md`, plus
+   **`templates/debt-ledger.sh`** → target repo's `scripts/debt-ledger.sh` (copy both together —
+   CONTRIBUTING.md names the command, so it has to actually exist). Conventional Commits
+   (`feat/fix/chore/docs/refactor/test/perf/ci/build`), no-AI-attribution, and the `athene:`
+   shortcut-marker convention.
+2. **`templates/pull_request_template.md`** → `.github/pull_request_template.md`.
+3. **`templates/ISSUE_TEMPLATE/bug_report.md`** and **`templates/ISSUE_TEMPLATE/feature_request.md`**
+   → `.github/ISSUE_TEMPLATE/`.
+4. **Claude Code only:** set `attribution.commit`/`attribution.pr` to `""` (and `sessionUrl` to
+   `false` if session links are also prohibited) in the target repo's `.claude/settings.json` —
+   `includeCoAuthoredBy` alone doesn't disable attribution once either of those keys is already
+   set. Codex and Cursor have no equivalent setting; the rule lives in the doc only there.
+
+**Framing and risk tier** — same indirect-question approach as Audit, not a form: infer first from
+what Design has already surfaced (stack choices, who the repo is for, whether payments/auth/PII
+are in scope); ask once, conversationally, only when genuinely ambiguous. Use
+`references/governance-doc-set-mapping.md`'s own criteria directly — don't restate them here, that
+creates a second copy that can drift. Record framing, risk tier, and why in `.athene/state.md`'s
+Decisions made.
+
+**Variable layer** — look up the (framing, risk tier) pair in that same table and write exactly the
+doc set the row names, nothing more: `templates/CODEOWNERS` (check `.github/CODEOWNERS`, root, then
+`docs/CODEOWNERS` first — first match wins, leave an existing one alone; when writing a new one,
+replace `@REPLACE_WITH_DEFAULT_OWNER` with a real owner who has repo write access and confirm the
+file no longer contains the placeholder — a CODEOWNERS file the review gate can see but that names
+no real owner satisfies the gate's existence check without actually routing review to anyone),
+`templates/SECURITY.md` (only list a channel confirmed to actually work), `templates/commitlint.config.mjs`
++ `templates/workflows/commitlint.yml` (check the full documented commitlint config-file list before
+assuming none exists; leave an existing config unchanged; set `configFile` only for formats the
+action supports; skip and record the case if the detected format, its dependencies, or existing CI
+can't be supported — same handling as Audit's own commitlint step, not restated here), and
+`templates/RELEASE.md`. `none` is a valid, common result — don't add extra docs because it feels
+more thorough.
+
+**Review/merge gate:** copy `templates/set-review-gate.sh` → target repo's
+`scripts/set-review-gate.sh`, and follow `references/review-gate.md` for what it does and the
+default-off rationale — don't run it unprompted. Every PR this skill authors gets a self-review
+subagent pass first, then waits on whoever's configured as reviewer before merge; that queue
+discipline holds regardless of the toggle. Offer the toggle, note the result in Decisions made, and
+only run `set-review-gate.sh ... on` if the user asks for it turned on now — but first confirm a
+real CODEOWNERS owner is in place (see above) and that at least one eligible reviewer other than
+whoever authors this skill's PRs can actually approve them; a solo-writer repo with the gate on
+blocks every PR until someone else is added or the gate is turned back off.
 
 ## State handling
 
