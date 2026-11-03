@@ -165,10 +165,10 @@ own repo and isn't packaged alongside this skill when mirrored into a target rep
   `## Active skill`, `## Current phase`, `## Decisions made`, `## Open questions`.
 - **Active skill:** `athene` — the build skill's frontmatter `name` (Athene: repo + build +
   architecture), not a descriptive title; Resume needs a real file to find. Audit's job is
-  retrofit, not ongoing ownership — hand off once the baseline above is written. **Caveat:** that
-  build skill isn't packaged in this repo yet (Phase 2+, not yet built). If no skill named `athene`
-  exists where this skill is installed, say so explicitly and report everything else in this file
-  as-is, rather than claiming a handoff that can't actually happen.
+  retrofit, not ongoing ownership — hand off once the baseline above is written. If this skill
+  was installed without `athene` alongside it (a partial install, not the usual case), say so
+  explicitly and report everything else in this file as-is, rather than claiming a handoff that
+  can't actually happen.
 - **Current phase:** intake.
 - **Decisions made:** bullet list, append-only. Record framing, risk tier, and every baseline and
   variable-layer artifact written (or found already present and left alone), in the order decided

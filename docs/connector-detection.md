@@ -2,9 +2,9 @@
 
 The format skill 2 (Athene build) uses once a stack decision (`docs/stack-decision-process.md`)
 identifies a connector/MCP need — per the design doc's "MCP/connector setup" section. **Not yet
-wired into any skill:** `athene`, the skill this feeds, doesn't exist in this repo yet. Same
-pattern as `docs/stack-decision-process.md` and `docs/governance-doc-set-mapping.md` before they
-were wired into Audit.
+wired into any skill:** `athene`, the skill this feeds, is scaffolded in `skills/athene/` but
+doesn't consume this flow yet. Same pattern as `docs/stack-decision-process.md` and
+`docs/governance-doc-set-mapping.md` before they were wired into Audit.
 
 ## Detection, per platform
 

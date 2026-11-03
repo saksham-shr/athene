@@ -3,8 +3,8 @@
 The flow `docs/engineering-source-index.md`'s "How this gets used" step 5 names but doesn't
 fully spell out: what happens when a build decision's topic isn't in the curated index. Phase 4
 of `docs/design/2026-10-31-athene-build-phases.md`. **Not yet wired into any skill:** `athene`,
-the skill this feeds, doesn't exist in this repo yet — same structural gap as
-`docs/stack-decision-process.md` and `docs/connector-detection.md` before them.
+the skill this feeds, is scaffolded in `skills/athene/` but doesn't consume this flow yet — same
+structural gap as `docs/stack-decision-process.md` and `docs/connector-detection.md` before them.
 
 ## When this triggers
 

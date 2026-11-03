@@ -2,10 +2,10 @@
 
 The format skill 2 (Athene build) uses at every material build choice (language, hosting, DB,
 domain, CI/CD tool, at minimum) — per the design doc's "Stack decisions" and "Evidence-backed
-architecture" sections. **Not yet wired into any skill:** `athene`, the skill this feeds, doesn't
-exist in this repo yet (external draft only, not built here). This is the standalone spec that
-skill will consume once built — same pattern as `docs/governance-doc-set-mapping.md` before
-#19 wired it into Audit.
+architecture" sections. **Not yet wired into any skill:** `athene`, the skill this feeds, is
+scaffolded in `skills/athene/` but doesn't consume this flow yet. This is the standalone spec
+that skill will consume once wired in — same pattern as `docs/governance-doc-set-mapping.md`
+before #19 wired it into Audit.
 
 ## The options table
 
