@@ -20,7 +20,12 @@ On start, scan the target repo for `.athene/state.md`.
 - **Not found:** don't proceed as if this were a clean greenfield repo just because this skill
   was invoked directly — read and follow the Athene: Audit skill file first. This is how this
   skill and Audit disambiguate without relying on how the user phrased the request.
-- **Found:** continue below, picking up at whatever `Current phase` the state file names.
+- **Found:** read all four sections before doing anything else — don't just confirm the file
+  exists and barge into the lifecycle below. Check `Active skill`:
+  - **`athene`:** continue below, picking up at whatever `Current phase` names.
+  - **Anything else:** this skill doesn't own the repo right now. Read and follow whichever
+    skill file `Active skill` names instead — stop and say so if that file isn't packaged where
+    this skill is installed. Don't start deciding work or touching state another skill owns.
 
 ## Lifecycle
 
@@ -87,7 +92,9 @@ re-authored.
 
 Create or update `.athene/state.md` as a committed plain-Markdown file, self-contained spec below
 (this file doesn't travel with the skill once mirrored elsewhere, so don't cross-reference it by
-path):
+path). Write it at the end of this skill's turn/session, not mid-task — a reader (including this
+skill, next time it reads its own state back) should never see an intermediate phase or an
+incomplete decision list:
 
 - Four headings, in this exact order, each required — `none`/`n/a` rather than omitting one:
   `## Active skill`, `## Current phase`, `## Decisions made`, `## Open questions`.
@@ -95,15 +102,23 @@ path):
   repo. Set to `athene-launch`'s frontmatter name once handed off (see below) — not yet a real
   file in this repo, so until it exists, name it anyway and flag in Open questions that the
   named skill isn't packaged yet, same pattern Audit and Resume already use for this exact gap.
-- **Current phase:** one of the lifecycle stages above.
+- **Current phase:** one of the lifecycle stages above, while `Active skill` is `athene`. Once
+  handed off to Launch, this field belongs to Launch's own lifecycle, not this skill's — see
+  the Handoff section below for what value to leave it at.
 - **Decisions made:** bullet list, append-only. What was chosen and why, in the order decided —
   stack choices, architecture decisions, governance artifacts written, each with its rationale.
 - **Open questions:** bullet list. Anything genuinely unresolved. `none` if nothing's outstanding.
 
 ## Handoff
 
-Once the repo foundation, decision records, and governance artifacts are in place, read and
-follow the Athene: Launch skill file directly — a plain read-and-follow instruction, not a
-platform-specific invoke call. That skill doesn't exist in this repo yet; if it isn't packaged
-where this skill is installed, say so explicitly and stop there rather than claiming a handoff
-that can't happen, instead of guessing at Launch's behavior.
+Once the repo foundation, decision records, and governance artifacts are in place, update
+`.athene/state.md`: set `Active skill` to `athene-launch` and `Current phase` to `handoff` — not
+a Build-lifecycle value like "release and post-merge," which belongs to this skill's own
+vocabulary, not Launch's. Launch defines its own lifecycle; `handoff` is the one shared value
+both skills agree means "just arrived, haven't started your own stages yet," so Launch (or
+Resume reading on Launch's behalf) never receives a phase name from a lifecycle it doesn't run.
+
+Then read and follow the Athene: Launch skill file directly — a plain read-and-follow
+instruction, not a platform-specific invoke call. That skill doesn't exist in this repo yet; if
+it isn't packaged where this skill is installed, say so explicitly and stop there rather than
+claiming a handoff that can't happen, instead of guessing at Launch's behavior.

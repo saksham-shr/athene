@@ -20,7 +20,12 @@ file: `athene-product-discovery`, `athene` (repo + build + architecture),
 
 ### Current phase
 Where that skill is in its own lifecycle (e.g. "intake", "triage", "design",
-"implementation", "post-launch review"). One line.
+"implementation", "post-launch review"). One line. Each skill's phase names belong to its own
+lifecycle — one skill handing off to another must never leave a phase name from its own
+lifecycle for the next skill to misread as one of its own. `handoff` is the one reserved,
+shared value every skill agrees means "just arrived, haven't started your own stages yet" —
+use it when setting `Active skill` to a different skill, not a phase name from the lifecycle
+you're leaving.
 
 ### Decisions made
 Bullet list. Each decision: what was chosen, one-line why. Append-only —

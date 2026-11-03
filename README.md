@@ -10,10 +10,11 @@ Build happens issue-by-issue.
 
 ## Status
 
-Phases 0–3 (repo scaffold, Resume/Audit, governance generation, stack-decision flow) are built
-and merged. Phase 4 (self-growing engineering source index) and three items from a prior-art
-review are open as issues now. The core `athene` build skill that ties everything below together
-doesn't exist yet — that's the next real target.
+Phases 0–4 (repo scaffold, Resume/Audit, governance generation, stack-decision flow, self-growing
+source index) are built and merged, along with the items from a prior-art review (Code Health
+skill, `athene:` shortcut-comment convention, condensed bootstrap snippets). `athene`, the core
+build skill, is now scaffolded (trigger, lifecycle, state handling, Launch handoff) but doesn't
+yet consume the specs below — wiring those in is the current work (#36, #37, #38).
 
 ## Skills
 
@@ -21,15 +22,16 @@ Live, in [`skills/`](skills/):
 - **`athene-resume`** — picks up an Athene-tracked repo where it left off.
 - **`athene-audit`** — onboards Athene onto an existing repo: scans it, determines project
   framing + risk tier, writes the right governance docs, offers a review-gate toggle.
+- **`athene-code-health`** — ranked bug/security/scale/test/speed/lean audit of the code itself,
+  distinct from `athene-audit`'s process-only scope. One-shot report, changes nothing.
+- **`athene`** (skill 2, repo + build + architecture) — the core build skill: lifecycle, ownership,
+  CI/CD, Launch handoff. Scaffolded; stack decisions, evidence-backed architecture, the
+  engineering quality bar, governance generation, and the review gate are specced (see below) but
+  not yet wired in.
 
 Planned, not yet built:
-- **`athene`** (skill 2, repo + build + architecture) — the core build skill: stack decisions,
-  evidence-backed architecture, connector setup, governance generation, review gate, Launch
-  handoff. Everything else in `docs/` is a standalone spec waiting to be wired into this.
 - **Athene: Product Discovery**, **Athene: Launch** — turn an idea into a brief, and define the
   smallest launchable slice.
-- **Athene: Code Health** — ranked bug/security/scale/test/speed/lean audit of the code itself,
-  distinct from `athene-audit`'s process-only scope.
 
 ## Reference specs (not yet wired into a skill)
 
@@ -43,6 +45,8 @@ Planned, not yet built:
   per platform.
 - [`docs/engineering-source-index.md`](docs/engineering-source-index.md) — topic-mapped real
   engineering blogs with RSS feeds, for evidence-backed decisions.
+- [`docs/source-index-live-search.md`](docs/source-index-live-search.md) — live-search fallback
+  and issue-drafting flow for a topic the source index doesn't cover.
 - [`docs/state-schema.md`](docs/state-schema.md) — `.athene/state.md` schema.
 - [`docs/skill-packaging.md`](docs/skill-packaging.md) — skill directory convention and the
   include-marker build step (`scripts/mirror-skills.sh`).
