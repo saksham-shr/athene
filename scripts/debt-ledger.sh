@@ -1,26 +1,29 @@
 #!/usr/bin/env bash
 # Greps the repo for real `athene:` shortcut markers (see CONTRIBUTING.md's
 # "Shortcut markers" section for the convention) and prints a ledger grouped
-# by file. A marker with no comma - no `, <upgrade path>` after the ceiling -
-# is flagged as rot risk: a deliberate shortcut nobody wrote a trigger for.
+# by file. A marker with no nonempty text after a comma - no real
+# `, <upgrade path>` after the ceiling - is flagged as rot risk: a
+# deliberate shortcut nobody wrote a trigger for.
 #
 # Only matches a comment-prefix immediately followed by "athene:" (#, //, or
 # /*, optional single space) - a loose substring match on "athene:" catches
 # this script's own source (strings/comments that mention the word without
-# being a real marker) and false-positives on every hit. Markdown files are
-# excluded entirely: a real marker lives in actual code, never in docs that
-# just describe or show an example of the convention.
+# being a real marker) and false-positives on every hit. Markdown files and
+# this script's own self-check fixture are excluded entirely: a real marker
+# lives in actual code, never in docs describing the convention or in the
+# planted examples debt-ledger-test.sh uses to test itself.
 #
-# git grep already skips .git and anything gitignored, so there's no separate
-# exclude list to maintain here.
-#
-# Run from anywhere inside the repo to check - it does not have to be Athene's
-# own; git grep finds the repo root itself.
+# Runs from the repo root regardless of the caller's cwd - plain `git grep`
+# only searches the current directory and below, so invoking this from a
+# subdirectory would silently miss markers elsewhere in the repo.
 #
 # Usage: scripts/debt-ledger.sh
 set -euo pipefail
 
-matches="$(git grep -n -I --no-color -E '(#|//|/\*) ?athene:' -- ':!*.md' 2>/dev/null || true)"
+root="$(git rev-parse --show-toplevel)"
+
+matches="$(cd "$root" && git grep -n -I --no-color -E '(#|//|/\*) ?athene:' -- \
+  ':!*.md' ':!scripts/debt-ledger-test.sh' 2>/dev/null || true)"
 
 if [ -z "$matches" ]; then
   echo "No athene: markers found."
@@ -47,7 +50,9 @@ while IFS= read -r line; do
   fi
 
   total=$((total + 1))
-  if [[ "$marker" == *,* ]]; then
+  upgrade="${marker#*,}"
+  upgrade="$(printf '%s' "$upgrade" | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')"
+  if [[ "$marker" == *,* ]] && [ -n "$upgrade" ]; then
     echo "  $lineno: athene: $marker"
   else
     rot=$((rot + 1))
