@@ -393,16 +393,19 @@ it Right → Practice. Most of it already exists in Athene, via existing lifecyc
 `superpowers` skills this project already uses (TDD, root-cause-not-symptom fixes, refactor-pin-
 behavior, commit/push discipline, context-window hygiene). One real gap, tracked below:
 
-1. **Quantified code-quality gates — real gap, tracked as #43.** `ub-mode` pairs with three
+1. **Quantified code-quality checks — real gap, tracked as #43.** `ub-mode` pairs with three
    companion tool repos (`crapper`, `dryer`, `mutator`) to enforce numeric thresholds: CRAP score
-   `< 10` per function (cyclomatic complexity + coverage-weighted risk), duplication ratio `>= 0.8`
-   flagged for elimination, and mutation testing to surface undertested code and dead code beyond
-   what line coverage shows. **`athene-code-health`** is Athene's equivalent surface (ranked
-   bugs/security/scale/missing-test/speed/lean audit) but is qualitative only — no numeric gates
-   anywhere in it. Decision: add the same three thresholds to Code Health, guidance-only — detect
-   and run an existing project tool that already computes one of these dimensions where present,
-   report the gap rather than silently skipping it where absent, don't bundle `crapper`/`dryer`/
-   `mutator` themselves (general-purpose but not confirmed across every stack Athene might touch).
+   `< 10` per function (cyclomatic complexity + coverage-weighted risk), minimum pairwise Jaccard
+   structural-similarity score `>= 0.8` (Athene's proposed threshold — `dryer`'s own documented
+   default is `0.82`; this isn't a whole-project duplication ratio) flagged for elimination, and
+   mutation testing to surface undertested code and dead code beyond what line coverage shows —
+   no numeric pass threshold proposed for this one, report results rather than gate on a number
+   until one is chosen. **`athene-code-health`** is Athene's equivalent surface (ranked
+   bugs/security/scale/missing-test/speed/lean audit) but is qualitative only — no numeric checks
+   anywhere in it. Decision: add these checks to Code Health, guidance-only — detect and run an
+   existing project tool that already computes one of these dimensions where present, report the
+   gap rather than silently skipping it where absent, don't bundle `crapper`/`dryer`/`mutator`
+   themselves (general-purpose but not confirmed across every stack Athene might touch).
 2. **"Keep a Log" and "Attack the Premise" — noted, not adopted now.** `ub-mode`'s per-action log
    (every action + the reason, reported on completion) is finer-grained than `.athene/state.md`'s
    Decisions made, which records decisions, not every action — a real distinction, but not clearly
