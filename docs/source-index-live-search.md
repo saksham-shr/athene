@@ -69,13 +69,23 @@ against Athene's own repo by default — this is a real constraint, not a local 
 a fine-grained PAT with `Issues: write`, **and** the user's own access to that repo actually
 granted on the token (a fine-grained PAT can be limited to repos the token's owner has access
 to; `Issues: write` alone doesn't guarantee that access exists). Never ask for a broader token.
-Use it only for one explicit call — `gh issue create --repo saksham-shr/athene` (the current
-Athene repo; update this if the project ever moves) — pass the token via `GH_TOKEN` in that
-command's own environment. Always pass `--repo` explicitly; never rely on `gh`'s ambient default,
-which resolves to whatever repo the agent happens to be running in — the *target* repo, not
-Athene's — and would file the issue in the wrong place. Don't write the token to any file in the
-target repo, don't log it, don't reuse it for anything else. If the user declines, has no such
-token, or the token lacks real access to Athene's repo:
+Use it only for one explicit, non-interactive call — pass the token via `GH_TOKEN` in that
+command's own environment, and pass the title/body directly so `gh` never prompts (an agent
+without an interactive terminal would otherwise block waiting for input it can't give):
+
+```
+GH_TOKEN="<token>" gh issue create --repo saksham-shr/athene \
+  --title "docs(source-index): propose adding <source name> for <topic>" \
+  --body-file -
+```
+
+(pipe the drafted body in via stdin, or `--body "<text>"` for a short one). Always pass `--repo`
+explicitly; never rely on `gh`'s ambient default, which resolves to whatever repo the agent
+happens to be running in — the *target* repo, not Athene's — and would file the issue in the
+wrong place. `saksham-shr/athene` is the current Athene repo; update this if the project ever
+moves. Don't write the token to any file in the target repo, don't log it, don't reuse it for
+anything else. If the user declines, has no such token, or the token lacks real access to
+Athene's repo:
 - Don't drop the proposal silently. Give the user the fully-drafted issue body directly in the
   conversation so they can file it themselves (or decline to), and note in `.athene/state.md`'s
   Open questions that a source proposal is pending, with what topic it's for.
@@ -92,7 +102,11 @@ Build decision: "pick a rate-limiting strategy for the API." No `rate limiting` 
    |---|---|---|
    | Token bucket | Allows short bursts, smooths out over time | Slightly more state per client than a fixed window |
    | Fixed window | Simplest to implement and reason about | Allows a burst right at the window boundary (2x the limit in a short span) |
-   | Leaky bucket | Smooths output to a constant rate | Doesn't allow bursts at all, worse UX for bursty-but-legitimate traffic |
+   | Leaky bucket | Outputs at a constant, predictable rate | Without a burst-capacity variant, no short bursts at all — worse UX for bursty-but-legitimate traffic |
+
+   (General algorithmic tradeoffs, not live-search citations — none of these three rows claims
+   a specific source yet. Step 2 below is what actually supplies sourced evidence, and only for
+   the row it covers.)
 
 2. Live search finds [Stripe's rate limiters post](https://stripe.com/blog/rate-limiters) (Paul
    Tarjan, 2017) — a primary source (Stripe's own engineering blog), with a specific, checkable
@@ -100,10 +114,12 @@ Build decision: "pick a rate-limiting strategy for the API." No `rate limiting` 
    each request consumes a token, tokens refill gradually. Not a comparison against the other
    candidates above, so don't cite it as one — just cite the specific claim it actually makes,
    as evidence for picking the row already in the table.
-3. Decision recorded (per `docs/stack-decision-process.md`): *"Rate limiting: token bucket over
-   fixed window/leaky bucket — allows legitimate bursts without the window-boundary exploit,
-   same approach Stripe's own engineering blog describes using for their API, per
-   https://stripe.com/blog/rate-limiters."*
+3. Decision recorded (per `docs/stack-decision-process.md`) — cite only what the source actually
+   supports, not a comparison it never made: *"Rate limiting: token bucket — Stripe's own
+   engineering blog describes using this approach for their API, per
+   https://stripe.com/blog/rate-limiters. Fixed window and leaky bucket weren't ruled out by any
+   sourced evidence, just by the general tradeoffs in the table above; revisit if a real source
+   favoring one of them turns up."*
 4. Issue drafted proposing Stripe's blog be added under a new `rate limiting` topic row (Stripe
    is already in the index under `payments` — this is a second topic for an existing source, not
    a brand-new one, worth noting in the issue's Why field).
