@@ -69,12 +69,13 @@ against Athene's own repo by default — this is a real constraint, not a local 
 a fine-grained PAT with `Issues: write`, **and** the user's own access to that repo actually
 granted on the token (a fine-grained PAT can be limited to repos the token's owner has access
 to; `Issues: write` alone doesn't guarantee that access exists). Never ask for a broader token.
-Use it only for one explicit, non-interactive call — pass the token via `GH_TOKEN` in that
-command's own environment, and pass the title/body directly so `gh` never prompts (an agent
-without an interactive terminal would otherwise block waiting for input it can't give):
+Use it only for one explicit, non-interactive call. Set `GH_TOKEN` in the executor's own
+environment for that call — never inline the token's value in the command text itself, it would
+land in shell history and process listings. Pass the title/body directly so `gh` never prompts
+(an agent without an interactive terminal would otherwise block waiting for input it can't give):
 
 ```
-GH_TOKEN="<token>" gh issue create --repo saksham-shr/athene \
+gh issue create --repo saksham-shr/athene \
   --title "docs(source-index): propose adding <source name> for <topic>" \
   --body-file -
 ```
