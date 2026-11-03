@@ -15,12 +15,18 @@ cat > sample.sh <<'EOF'
 echo "has trigger"
 # athene: naive O(n^2) scan
 echo "no trigger"
+/* athene: naive cache, */ int x;
 EOF
 git add sample.sh
 
+# Untracked file - never git add'ed - must still be found (--untracked).
+cat > untracked.sh <<'EOF'
+# athene: skip validation here, add it before shipping
+EOF
+
 out="$("$root/scripts/debt-ledger.sh")"
 
-echo "$out" | grep -q "2 marker(s), 1 flagged as rot risk." || {
+echo "$out" | grep -q "4 marker(s), 2 flagged as rot risk." || {
   echo "FAIL: summary line wrong. Got:"
   echo "$out"
   exit 1
@@ -31,6 +37,14 @@ echo "$out" | grep -q "global lock, per-account locks if throughput matters$" ||
 }
 echo "$out" | grep -q "naive O(n^2) scan  \[ROT RISK: no upgrade trigger named\]" || {
   echo "FAIL: rot-risk marker not flagged"
+  exit 1
+}
+echo "$out" | grep -q "naive cache,  \[ROT RISK: no upgrade trigger named\]" || {
+  echo "FAIL: block-comment marker's trailing code wasn't stripped before the upgrade-path check"
+  exit 1
+}
+echo "$out" | grep -q "skip validation here, add it before shipping$" || {
+  echo "FAIL: untracked file's marker not found - --untracked may be missing"
   exit 1
 }
 

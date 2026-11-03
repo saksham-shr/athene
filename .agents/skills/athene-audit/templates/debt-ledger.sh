@@ -22,7 +22,7 @@ set -euo pipefail
 
 root="$(git rev-parse --show-toplevel)"
 
-matches="$(cd "$root" && git grep -n -I --no-color -E '(#|//|/\*) ?athene:' -- \
+matches="$(cd "$root" && git grep --untracked -n -I --no-color -E '(#|//|/\*) ?athene:' -- \
   ':!*.md' ':!scripts/debt-ledger-test.sh' 2>/dev/null || true)"
 
 if [ -z "$matches" ]; then
@@ -42,6 +42,12 @@ while IFS= read -r line; do
 
   marker="${content#*athene:}"
   marker="$(printf '%s' "$marker" | sed 's/^[[:space:]]*//')"
+  # A marker inside a /* ... */ block comment has the closing delimiter and
+  # anything after it still inside $marker - strip that before checking for
+  # upgrade text, or trailing code reads as a valid upgrade path.
+  if [[ "$content" =~ /\*[[:space:]]?athene: ]]; then
+    marker="$(printf '%s' "$marker" | sed 's#[[:space:]]*\*/.*$##')"
+  fi
 
   if [ "$file" != "$current_file" ]; then
     [ -n "$current_file" ] && echo
