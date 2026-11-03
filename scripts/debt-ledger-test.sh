@@ -48,4 +48,14 @@ echo "$out" | grep -q "skip validation here, add it before shipping$" || {
   exit 1
 }
 
+# submodule.recurse=true makes plain `git grep --untracked` fail outright
+# (conflicts with implied --recurse-submodules) - must still find markers.
+git config submodule.recurse true
+out2="$("$root/scripts/debt-ledger.sh")"
+echo "$out2" | grep -q "4 marker(s), 2 flagged as rot risk." || {
+  echo "FAIL: submodule.recurse=true broke the ledger (--no-recurse-submodules missing?). Got:"
+  echo "$out2"
+  exit 1
+}
+
 echo "PASS: debt-ledger.sh"

@@ -22,8 +22,19 @@ set -euo pipefail
 
 root="$(git rev-parse --show-toplevel)"
 
-matches="$(cd "$root" && git grep --untracked -n -I --no-color -E '(#|//|/\*) ?athene:' -- \
-  ':!*.md' ':!scripts/debt-ledger-test.sh' 2>/dev/null || true)"
+status=0
+matches="$(cd "$root" && git grep --untracked --no-recurse-submodules -n -I --no-color \
+  -E '(#|//|/\*) ?athene:' -- ':!*.md' ':!scripts/debt-ledger-test.sh')" || status=$?
+
+# git grep exits 1 for "no matches" - that's a normal empty result, not an
+# error. Any other nonzero status (e.g. --untracked conflicting with
+# submodule.recurse=true) is a real failure and must stop the script, not be
+# silently swallowed into a false "no markers found".
+if [ "$status" -eq 1 ]; then
+  matches=""
+elif [ "$status" -ne 0 ]; then
+  exit "$status"
+fi
 
 if [ -z "$matches" ]; then
   echo "No athene: markers found."
