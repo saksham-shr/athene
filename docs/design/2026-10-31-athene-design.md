@@ -480,9 +480,11 @@ turning it into one.
 - ~~Risk-tier → governance-doc-set mapping table~~ — **done**, see
   `docs/governance-doc-set-mapping.md`, wired into Audit as of #19/PR #22.
 - Fleshing out `agents/openai.yaml` for all five skills beyond the current placeholder.
-- The concrete question set/template Athene asks at each architecture decision point to
-  operationalize the engineering-quality-bar checklist above, and how the review-gate subagent's
-  prompt encodes that same checklist.
+- ~~The concrete question set/template Athene asks at each architecture decision point to
+  operationalize the engineering-quality-bar checklist above~~ — **done**, see
+  `docs/architecture-decision-template.md` (#37), wired into `athene`'s "Evidence-backed
+  architecture and the engineering quality bar" section. Still open: how the review-gate
+  subagent's prompt encodes that same checklist — that's #38's territory, not yet built.
 - **Known limitations surfaced during #19/PR #22's review, deliberately deferred rather than
   fixed — watch for these causing a real issue later:**
   - `scripts/set-review-gate.sh off` removes the entire branch-protection rule rather than

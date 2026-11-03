@@ -40,10 +40,9 @@ model this project's planning already settled on:
    actionable.
 3. **Design** — require an issue/RFC for public API, behavior, architecture, format,
    performance-contract, or security changes. Capture problem, non-goals, alternatives,
-   compatibility/migration, tests, rollback. This is where stack decisions and connector setup
-   apply — see the dedicated section below. Evidence-backed architecture and the engineering
-   quality bar also apply here, but aren't wired into this skeleton yet — see the follow-up
-   issue that wires those in.
+   compatibility/migration, tests, rollback. This is where stack decisions, connector setup,
+   evidence-backed architecture, and the engineering quality bar all apply — see the two
+   dedicated sections below.
 4. **Implementation** — supported toolchains, reproducible bootstrap/lint/targeted-test/docs-
    preview/debugging paths. Focused diffs, risk-proportionate tests, docs/release impact
    assessed.
@@ -95,6 +94,19 @@ matching MCP/connector exists per the current platform (Claude Code, Codex, Curs
 up when that's supported (Claude Code and Codex have a CLI add command; Cursor doesn't — manual
 guide only there), and hand over a real, usable manual guide otherwise — never claim auto-setup
 for a connector that isn't actually AI-configurable.
+
+## Evidence-backed architecture and the engineering quality bar
+
+For each nontrivial architecture decision (not a stack pick — how a feature's data flows, where
+state lives, how a system handles failure), follow `references/architecture-decision-template.md`:
+check reversibility first (skip the full template if the choice is changeable in under a week),
+otherwise work through problem/constraints/requirements → options with tradeoffs → the
+quality-bar check (non-functional targets, security, performance, operations, edge cases) →
+decision → consequences → revisit trigger.
+
+Back the decision with real evidence, not memory: consult `references/engineering-source-index.md`
+for the topic. If no entry covers it, follow `references/source-index-live-search.md`'s
+live-search + issue-drafting flow instead of skipping evidence.
 
 ## Governance artifacts
 
