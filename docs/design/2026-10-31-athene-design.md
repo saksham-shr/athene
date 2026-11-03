@@ -386,6 +386,35 @@ from them:
    ready to ship externally, and the packaging convention (#1, #25) would need real rework to
    support compact per-platform adaptations (point 4) before broader reach is worth pursuing.
 
+## Prior-art review: `unclebob/ub-mode` (researched 2026-11-03)
+
+Single-file skill (~150 lines, no bundled tooling), structured as First Make it Work → Then Make
+it Right → Practice. Most of it already exists in Athene, via existing lifecycle stages or the
+`superpowers` skills this project already uses (TDD, root-cause-not-symptom fixes, refactor-pin-
+behavior, commit/push discipline, context-window hygiene). One real gap, tracked below:
+
+1. **Quantified code-quality checks — real gap, tracked as #43.** `ub-mode` pairs with three
+   companion tool repos (`crapper`, `dryer`, `mutator`) to enforce numeric thresholds: CRAP score
+   `< 10` per function (cyclomatic complexity + coverage-weighted risk), minimum pairwise Jaccard
+   structural-similarity score `>= 0.8` (Athene's proposed threshold — `dryer`'s own documented
+   default is `0.82`; this isn't a whole-project duplication ratio) flagged for elimination, and
+   mutation testing to surface undertested code and dead code beyond what line coverage shows —
+   no numeric pass threshold proposed for this one, report results rather than gate on a number
+   until one is chosen. **`athene-code-health`** is Athene's equivalent surface (ranked
+   bugs/security/scale/missing-test/speed/lean audit) but is qualitative only — no numeric checks
+   anywhere in it. Decision: add these checks to Code Health, guidance-only — detect and run an
+   existing project tool that already computes one of these dimensions where present, report the
+   gap rather than silently skipping it where absent, don't bundle `crapper`/`dryer`/`mutator`
+   themselves (general-purpose but not confirmed across every stack Athene might touch).
+2. **"Keep a Log" and "Attack the Premise" — noted, not adopted now.** `ub-mode`'s per-action log
+   (every action + the reason, reported on completion) is finer-grained than `.athene/state.md`'s
+   Decisions made, which records decisions, not every action — a real distinction, but not clearly
+   worth the verbosity cost for every skill's every run; revisit if a real debugging need for a
+   finer trail shows up. `ub-mode`'s "Attack the Premise" (when two independent fixes hit the same
+   gate, stop and name the shared premise in one sentence before trying a third fix) is a sharp
+   debugging heuristic, but belongs in a debugging skill, not Athene's governance/build scope —
+   `superpowers:systematic-debugging` is the right home for it if ever adopted, not this project.
+
 ## Behavioral continuity across sessions (researched 2026-11-03)
 
 **The problem.** A fresh session in a repo the user has already been working in shouldn't feel
@@ -441,8 +470,10 @@ turning it into one.
 ## Left to the builder
 
 - ~~Implement the include-directive expansion in `scripts/mirror-skills.sh`~~ — **done**, #25/#26.
-- Build `skills/athene-code-health/SKILL.md` (skill 6) — bugs/security/scale/missing-test/speed/
-  lean, ranked, 4-part findings, per the ponytail-audit structure reviewed above.
+- ~~Build `skills/athene-code-health/SKILL.md` (skill 6)~~ — **done**: bugs/security/scale/
+  missing-test/speed/lean, ranked, 4-part findings, per the ponytail-audit structure reviewed
+  above. Still open: quantified CRAP/duplication/mutation thresholds on top of the qualitative
+  audit — tracked as #43, see the `ub-mode` prior-art review above.
 - Define the `athene:` shortcut-comment convention (parallel to ponytail's `shortcut:`/`ponytail:`)
   and a debt-ledger command/skill to grep it into a report, flagging markers with no upgrade
   trigger.
