@@ -65,11 +65,17 @@ one-off evidence; it doesn't wait on the issue being resolved.
 An agent running inside someone else's target repo doesn't have credentials to file an issue
 against Athene's own repo by default — this is a real constraint, not a local file edit.
 
-**Concrete answer:** ask the user for a GitHub token scoped to create issues on Athene's repo
-(a fine-grained PAT with Issues: write on that one repo is enough; never ask for a broader
-token). Use it only for that one `gh issue create` call — pass it via `GH_TOKEN` in the
-command's own environment, don't write it to any file in the target repo, don't log it, don't
-reuse it for anything else. If the user declines or has no such token:
+**Concrete answer:** ask the user for a GitHub token scoped to create issues on Athene's repo —
+a fine-grained PAT with `Issues: write`, **and** the user's own access to that repo actually
+granted on the token (a fine-grained PAT can be limited to repos the token's owner has access
+to; `Issues: write` alone doesn't guarantee that access exists). Never ask for a broader token.
+Use it only for one explicit call — `gh issue create --repo saksham-shr/athene` (the current
+Athene repo; update this if the project ever moves) — pass the token via `GH_TOKEN` in that
+command's own environment. Always pass `--repo` explicitly; never rely on `gh`'s ambient default,
+which resolves to whatever repo the agent happens to be running in — the *target* repo, not
+Athene's — and would file the issue in the wrong place. Don't write the token to any file in the
+target repo, don't log it, don't reuse it for anything else. If the user declines, has no such
+token, or the token lacks real access to Athene's repo:
 - Don't drop the proposal silently. Give the user the fully-drafted issue body directly in the
   conversation so they can file it themselves (or decline to), and note in `.athene/state.md`'s
   Open questions that a source proposal is pending, with what topic it's for.
@@ -79,17 +85,28 @@ reuse it for anything else. If the user declines or has no such token:
 Build decision: "pick a rate-limiting strategy for the API." No `rate limiting` row in
 `docs/engineering-source-index.md`.
 
-1. Live search finds [Stripe's rate limiters post](https://stripe.com/blog/rate-limiters) (Paul
+1. Options table first (per `docs/stack-decision-process.md` — this isn't optional just because
+   the topic is unindexed):
+
+   | Candidate | Pros | Cons |
+   |---|---|---|
+   | Token bucket | Allows short bursts, smooths out over time | Slightly more state per client than a fixed window |
+   | Fixed window | Simplest to implement and reason about | Allows a burst right at the window boundary (2x the limit in a short span) |
+   | Leaky bucket | Smooths output to a constant rate | Doesn't allow bursts at all, worse UX for bursty-but-legitimate traffic |
+
+2. Live search finds [Stripe's rate limiters post](https://stripe.com/blog/rate-limiters) (Paul
    Tarjan, 2017) — a primary source (Stripe's own engineering blog), with a specific, checkable
    claim: "We use the token bucket algorithm to do rate limiting" — a central bucket per user,
-   each request consumes a token, tokens refill gradually. Not a comparison against
-   alternatives, so don't cite it as one — just cite the specific claim it actually makes.
-2. Decision recorded (per `docs/stack-decision-process.md`): *"Rate limiting: token bucket,
-   per-user — same approach Stripe's own engineering blog describes using for their API, per
+   each request consumes a token, tokens refill gradually. Not a comparison against the other
+   candidates above, so don't cite it as one — just cite the specific claim it actually makes,
+   as evidence for picking the row already in the table.
+3. Decision recorded (per `docs/stack-decision-process.md`): *"Rate limiting: token bucket over
+   fixed window/leaky bucket — allows legitimate bursts without the window-boundary exploit,
+   same approach Stripe's own engineering blog describes using for their API, per
    https://stripe.com/blog/rate-limiters."*
-3. Issue drafted proposing Stripe's blog be added under a new `rate limiting` topic row (Stripe
+4. Issue drafted proposing Stripe's blog be added under a new `rate limiting` topic row (Stripe
    is already in the index under `payments` — this is a second topic for an existing source, not
    a brand-new one, worth noting in the issue's Why field).
-4. User has no token handy — issue body handed to them directly in chat, state.md's Open
+5. User has no token handy — issue body handed to them directly in chat, state.md's Open
    questions notes: "Source proposal pending (Stripe blog, rate limiting topic) — user to file or
    decline."
