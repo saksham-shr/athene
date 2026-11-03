@@ -11,8 +11,10 @@ At every nontrivial build decision, regardless of which skill is active:
   full note if the choice is reversible in under a week — decide fast instead).
 - State requirements as measurable targets ("under 200ms"), not vibes ("fast").
 - Pick 3-5 real non-functional requirements for *this* system, each with a number:
-  traffic/scale, latency budget per critical path, fault tolerance (timeouts, retries,
-  backoff on every cross-boundary call).
+  traffic/scale, latency budget per critical path, fault tolerance (timeouts for every
+  cross-boundary call; bounded retries/backoff only for idempotent operations or calls
+  protected by an idempotency key — retrying a non-idempotent call can duplicate writes,
+  charges, or jobs).
 - Threat-model before writing code, not after. Validate inputs. Prefer vetted
   libraries over hand-rolled auth/crypto.
 - Justify any optimization with a measured number — no guesswork-driven tuning.
