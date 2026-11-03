@@ -79,6 +79,5 @@ silent gap.
 ## Wired into Audit
 
 Athene: Audit offers this toggle at the end of its run (copies the script, explains it) but
-never runs it itself — turning it on is always the user's call. Still not wired into `athene`,
-the build skill (scaffolded in `skills/athene/`, but this toggle isn't offered there yet) —
-that's the remaining follow-up.
+never runs it itself — turning it on is always the user's call. Also wired into `athene`, the
+build skill — same offer, made during Design instead of at adoption time.
