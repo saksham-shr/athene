@@ -468,14 +468,15 @@ turning it into one.
   Cursor~~ — **done** as a spec, see `docs/connector-detection.md` (#21). Claude Code's paths
   confirmed against its own docs; Codex's and Cursor's are community-sourced with known gaps
   (Cursor's Windows global path conflicts across sources) flagged explicitly in that file, not
-  silently asserted. Not yet wired into any skill — same gap as the other Phase 3 pieces.
+  silently asserted. Wired into `athene`'s "Stack decisions and connector setup" section (#36),
+  bundled as `references/connector-detection.md` via the include-marker convention.
 - ~~The exact wording/flow of the indirect project-framing question~~ — **done** for Audit, see
   `skills/athene-audit/SKILL.md`'s "Determine framing and risk tier" section (infer from scan
   first, ask once conversationally if ambiguous, never recite the four category names).
 - ~~The free/paid/tier question wording and options-table format at each stack decision point~~
-  — **done** as a spec, see `docs/stack-decision-process.md` (#20). Not yet wired into
-  `athene`, the build skill this feeds — scaffolded as of #35, but this flow isn't consumed
-  there yet. Same gap Audit had before #19 closed it for the governance layer.
+  — **done** as a spec, see `docs/stack-decision-process.md` (#20). Wired into `athene`'s
+  "Stack decisions and connector setup" section (#36), bundled as
+  `references/stack-decision-process.md` via the include-marker convention.
 - ~~Risk-tier → governance-doc-set mapping table~~ — **done**, see
   `docs/governance-doc-set-mapping.md`, wired into Audit as of #19/PR #22.
 - Fleshing out `agents/openai.yaml` for all five skills beyond the current placeholder.
