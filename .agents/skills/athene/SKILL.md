@@ -86,8 +86,9 @@ pins. Never expose secrets to untrusted fork PRs.
 
 At every material choice during Design (language, hosting, DB, domain, CI/CD tool, at minimum),
 follow `references/stack-decision-process.md`: present an options table (2-3 real candidates,
-pros/cons), ask free vs. paid vs. which-paid-tier — never a raw budget figure — and cite real
-evidence for the decision, recorded in `.athene/state.md`'s Decisions made.
+pros/cons), then two ordered questions — self-hosted or managed first, pricing tier only if
+managed — never a raw budget figure — and cite real evidence for the decision, recorded in
+`.athene/state.md`'s Decisions made.
 
 Once a stack choice is made, follow `references/connector-detection.md`: detect whether the
 matching MCP/connector exists per the current platform (Claude Code, Codex, Cursor), auto-set it
