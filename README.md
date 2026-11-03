@@ -49,7 +49,8 @@ Consumed by a skill via `references/` include-marker stubs (see
 - [`docs/source-index-live-search.md`](docs/source-index-live-search.md) — live-search fallback
   and issue-drafting flow for a topic the source index doesn't cover. Wired into `athene`.
 
-Cross-cutting, used by every skill via mirroring rather than a single skill's `references/`:
+Repository-wide maintainer documentation — not bundled via include-marker, not mirrored into any
+skill:
 - [`docs/state-schema.md`](docs/state-schema.md) — `.athene/state.md` schema.
 - [`docs/skill-packaging.md`](docs/skill-packaging.md) — skill directory convention and the
   include-marker build step (`scripts/mirror-skills.sh`).

@@ -140,9 +140,12 @@ Decisions made.
 
 **Variable layer** — look up the (framing, risk tier) pair in that same table and write exactly the
 doc set the row names, nothing more: `templates/CODEOWNERS` (check `.github/CODEOWNERS`, root, then
-`docs/CODEOWNERS` first — first match wins, leave an existing one alone), `templates/SECURITY.md`
-(only list a channel confirmed to actually work), `templates/commitlint.config.mjs` +
-`templates/workflows/commitlint.yml` (check the full documented commitlint config-file list before
+`docs/CODEOWNERS` first — first match wins, leave an existing one alone; when writing a new one,
+replace `@REPLACE_WITH_DEFAULT_OWNER` with a real owner who has repo write access and confirm the
+file no longer contains the placeholder — a CODEOWNERS file the review gate can see but that names
+no real owner satisfies the gate's existence check without actually routing review to anyone),
+`templates/SECURITY.md` (only list a channel confirmed to actually work), `templates/commitlint.config.mjs`
++ `templates/workflows/commitlint.yml` (check the full documented commitlint config-file list before
 assuming none exists; skip the workflow if an unsupported alternate format is detected), and
 `templates/RELEASE.md`. `none` is a valid, common result — don't add extra docs because it feels
 more thorough.
@@ -152,7 +155,10 @@ more thorough.
 default-off rationale — don't run it unprompted. Every PR this skill authors gets a self-review
 subagent pass first, then waits on whoever's configured as reviewer before merge; that queue
 discipline holds regardless of the toggle. Offer the toggle, note the result in Decisions made, and
-only run `set-review-gate.sh ... on` if the user asks for it turned on now.
+only run `set-review-gate.sh ... on` if the user asks for it turned on now — but first confirm a
+real CODEOWNERS owner is in place (see above) and that at least one eligible reviewer other than
+whoever authors this skill's PRs can actually approve them; a solo-writer repo with the gate on
+blocks every PR until someone else is added or the gate is turned back off.
 
 ## State handling
 
