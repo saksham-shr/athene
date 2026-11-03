@@ -1,6 +1,9 @@
 ---
 name: athene-code-health
-description: Rank a repo's code quality - bugs, security holes, scale limits, missing tests, slow paths, bloat. One-shot report, changes nothing. Use for "audit this codebase", "review the whole repo". Skip for process/governance setup (use Athene: Audit) or a single-file/diff review.
+description: >-
+  Rank a repo's code quality - bugs, security holes, scale limits, missing tests, slow paths,
+  bloat. One-shot report, changes nothing. Use for "audit this codebase", "review the whole
+  repo". Skip for process/governance setup (use Athene: Audit) or a single-file/diff review.
 ---
 
 # Athene: Code Health
