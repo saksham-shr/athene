@@ -1,8 +1,15 @@
 #!/usr/bin/env bash
-# Greps the repo for `athene:` shortcut markers (see CONTRIBUTING.md's
+# Greps the repo for real `athene:` shortcut markers (see CONTRIBUTING.md's
 # "Shortcut markers" section for the convention) and prints a ledger grouped
 # by file. A marker with no comma - no `, <upgrade path>` after the ceiling -
 # is flagged as rot risk: a deliberate shortcut nobody wrote a trigger for.
+#
+# Only matches a comment-prefix immediately followed by "athene:" (#, //, or
+# /*, optional single space) - a loose substring match on "athene:" catches
+# this script's own source (strings/comments that mention the word without
+# being a real marker) and false-positives on every hit. Markdown files are
+# excluded entirely: a real marker lives in actual code, never in docs that
+# just describe or show an example of the convention.
 #
 # git grep already skips .git and anything gitignored, so there's no separate
 # exclude list to maintain here.
@@ -13,7 +20,7 @@
 # Usage: scripts/debt-ledger.sh
 set -euo pipefail
 
-matches="$(git grep -n -I --no-color 'athene:' 2>/dev/null || true)"
+matches="$(git grep -n -I --no-color -E '(#|//|/\*) ?athene:' -- ':!*.md' 2>/dev/null || true)"
 
 if [ -z "$matches" ]; then
   echo "No athene: markers found."
