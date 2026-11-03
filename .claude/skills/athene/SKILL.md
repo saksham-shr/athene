@@ -146,7 +146,9 @@ file no longer contains the placeholder — a CODEOWNERS file the review gate ca
 no real owner satisfies the gate's existence check without actually routing review to anyone),
 `templates/SECURITY.md` (only list a channel confirmed to actually work), `templates/commitlint.config.mjs`
 + `templates/workflows/commitlint.yml` (check the full documented commitlint config-file list before
-assuming none exists; skip the workflow if an unsupported alternate format is detected), and
+assuming none exists; leave an existing config unchanged; set `configFile` only for formats the
+action supports; skip and record the case if the detected format, its dependencies, or existing CI
+can't be supported — same handling as Audit's own commitlint step, not restated here), and
 `templates/RELEASE.md`. `none` is a valid, common result — don't add extra docs because it feels
 more thorough.
 
