@@ -2,13 +2,15 @@
 
 The flow `docs/engineering-source-index.md`'s "How this gets used" step 5 names but doesn't
 fully spell out: what happens when a build decision's topic isn't in the curated index. Phase 4
-of `docs/design/2026-10-31-athene-build-phases.md`. **Not yet wired into any skill:** `athene`,
-the skill this feeds, is scaffolded in `skills/athene/` but doesn't consume this flow yet — same
-structural gap as `docs/stack-decision-process.md` and `docs/connector-detection.md` before them.
+of `docs/design/2026-10-31-athene-build-phases.md`. **Wired into `athene`'s "Evidence-backed
+architecture and the engineering quality bar" section** (#37) — bundled there as
+`references/source-index-live-search.md` via the include-marker convention, same pattern
+`docs/stack-decision-process.md` and `docs/connector-detection.md` followed in #36.
 
 ## When this triggers
 
-A build decision's topic has no row in `docs/engineering-source-index.md`'s table. Don't skip
+A build decision's topic has no row in `engineering-source-index.md`'s table (co-located with
+this file — `docs/` in this repo, `references/` once bundled into a skill). Don't skip
 evidence and decide from memory — search live, following the same evidence bar the curated
 entries hold themselves to.
 
@@ -31,7 +33,7 @@ fly:
 
 Same as an existing index entry: pull the specific post/page and the specific claim it makes —
 not just "the domain is reputable." Cite the actual URL in the decision record, per
-`docs/stack-decision-process.md`'s "Recording the decision" rule.
+`stack-decision-process.md`'s "Recording the decision" rule (co-located with this file).
 
 ## Drafting the issue — real template, not "open an issue"
 
@@ -55,7 +57,8 @@ while searching live for this build.
 **Depends on:** none
 ```
 
-Per the existing rule in `docs/engineering-source-index.md`: don't silently append the new
+Per the existing rule in `engineering-source-index.md` (co-located with this file): don't
+silently append the new
 source to the shared file — open this issue and let a maintainer (or the user, self-assigning)
 decide whether it's added. The build decision itself proceeds using the live-search result as
 one-off evidence; it doesn't wait on the issue being resolved.
@@ -94,10 +97,10 @@ Athene's repo:
 ## Worked example — unindexed topic
 
 Build decision: "pick a rate-limiting strategy for the API." No `rate limiting` row in
-`docs/engineering-source-index.md`.
+`engineering-source-index.md` (co-located with this file).
 
-1. Options table first (per `docs/stack-decision-process.md` — this isn't optional just because
-   the topic is unindexed):
+1. Options table first (per `stack-decision-process.md`, co-located with this file — this
+   isn't optional just because the topic is unindexed):
 
    | Candidate | Pros | Cons |
    |---|---|---|
@@ -115,8 +118,9 @@ Build decision: "pick a rate-limiting strategy for the API." No `rate limiting` 
    each request consumes a token, tokens refill gradually. Not a comparison against the other
    candidates above, so don't cite it as one — just cite the specific claim it actually makes,
    as evidence for picking the row already in the table.
-3. Decision recorded (per `docs/stack-decision-process.md`) — cite only what the source actually
-   supports, not a comparison it never made: *"Rate limiting: token bucket — Stripe's own
+3. Decision recorded (per `stack-decision-process.md`, co-located with this file) — cite only
+   what the source actually supports, not a comparison it never made: *"Rate limiting: token
+   bucket — Stripe's own
    engineering blog describes using this approach for their API, per
    https://stripe.com/blog/rate-limiters. Fixed window and leaky bucket weren't ruled out by any
    sourced evidence, just by the general tradeoffs in the table above; revisit if a real source

@@ -38,7 +38,7 @@ Don't guess at a design decision. At each nontrivial build decision:
 | Marketplace / on-demand logistics | DoorDash | https://doordash.engineering/blog/rss | Real-time logistics/dispatch at scale. |
 | Marketplace / on-demand logistics | Instacart | https://tech.instacart.com/feed | Marketplace + real-time inventory. |
 | Marketplace / on-demand logistics | Deliveroo | https://deliveroo.engineering/feed.xml | Same domain, different scale/region tradeoffs. |
-| Marketplace / on-demand logistics | Grab | http://engineering.grab.com/feed.xml | Super-app, multi-service marketplace at scale. |
+| Marketplace / on-demand logistics | Grab | https://engineering.grab.com/feed.xml | Super-app, multi-service marketplace at scale. |
 | Social / feed systems | Instagram | https://instagram-engineering.com/feed | Feed ranking/serving at huge scale. |
 | Social / feed systems | Pinterest | https://medium.com/feed/@Pinterest_Engineering | Discovery/recommendation feed systems. |
 | Social / feed systems | Facebook | https://engineering.fb.com/feed/ | Largest-scale social graph/feed engineering. |
