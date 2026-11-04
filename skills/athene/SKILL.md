@@ -50,11 +50,14 @@ model this project's planning already settled on:
 4. **Implementation** — supported toolchains, reproducible bootstrap/lint/targeted-test/docs-
    preview/debugging paths. Focused diffs, risk-proportionate tests, docs/release impact
    assessed. **Comment discipline:** detect and run an existing project linter that flags
-   AI-comment-slop patterns (a comment restating the line below it, a docstring that only
-   expands the function name into a sentence, a vague TODO with no approach named) where one's
-   already configured for the language — never add new tooling to do this. No matching tool for
-   the language: flag the gap in Decisions made rather than silently skipping the dimension, and
-   lean on the self-review subagent's proof-test (see "Governance artifacts" below) instead.
+   AI-comment-slop patterns (for Python, the `OBVIOUS_COMMENT`/`RESTATED_DOCSTRING`/`VAGUE_TODO`
+   pattern: a comment restating the line below it, a docstring that only expands the function
+   name into a sentence, a vague TODO with no approach named) where one's already configured for
+   the language — never add new tooling to do this. Whenever no such linter is already
+   configured for the language — no matching tool exists for it at all, or one exists but isn't
+   set up in this repo — flag the gap in Decisions made rather than silently skipping the
+   dimension, and lean on the self-review subagent's proof-test (see "Governance artifacts"
+   below) as the fallback either way.
 5. **PR intake** — drafts until ready. Non-trivial external work needs an accepted issue or a
    named sponsor, a concise human-written summary, compatibility disclosure, performance
    evidence where relevant. Run CLA/license/security checks early.
