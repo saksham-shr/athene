@@ -467,6 +467,77 @@ start and already reads repo state; this would be an additional silent read alon
 is the research and the decision record, per the user's explicit ask to research further before
 turning it into one.
 
+## Prior-art review: product-discovery agent skills (researched 2026-11-04)
+
+Skill 1 (Athene: Product Discovery) already exists as a standalone draft (see "Intent and why"
+above) and has a feature list recorded from it plus the design doc's own additions, but hadn't
+been checked against other AI-agent product-discovery skills before scoping a build issue, per
+the user's explicit ask. Reviewed three real repos in this space, same depth as the ponytail/
+ub-mode reviews above:
+
+1. **`phuryn/pm-skills`'s `opportunity-solution-tree` skill — real gap, worth adopting.** Teresa
+   Torres' Opportunity Solution Tree (OST): a 4-level structure connecting a single measurable
+   **outcome** → 3-7 customer **opportunities** (framed as "I struggle to..."/"I wish I could...",
+   never as features) → 3+ **solutions** per opportunity (compare multiple before picking one,
+   avoid the first-idea trap) → 1-2 **experiments** per solution (hypothesis, method, metric,
+   success threshold). Opportunities get ranked by an **Opportunity Score** (Dan Olsen's formula,
+   `Importance × (1 − Satisfaction)`, both normalized 0-1) when the conversation has evidence to
+   support both inputs; otherwise use a qualitative ranking and record the evidence gap rather
+   than inventing normalized numbers from an interview-only conversation. Athene's own
+   draft's "Generate and choose options" section already does the solutions-comparison part (2-3
+   genuinely different approaches, smallest disproving test) but has no explicit outcome →
+   opportunity → solution → experiment structure above it, and no prioritization formula for
+   *which opportunity* to spend that comparison on in the first place — it jumps straight to
+   comparing solutions. Adopting the OST shape would mean: before "Generate and choose options"
+   runs, first map the outcome (from the framing/success-signal work already in "Discover the
+   intent") to a short, scored list of opportunities, and only then generate/compare solutions for
+   the top 1-2 — closes a real sequencing gap, not a new feature.
+2. **`ncklrs/startup-os-skills`'s `product-discovery` skill — explicit
+   anti-pattern list, worth adopting.** It names a recurring set of discovery failure modes:
+   solution-first discovery (falling for a solution before the problem's validated — Athene's
+   draft's product-quality checks implicitly guards this but never names it), leading the witness,
+   confirmation bias, sample-of-one (deciding from one interview/one user), proxy research (asking
+   salespeople/support instead of the actual user), feature-requests-as-research (users ask for
+   features, not problems — Athene's "Discover the intent" section already distinguishes stated
+   facts from assumptions but doesn't call this specific trap out), analysis paralysis, and
+   HiPPO-driven decisions (highest-paid-person's-opinion overriding evidence). Athene's
+   `product-brainstorming`-style skills (see this repo's own available-skills list) already carry
+   an equivalent anti-pattern list for brainstorming generally; Discovery doesn't have its own
+   discovery-specific one. Worth a short, named list in the "Discover the intent" or
+   "Product-quality checks" section — a known trap named once is cheaper than re-discovering it
+   per session.
+3. **`ncklrs/startup-os-skills`'s research-method-selection matrix — noted, not adopted as a new
+   structure.** Classifies methods as generative (interviews, contextual inquiry, diary studies —
+   discover unknown unknowns), evaluative (usability/A-B/prototype testing — validate known
+   hypotheses), or quantitative (surveys, analytics, card sorting — measure and prioritize), each
+   mapped to an interview-type/question pairing. Athene's draft already proposes "the narrow
+   research question and source scope" before running research, which covers the same decision
+   point in fewer words — the three-tier taxonomy is good reference material but restating it as
+   a new required step would just be the same instruction with more ceremony. Not adopted as new
+   structure; the underlying method list is useful context if the question ever comes up of which
+   research method to propose.
+4. **Jobs-to-be-Done's functional/emotional/social/context split — noted, already implicit.**
+   Both repos (and the `product-brainstorming` skill already available in this environment)
+   name JTBD's distinction between the functional job (what the user does), and the often-more-
+   powerful emotional/social jobs (how they want to feel, be seen) and situational context
+   (when/where). Athene's draft already asks about "problem/job" and "desired outcome" without
+   naming this specific breakdown. Not a new feature — worth keeping in mind as a deeper probe
+   when a stated problem feels thin, not a new mandatory question.
+5. **Continuous-discovery weekly/monthly/quarterly cadence — explicitly rejected, wrong shape for
+   this skill.** Several of these repos (and Teresa Torres' own framework) assume discovery is an
+   ongoing weekly practice across a product's whole life, not a one-shot brief-then-handoff flow.
+   Athene's Discovery skill produces one approved brief and hands off to `athene` (build) — a
+   discrete flow, not a recurring cadence skill. Adopting a cadence structure here would be
+   building the wrong shape of skill; rejected, not deferred.
+
+Repos reviewed: [phuryn/pm-skills](https://github.com/phuryn/pm-skills) (skill:
+`pm-product-discovery/skills/opportunity-solution-tree`), [ncklrs/startup-os-skills](https://github.com/ncklrs/startup-os-skills)
+(skill: `skills/product-discovery`), plus a broader landscape search (BuildBetter's `bb-skills`,
+`product-on-purpose/pm-skills`, `wdavidturner/product-skills`, `popup-studio-ai/bkit-claude-code`)
+confirming this is a crowded, fragmented space with no single dominant standard — the two gaps
+above were the concrete, adoptable findings, not a reason to rebuild Discovery around any one
+repo's full structure.
+
 ## External-repo personas: guest contributor and contribution-receiving maintainer (researched 2026-11-04)
 
 **The gap.** Every Athene skill so far assumes the current repo is the one Athene governs — it
