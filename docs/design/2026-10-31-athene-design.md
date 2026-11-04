@@ -674,6 +674,68 @@ by default, forced on for `opensource`), tell the user in the moment it fires, a
 same follow-up as the two decisions above, likely the same issue as the maintainer-receiving-
 contributions one since both touch the same `CONTRIBUTING.md` "No AI attribution" section.
 
+## Controlling AI-written comments (researched 2026-11-04)
+
+**The gap.** Every lifecycle stage and quality-bar section built so far governs process,
+architecture, and governance artifacts — none of it governs the comments Athene itself writes
+into the code it produces. AI-written comments have a documented, specific failure mode distinct
+from ordinary over-commenting: explaining the fix or change itself ("fixed the bug where X",
+"updated to handle Y") rather than a durable property of the code. That kind of comment rots the
+moment the next change touches the line and nobody updates it — the information belongs in the
+commit message/PR description (timestamped history), not in code that outlives the fix it
+describes.
+
+**Canonical rule, confirmed across general sources, not AI-specific:** comments explain **why**,
+never **what** — code already says what. Self-documenting code (naming, structure) is the first
+line of defense, not a replacement for every comment, but a stale comment is worse than no
+comment, so what remains should be durable and accurate, not a narration of the diff that
+produced it.
+
+**AI-specific evidence this is a real, measured gap, not just a vibe:**
+- A 2026 readability study of LLM-generated code found redundant/restating comments as the
+  second most common issue after excessive complexity — more common than in human-written code.
+- A 2024 study found ~20% of GPT-4-generated Java method comments contained demonstrably
+  inaccurate statements — confident but wrong, not just verbose.
+- Documented practitioner pattern: agents add confident "design-intent" comments not actually
+  grounded in the code; some developers now block LLM-written comments outright over this.
+- Caveat: no 2025-2026 benchmark found specifically quantifying this for current frontier
+  models — the hard numbers above are from 2023-2024-era models (CodeLlama, GPT-4, Copilot).
+  Treat as directionally confirmed, not precisely quantified for current models.
+- Sources: [arxiv 2605.13280](https://arxiv.org/pdf/2605.13280) (LLM readability issues),
+  [arxiv 2406.14836](https://arxiv.org/html/2406.14836v1) (inaccurate LLM comments),
+  [arxiv 2303.11455](https://arxiv.org/pdf/2303.11455) (Copilot/Codex bug study),
+  [Ardalis — When to Comment](https://ardalis.com/when-to-comment-your-code/).
+
+**Two real enforcement mechanisms exist — "control" doesn't have to mean LLM judgment alone,**
+which a practitioner report found noisy and overwhelming when run in CI by itself:
+
+1. **Deterministic rule layer, cheap and mechanical — real prior art, not hypothetical.**
+   `grain-lint` (Python-specific; the pattern generalizes, the tool doesn't) flags:
+   `OBVIOUS_COMMENT` (a comment that just restates the line below it, e.g. `# return result`
+   above `return result` — auto-fixable), `RESTATED_DOCSTRING` (a docstring that only expands
+   the function name into a sentence, no new information), `VAGUE_TODO` (a TODO with no concrete
+   approach or reason named). Suppressible per-line, meant to run alongside normal linters, not
+   replace them. **Known gap:** no equivalent found for JS/TS/Go/other stacks Athene might build
+   in — this pattern is proven for Python only; other languages fall back to the layer below.
+2. **Subagent self-review layer, for what the linter can't catch.** The `No Comments` Claude Code
+   skill dispatches a subagent to challenge every surviving comment: a comment survives only with
+   **proof** — a genuinely external constraint outside the team's control. A constraint the
+   *project itself* controls gets converted into real enforcement (a type, a runtime assertion, a
+   test, a CI lint rule) **before** the comment justifying it is deleted — replace the comment's
+   job with something that actually enforces it, don't just delete and hope. A comment explaining
+   a fix/change fails the proof test outright (it's not an external constraint) and should move
+   to the commit message instead — this is where the specific pattern flagged above gets caught.
+- Sources: [grain-lint on PyPI](https://pypi.org/project/grain-lint/),
+  [No Comments skill](https://mcpmarket.com/tools/skills/no-comments).
+
+**Decision.** Run both layers, cheap-first, matching Athene's own lean-first instinct elsewhere
+in this doc: the deterministic layer where a language has one (Python today; flag the gap for
+other stacks rather than silently skipping it), then fold the subagent-proof-test into the
+self-review pass `athene`'s review/merge gate already runs (see "Governance artifacts" in
+`skills/athene/SKILL.md`, #38) — one more thing that pass checks before a PR is sent, not a new
+separate gate. Not yet scoped into a build issue — this section is the research and decision
+record, per the explicit ask to research and share findings before writing this up.
+
 ## Left to the builder
 
 - ~~Implement the include-directive expansion in `scripts/mirror-skills.sh`~~ — **done**, #25/#26.
