@@ -65,9 +65,10 @@ skipping it or guessing a number.
   running the tool. CRAP combines cyclomatic complexity with how little of the function is
   covered, so it catches "complex and untested," not complexity alone.
 - **Structural duplication:** if an existing structural-duplication tool is already configured
-  (e.g. a CPD-style tool reporting pairwise structural similarity, not a raw text diff), run it
-  and flag any pair scoring `>= 0.8` minimum pairwise similarity for merging — this is Athene's
-  own proposed threshold for "worth merging," not a given tool's default; note the tool's actual
+  (e.g. a CPD-style tool reporting pairwise Jaccard structural similarity, not a raw text diff),
+  run it and flag any pair scoring `>= 0.8` minimum pairwise Jaccard similarity for merging — this
+  is Athene's own proposed threshold for "worth merging," not a given tool's default; a tool
+  reporting a different similarity metric doesn't satisfy this check, note the tool's actual
   default alongside it if different. Same finding as a near-copy under "Lean," just with a number
   behind it instead of eyeballing it.
 - **Mutation testing:** if an existing mutation-testing setup is already configured for this
