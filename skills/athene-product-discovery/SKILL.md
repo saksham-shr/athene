@@ -158,6 +158,25 @@ Before calling discovery complete, verify that:
 Keep the conversation adaptive. A clear product request may need only a short playback and
 approval; an uncertain or consequential bet deserves deeper discovery.
 
+## Discovery anti-patterns
+
+Watch for these while running the sections above — a named trap is cheaper to catch than
+re-discovering it mid-session:
+
+- **Solution-first discovery** — settling on a solution before the problem's actually validated.
+  The product-quality check above ("the problem is expressed independently of the proposed
+  solution") catches the symptom; this names the habit that produces it.
+- **Sample-of-one** — deciding from a single interview, user, or data point. One data point is a
+  hypothesis, not a validated problem.
+- **Proxy research** — treating a salesperson's, support agent's, or stakeholder's account of what
+  users want as equivalent to hearing it from users directly.
+- **Feature-requests-as-research** — taking a requested feature at face value instead of as a
+  symptom of an underlying problem; the feature named isn't necessarily the right fix.
+- **Leading the witness / confirmation bias** — framing a question so it suggests the answer
+  wanted, or only registering what confirms the existing hypothesis.
+- **HiPPO-driven** — letting the highest-paid person's opinion override the evidence actually
+  gathered.
+
 ## State handling
 
 Create or update `.athene/state.md` as a committed plain-Markdown file, self-contained spec below

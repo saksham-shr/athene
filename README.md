@@ -28,9 +28,9 @@ Live, in [`skills/`](skills/):
   CI/CD, stack decisions, evidence-backed architecture + the engineering quality bar, governance
   generation, the review gate, and Launch handoff.
 - **`athene-product-discovery`** (skill 1) — turns an ambiguous idea into an approved product
-  brief, then hands off to `athene`. Core scaffold built; the Opportunity Solution Tree
-  opportunity-scoring step and the discovery-specific anti-pattern list are still open follow-ups
-  (#50, #51).
+  brief, then hands off to `athene`: discover the intent, map and score opportunities (Opportunity
+  Solution Tree sequencing), generate and choose options, scope deliberately, named discovery
+  anti-patterns, product-quality checks.
 
 Planned, not yet built:
 - **Athene: Launch** — define the smallest launchable slice, confirm release readiness.
