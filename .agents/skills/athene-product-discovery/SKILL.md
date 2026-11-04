@@ -16,6 +16,19 @@ directly, or for a specification the user has already approved.
 The goal is shared understanding, not an interrogation or a theatrical specification. Make the
 user's product judgment stronger; don't substitute this skill's preferences for it.
 
+## Check for an already-tracked repo first
+
+Before starting discovery from zero, look for `.athene/state.md` at the repo root.
+
+- **Not found:** this is a genuinely fresh idea with no Athene footprint yet. Continue below.
+- **Found:** don't restart discovery from scratch just because this skill was invoked directly.
+  Ask instead, conversationally: "Is this a new feature on top of what's already here, or a new
+  idea/direction overall?" A new feature on the existing project still goes through the discovery
+  flow below, but framed against what's already built rather than from a blank slate — read the
+  state file's `Decisions made` first so earlier choices aren't re-litigated. A new idea/direction
+  overall is a separate initiative; run discovery for it as its own thing, independent of the
+  existing project's state until (if ever) this skill hands it off.
+
 ## Discover the intent
 
 Start from the context already supplied. If a material gap remains, ask one natural,
@@ -29,6 +42,15 @@ high-leverage question at a time. Prefer concrete prompts such as:
 Learn only what changes the recommendation: audience, problem/job, current workaround, desired
 outcome, constraints, evidence, risks, timing, and who decides. State useful assumptions so the
 user can correct them. Treat guesses as hypotheses, not facts.
+
+Ask the project-framing question early — `opensource`, `startup`, `personal`, or `research` —
+conversationally, never by reciting those four category names (same indirect approach as
+`skills/athene-audit/SKILL.md`'s "Determine framing and risk tier"): *"One thing before I go
+further — who's this really for: just you right now, outside contributors or users you don't
+control, a team or customers depending on it, or is it feeding research or coursework?"* Map the
+answer to a category yourself; don't make the user pick a label. Record the result and why in
+`.athene/state.md`'s Decisions made — `athene`'s own framing/risk-tier determination (see its
+"Governance artifacts" section) reads this back rather than re-asking it from scratch.
 
 When research, repository inspection, customer material, or market comparison would materially
 reduce uncertainty, propose the narrow research question and source scope before doing it.

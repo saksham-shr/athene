@@ -135,9 +135,11 @@ location across skills.
    `includeCoAuthoredBy` alone doesn't disable attribution once either of those keys is already
    set. Codex and Cursor have no equivalent setting; the rule lives in the doc only there.
 
-**Framing and risk tier** — same indirect-question approach as Audit, not a form: infer first from
-what Design has already surfaced (stack choices, who the repo is for, whether payments/auth/PII
-are in scope); ask once, conversationally, only when genuinely ambiguous. Use
+**Framing and risk tier** — same indirect-question approach as Audit, not a form: check
+`.athene/state.md`'s Decisions made first — if Athene: Product Discovery already recorded a
+framing decision on its way out, read it back rather than re-asking. Otherwise infer from what
+Design has already surfaced (stack choices, who the repo is for, whether payments/auth/PII are in
+scope); ask once, conversationally, only when genuinely ambiguous. Use
 `references/governance-doc-set-mapping.md`'s own criteria directly — don't restate them here, that
 creates a second copy that can drift. Record framing, risk tier, and why in `.athene/state.md`'s
 Decisions made.
