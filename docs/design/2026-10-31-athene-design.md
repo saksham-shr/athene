@@ -733,8 +733,10 @@ in this doc: the deterministic layer where a language has one (Python today; fla
 other stacks rather than silently skipping it), then fold the subagent-proof-test into the
 self-review pass `athene`'s review/merge gate already runs (see "Governance artifacts" in
 `skills/athene/SKILL.md`, #38) — one more thing that pass checks before a PR is sent, not a new
-separate gate. Not yet scoped into a build issue — this section is the research and decision
-record, per the explicit ask to research and share findings before writing this up.
+separate gate. **Done** (#55): wired into `athene`'s Implementation lifecycle stage (deterministic
+layer + per-language gap flag) and its "Governance artifacts" self-review pass (proof-test).
+Also catches slop already shipped via `athene-code-health`'s "Lean" category (#53), a separate,
+already-done piece of this same research.
 
 ## Left to the builder
 
