@@ -154,6 +154,7 @@ Before calling discovery complete, verify that:
 - Risks around security, privacy, accessibility, cost, reliability, abuse, and support have
   appropriate owners.
 - Open questions are visible; the plan doesn't pretend they're resolved.
+- No trap listed in **Discovery anti-patterns** below remains unaddressed.
 
 Keep the conversation adaptive. A clear product request may need only a short playback and
 approval; an uncertain or consequential bet deserves deeper discovery.
