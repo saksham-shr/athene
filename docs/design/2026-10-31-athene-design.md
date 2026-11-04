@@ -558,7 +558,10 @@ govern, it must not apply its own no-AI-attribution convention there — that co
 to repos Athene governs, where the owner chose it. Instead: scan the target repo for a stated
 AI-contribution policy first (`CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, PR template, pinned
 issues, a bot-posted comment on a comparable prior PR) before writing any code, and branch on
-what's found — ban/maintainers-only (don't open the PR, tell the user why), disclosure-required
+what's found — ban/maintainers-only (don't open the PR, tell the user why), explicit
+no-attribution with AI use allowed (follow that project's own no-attribution rule, don't disclose
+— a stated "don't attribute AI" policy is a different case from an unstated one, and defaulting
+to disclosure there would override a rule the target repo actually asked for), disclosure-required
 (disclose per that project's own stated format, don't suppress it), or silent/unstated (default
 to disclosing anyway in the PR description, since omission is the single most-cited maintainer
 complaint in the research above — a disclosed AI contribution that's otherwise good work is a
@@ -576,8 +579,16 @@ scoped into a build issue.
 
 **Decision, Athene's own fixed baseline for `opensource`-framed repos:** `opensource` framing
 forces AI-disclosure on every commit/PR Athene itself authors into that repo, overriding
-`attribution.commit`/`attribution.pr`/`sessionUrl` even if the user has set them to suppress
-attribution — same reasoning as the guest-contributor decision above: non-disclosure is the
+`attribution.commit`/`attribution.pr` even if the user has set them to suppress attribution.
+This is a real technical guarantee on Claude Code, where those keys are a tool-level setting
+Athene itself writes; on Codex and Cursor, which have no equivalent attribution control at all
+(see the fixed-baseline section above), it's a documented policy in `CONTRIBUTING.md` and the
+skill's own commit/PR instructions, not an enforced one — same honesty gap the existing
+no-attribution rule already has on those two platforms, not a new one this decision introduces.
+`sessionUrl` is left alone by this override — disclosing AI authorship doesn't require also
+publishing a session link, and changing a control the user set for an unrelated reason (session
+privacy, not authorship disclosure) isn't this decision's call to make. Same reasoning as the
+guest-contributor decision above: non-disclosure is the
 single most-cited maintainer complaint in the AI-slop research, and an `opensource`-framed repo
 by definition expects outside contributors and reviewers who didn't make that attribution choice
 themselves. **This override must never be silent.** A version of this was considered where the
