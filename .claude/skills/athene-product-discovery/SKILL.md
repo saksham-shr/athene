@@ -168,9 +168,9 @@ path). Write it at the end of this skill's turn/session, not mid-task:
   `## Active skill`, `## Current phase`, `## Decisions made`, `## Open questions`.
 - **Active skill:** `athene-product-discovery` — this skill's own frontmatter `name`, while this
   skill owns the repo. Set to `athene`'s frontmatter name once handed off (see below).
-- **Current phase:** one of this skill's own stages above (`discover-intent`, `generate-options`,
-  `scope`, `produce-handoff`, `quality-checks`), while `Active skill` is
-  `athene-product-discovery`.
+- **Current phase:** one of this skill's own stages above (`discover-intent`,
+  `map-score-opportunities`, `generate-options`, `scope`, `produce-handoff`, `quality-checks`),
+  while `Active skill` is `athene-product-discovery`.
 - **Decisions made:** bullet list, append-only. What was chosen and why, in the order decided.
 - **Open questions:** bullet list. Anything genuinely unresolved. `none` if nothing's outstanding.
 
