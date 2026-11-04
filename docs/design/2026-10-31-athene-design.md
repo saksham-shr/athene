@@ -574,6 +574,24 @@ stance on AI-authored contributions), written into `CONTRIBUTING.md` explicitly 
 unstated, since "unstated" is itself now a documented source of maintainer friction. Also not yet
 scoped into a build issue.
 
+**Decision, Athene's own fixed baseline for `opensource`-framed repos:** `opensource` framing
+forces AI-disclosure on every commit/PR Athene itself authors into that repo, overriding
+`attribution.commit`/`attribution.pr`/`sessionUrl` even if the user has set them to suppress
+attribution — same reasoning as the guest-contributor decision above: non-disclosure is the
+single most-cited maintainer complaint in the AI-slop research, and an `opensource`-framed repo
+by definition expects outside contributors and reviewers who didn't make that attribution choice
+themselves. **This override must never be silent.** A version of this was considered where the
+override wasn't disclosed anywhere, not even in the target repo's own README — rejected: it
+would mean Athene secretly overriding its own operator's explicit setting and hiding that fact
+from them specifically, not just from a bad actor (who'd just skip Athene's attribution path
+entirely to slop a repo regardless — a silent flag only ever surprises the honest user who didn't
+expect it, while doing nothing to stop someone determined to abuse it). Instead: write the
+override into `CONTRIBUTING.md`'s "No AI attribution" section as a stated, conditional rule (off
+by default, forced on for `opensource`), tell the user in the moment it fires, and record it in
+`.athene/state.md`'s Decisions made like any other decision. Not yet scoped into a build issue —
+same follow-up as the two decisions above, likely the same issue as the maintainer-receiving-
+contributions one since both touch the same `CONTRIBUTING.md` "No AI attribution" section.
+
 ## Left to the builder
 
 - ~~Implement the include-directive expansion in `scripts/mirror-skills.sh`~~ — **done**, #25/#26.
