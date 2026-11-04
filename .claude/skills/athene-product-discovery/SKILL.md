@@ -54,9 +54,9 @@ user can correct them. Treat guesses as hypotheses, not facts.
 
 **Only on the existing-project branch above:** if `.athene/state.md`'s Decisions made already
 holds a framing decision, reuse it and skip this question — don't re-litigate it. On the
-new-idea/new-direction branch, or when no `.athene/state.md` exists at all, the existing project's
-framing (if any) doesn't apply to this separate initiative — determine framing fresh in
-conversation, and keep the result out of `.athene/state.md` until the user explicitly approves
+new-idea/new-direction branch, the existing project's framing (if any) doesn't apply to this
+separate initiative — determine framing fresh in conversation, and keep the result out of
+`.athene/state.md` until the user explicitly approves
 takeover (see above), recording it as part of that handoff rather than mid-discovery. Otherwise
 ask the project-framing question early — `opensource`, `startup`, `personal`, or `research` —
 conversationally, never by reciting those four category names (same indirect approach as
