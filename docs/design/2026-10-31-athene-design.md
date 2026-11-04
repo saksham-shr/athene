@@ -608,8 +608,9 @@ contributions one since both touch the same `CONTRIBUTING.md` "No AI attribution
 - ~~Implement the include-directive expansion in `scripts/mirror-skills.sh`~~ — **done**, #25/#26.
 - ~~Build `skills/athene-code-health/SKILL.md` (skill 6)~~ — **done**: bugs/security/scale/
   missing-test/speed/lean, ranked, 4-part findings, per the ponytail-audit structure reviewed
-  above. Still open: quantified CRAP/duplication/mutation thresholds on top of the qualitative
-  audit — tracked as #43, see the `ub-mode` prior-art review above.
+  above. ~~Quantified CRAP/duplication/mutation checks on top of the qualitative audit~~ — **done**
+  (#43), guidance-only: run an existing project tool where one's already configured for that
+  dimension, report the gap in `Not checked:` otherwise, never bundle new tooling.
 - Define the `athene:` shortcut-comment convention (parallel to ponytail's `shortcut:`/`ponytail:`)
   and a debt-ledger command/skill to grep it into a report, flagging markers with no upgrade
   trigger.
