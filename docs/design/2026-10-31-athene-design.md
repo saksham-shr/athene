@@ -467,6 +467,142 @@ start and already reads repo state; this would be an additional silent read alon
 is the research and the decision record, per the user's explicit ask to research further before
 turning it into one.
 
+## External-repo personas: guest contributor and contribution-receiving maintainer (researched 2026-11-04)
+
+**The gap.** Every Athene skill so far assumes the current repo is the one Athene governs — it
+writes its own baseline (Conventional Commits, `athene:` markers, no-AI-attribution) *into* the
+target repo. Two real personas fall outside that assumption and have no coverage anywhere today:
+
+1. **Guest contributor** — the user asks Athene to fix something in, or send a PR to, a repo
+   Athene doesn't own or govern (someone else's open-source project). Imposing Athene's own
+   baseline there is wrong; the target repo's existing rules govern, not Athene's.
+2. **Contribution-receiving maintainer** — the user owns a repo Athene governs, but it also takes
+   outside PRs. The "PR intake" lifecycle stage (see "Skills (6) and the flow" above) already
+   says non-trivial external work needs an accepted issue or a named sponsor, but says nothing
+   about DCO/CLA checks, first-time-contributor routing, or whether the repo even has a stated
+   policy on AI-authored contributions — a live, consequential gap, not a hypothetical one (see
+   below).
+
+**What open-source practice actually expects of a guest contributor** (general web research,
+2026-11-04 — individual project pages, not a single authoritative standard; verify against the
+specific target repo before relying on any of this):
+- **Read and defer to the target's own `CONTRIBUTING.md`, commit-message style, and DCO/CLA
+  requirement** — never impose Athene's Conventional Commits/`athene:`-marker baseline on a repo
+  Athene doesn't govern. DCO sign-off is a `git commit -s` trailer, distinct from a CLA (a
+  one-time, broader legal agreement some projects require before any code is accepted) — the two
+  aren't interchangeable, and some projects run an automated bot that determines which (if either)
+  applies and walks the contributor through it.
+- **Discuss first for anything non-trivial.** Check open and recently merged PRs/issues for
+  duplicate work before starting. Open or claim an issue before sending a non-trivial PR or
+  feature; several projects explicitly ask for this so a rejected approach doesn't waste a
+  contributor's time. A trivial, obviously-correct bug fix is the exception most projects still
+  accept directly as a PR.
+- **Keep the diff focused** — no incidental reformatting of code the fix doesn't touch; makes
+  review harder and is a named complaint in more than one CONTRIBUTING guide reviewed.
+- **Run the target's own build/test/lint before submitting**, not just Athene's own quality bar —
+  don't shift that burden onto the maintainer's CI.
+- **Fill in the PR template the target repo provides** and stay responsive to review comments
+  rather than treating the PR as done at submission.
+- Sources (general web research, not project-specific; re-verify per target repo): CONTRIBUTING
+  guides reviewed for [data-prepper](https://github.com/dlvenable/data-prepper/blob/main/CONTRIBUTING.md),
+  [dashboards-search-relevance](https://github.com/opensearch-project/dashboards-search-relevance/blob/main/CONTRIBUTING.md),
+  a pre-submission checklist skill at [tessl.io](https://tessl.io/registry/tessl-labs/good-oss-citizen/1.1.12/files/skills/preflight/SKILL.md).
+
+**What open-source practice expects on the maintainer side** (same caveat — illustrative, not a
+single standard):
+- **DCO/CLA check belongs at triage**, not left implicit — Moby/Docker's own maintainer docs
+  describe checking DCO sign-off as part of the initial label-based triage step, and closing
+  stale, unresponsive PRs that never got one.
+- **A CLA bot, where a CLA is required**, decorates the PR with a status check or comment and
+  walks the contributor through it rather than making the maintainer explain it by hand each time
+  (e.g. Microsoft's PyRIT project).
+- **Code of conduct** is a named, linked document most serious projects adopt (often inherited,
+  e.g. the Microsoft or Contributor Covenant one) rather than invented per-repo.
+- **Newcomer routing** via a `good first issue` (and sometimes `first-timers-only` or
+  `help wanted`) label, with a stated norm for claiming one (comment and wait to be assigned, or
+  just open the PR directly — projects differ, so the maintainer's own CONTRIBUTING.md has to say
+  which).
+- **A stated stale-PR policy** — e.g. check in with the author first, reassign after a fixed
+  window (PyRIT uses 14 days) if there's no response.
+- Sources: Moby/Docker `MAINTAINERS`-flow docs, Microsoft PyRIT's
+  [contributing guide](https://microsoft.github.io/PyRIT/latest/contributing/readme), the
+  [oss-governance-bot](https://github.com/BirthdayResearch/oss-governance-bot) project (slash-command
+  policy automation, contributor-type-aware).
+
+**The real, live tension this surfaces: AI-disclosure vs. Athene's own no-AI-attribution rule.**
+Athene's existing fixed baseline (see "Issue and PR conventions" above and
+`skills/athene-audit/templates/CONTRIBUTING.md`) strips AI attribution from every commit/PR it
+writes, by design — written before this research, for repos Athene itself governs, where the
+owner wants that. Current reporting on AI-authored open-source contributions as of 2026-02 to
+2026-06 shows the opposite is increasingly required or expected *by other projects' own rules*,
+not Athene's call to make:
+- **curl** started requiring AI-use disclosure in reports and PRs after a fabricated AI-generated
+  vulnerability report wasted maintainer triage time.
+- **Ghostty** required disclosure from 2025-08, then (2026-01) restricted AI-authored
+  contributions entirely to pre-approved issues handled by existing maintainers.
+- **tldraw** went further still (2026-01): auto-closes all external PRs, AI-authored or not.
+- **GitHub itself** was reportedly weighing a PR "kill switch" for AI-generated submissions as of
+  2026-02, after public maintainer pushback (Godot's maintainers specifically described
+  AI-authored "slop" PRs as draining and demoralizing, and noted contributors often skip required
+  disclosure anyway).
+- RedMonk's own survey reportedly found dozens of open-source organizations split across outright
+  bans, mandatory disclosure, and still-undecided policies — there is no single community norm to
+  default to.
+- Sources: [Socket.dev](https://socket.dev/blog/oss-maintainers-demand-ability-to-block-copilot-generated-issues-and-prs),
+  [The Register](https://www.theregister.com/2026/02/18/godot_maintainers_struggle_with_draining/),
+  [The Register](https://www.theregister.com/2026/02/03/github_kill_switch_pull_requests_ai),
+  [DEV Community](https://dev.to/pickuma/why-open-source-maintainers-are-rejecting-ai-generated-pull-requests-12ac).
+
+**Decision, guest-contributor direction:** when Athene is sending a PR to a repo it doesn't
+govern, it must not apply its own no-AI-attribution convention there — that convention is scoped
+to repos Athene governs, where the owner chose it. Instead: scan the target repo for a stated
+AI-contribution policy first (`CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, PR template, pinned
+issues, a bot-posted comment on a comparable prior PR) before writing any code, and branch on
+what's found — ban/maintainers-only (don't open the PR, tell the user why), explicit
+no-attribution with AI use allowed (follow that project's own no-attribution rule, don't disclose
+— a stated "don't attribute AI" policy is a different case from an unstated one, and defaulting
+to disclosure there would override a rule the target repo actually asked for), disclosure-required
+(disclose per that project's own stated format, don't suppress it), or silent/unstated (default
+to disclosing anyway in the PR description, since omission is the single most-cited maintainer
+complaint in the research above — a disclosed AI contribution that's otherwise good work is a
+minor issue; an undisclosed one that turns out to be wrong is a trust problem for every future
+PR from the same account). Not yet a build issue — tracked below, since it needs its own scoping
+pass (what exactly gets scanned for, where the policy-detection logic lives) before that.
+
+**Decision, maintainer-receiving-contributions direction:** add a DCO/CLA-and-AI-contribution-
+policy question to the same framing/risk-tier determination Athene already does (see
+"Governance artifacts" in `skills/athene/SKILL.md` and `skills/athene-audit/SKILL.md`) — an
+`opensource` framing should prompt a decision on all three (DCO, CLA, and the project's own
+stance on AI-authored contributions), written into `CONTRIBUTING.md` explicitly rather than left
+unstated, since "unstated" is itself now a documented source of maintainer friction. Also not yet
+scoped into a build issue.
+
+**Decision, Athene's own fixed baseline for `opensource`-framed repos:** `opensource` framing
+forces AI-disclosure on every commit/PR Athene itself authors into that repo, overriding
+`attribution.commit`/`attribution.pr` even if the user has set them to suppress attribution.
+This is a real technical guarantee on Claude Code, where those keys are a tool-level setting
+Athene itself writes; on Codex and Cursor, which have no equivalent attribution control at all
+(see the fixed-baseline section above), it's a documented policy in `CONTRIBUTING.md` and the
+skill's own commit/PR instructions, not an enforced one — same honesty gap the existing
+no-attribution rule already has on those two platforms, not a new one this decision introduces.
+`sessionUrl` is left alone by this override — disclosing AI authorship doesn't require also
+publishing a session link, and changing a control the user set for an unrelated reason (session
+privacy, not authorship disclosure) isn't this decision's call to make. Same reasoning as the
+guest-contributor decision above: non-disclosure is the
+single most-cited maintainer complaint in the AI-slop research, and an `opensource`-framed repo
+by definition expects outside contributors and reviewers who didn't make that attribution choice
+themselves. **This override must never be silent.** A version of this was considered where the
+override wasn't disclosed anywhere, not even in the target repo's own README — rejected: it
+would mean Athene secretly overriding its own operator's explicit setting and hiding that fact
+from them specifically, not just from a bad actor (who'd just skip Athene's attribution path
+entirely to slop a repo regardless — a silent flag only ever surprises the honest user who didn't
+expect it, while doing nothing to stop someone determined to abuse it). Instead: write the
+override into `CONTRIBUTING.md`'s "No AI attribution" section as a stated, conditional rule (off
+by default, forced on for `opensource`), tell the user in the moment it fires, and record it in
+`.athene/state.md`'s Decisions made like any other decision. Not yet scoped into a build issue —
+same follow-up as the two decisions above, likely the same issue as the maintainer-receiving-
+contributions one since both touch the same `CONTRIBUTING.md` "No AI attribution" section.
+
 ## Left to the builder
 
 - ~~Implement the include-directive expansion in `scripts/mirror-skills.sh`~~ — **done**, #25/#26.
