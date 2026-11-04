@@ -47,7 +47,13 @@ process docs, changes nothing.
    speculative features, two helpers doing the same thing, a dependency doing what a few lines or
    the platform already does, an interface/factory/wrapper with exactly one real implementation,
    near-copies that must change together (merge), one function doing several unrelated jobs
-   (split by job, never by line count).
+   (split by job, never by line count), and **comment slop** — a comment that explains the fix or
+   change itself ("fixed the bug where X", "updated to handle Y") instead of a durable property of
+   the code (that belongs in commit history, not code that outlives the fix it describes), a
+   comment that just restates the line below it, a docstring that only expands the function/class
+   name into a sentence with no new information, a TODO with no concrete approach or reason named,
+   or any comment with no proof — not justified by a genuinely external constraint outside the
+   project's own control.
 
 ## 3. Quantified checks, where a tool already exists
 
