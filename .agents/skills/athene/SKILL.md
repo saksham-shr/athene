@@ -22,7 +22,11 @@ On start, scan the target repo for `.athene/state.md`.
   skill and Audit disambiguate without relying on how the user phrased the request.
 - **Found:** read all four sections before doing anything else — don't just confirm the file
   exists and barge into the lifecycle below. Check `Active skill`:
-  - **`athene`:** continue below, picking up at whatever `Current phase` names.
+  - **`athene`:** continue below, picking up at whatever `Current phase` names. If `Current
+    phase` is `handoff` (the reserved value a handing-off skill like Athene: Product Discovery
+    leaves — see `docs/state-schema.md`), that isn't one of this skill's own lifecycle stage
+    names: start at **Intake**, this lifecycle's first stage, rather than treating `handoff` as
+    an unrecognized phase.
   - **Anything else:** this skill doesn't own the repo right now. Read and follow whichever
     skill file `Active skill` names instead — stop and say so if that file isn't packaged where
     this skill is installed. Don't start deciding work or touching state another skill owns.

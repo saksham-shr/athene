@@ -27,10 +27,13 @@ Live, in [`skills/`](skills/):
 - **`athene`** (skill 2, repo + build + architecture) — the core build skill: lifecycle, ownership,
   CI/CD, stack decisions, evidence-backed architecture + the engineering quality bar, governance
   generation, the review gate, and Launch handoff.
+- **`athene-product-discovery`** (skill 1) — turns an ambiguous idea into an approved product
+  brief, then hands off to `athene`. Core scaffold built; the Opportunity Solution Tree
+  opportunity-scoring step and the discovery-specific anti-pattern list are still open follow-ups
+  (#50, #51).
 
 Planned, not yet built:
-- **Athene: Product Discovery**, **Athene: Launch** — turn an idea into a brief, and define the
-  smallest launchable slice.
+- **Athene: Launch** — define the smallest launchable slice, confirm release readiness.
 
 ## Reference specs
 
