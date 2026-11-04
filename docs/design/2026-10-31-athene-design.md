@@ -755,17 +755,26 @@ against. Researched before scoping a build issue, same pattern as Discovery's pr
 - **Happenstance (2016)** — a Product Hunt launch brought 1,200+ signups in 24h at ~50%
   conversion. A newsletter push to 400 existing users *before* that launch only got 17 upvotes —
   a warm list doesn't guarantee launch-day votes.
-- **Dropbox** — the canonical product-led referral case: during the 100k→4M-user growth period
-  (through January 2010), the reward was 250MB free storage per successful referral (both sides);
-  Dropbox doubled it to 500MB in a later, separate 2012 promotion — don't attribute the later
-  amount to the earlier growth period. Source:
-  [Dropbox's own 2012 announcement](https://blog.dropbox.com/topics/company/dropbox-referrals-are-now-twice-as-nice).
+- **Dropbox** — the canonical product-led referral case. The reward itself is confirmed by
+  Dropbox's own 2012 announcement: 250MB free storage per successful referral (both sides)
+  originally, doubled to 500MB in that later, separate 2012 promotion — don't attribute the later
+  amount to the earlier growth period. The commonly-cited 100k→4M-user figure (reportedly over
+  ~15 months, through around early 2010) has **no primary Dropbox source found** — it traces back
+  to Drew Houston's public talks per secondary accounts, not a linkable primary document; treat
+  it as a widely-repeated but unverified figure, not a confirmed one. Sources:
+  [Dropbox's own 2012 announcement](https://blog.dropbox.com/topics/company/dropbox-referrals-are-now-twice-as-nice)
+  (reward amounts only), [Prefinery — Dropbox referral growth study](https://prefinery.com/blog/dropbox-referral-program-3900percent-growth-study/)
+  (the 100k→4M figure, secondary, unverified against a primary source).
 - **Airbnb** — two separate growth mechanisms, not one: a tool letting hosts auto-cross-post
   Airbnb listings to Craigslist (rode Craigslist's existing demand until Craigslist patched the
-  integration), and, separately, a referral program offering up to $100 in combined credit ($25
-  for a guest referral, $75 for a host referral) — the $100 figure was never a Craigslist
-  cross-posting incentive. Source:
-  [The Next Web — Airbnb's referral program](https://thenextweb.com/news/airbnbs-new-referral-program-could-double-its-member-base).
+  integration — reported by multiple growth-hacking write-ups but with **no single confirmed
+  primary source**, not a company disclosure), and, separately, a referral program offering up to
+  $100 in combined credit ($25 for a guest referral, $75 for a host referral, confirmed by the
+  Next Web source) — the $100 figure was never a Craigslist cross-posting incentive. Sources:
+  [HackerNoon — How Airbnb Hacked Craigslist for Viral Growth](https://hackernoon.com/how-airbnb-hacked-craigslist-for-viral-growth-24l35eg)
+  (Craigslist tactic, secondary, unverified against a primary source),
+  [The Next Web — Airbnb's referral program](https://thenextweb.com/news/airbnbs-new-referral-program-could-double-its-member-base)
+  (referral-credit figures only — don't use it to support the Craigslist claim).
 - **Harry's** — a pre-launch referral waitlist collected 100k emails in one week, showing each
   signup their queue position, referral count, and unlocked rewards.
 - These figures are self-reported by the companies or by secondary write-ups, not independently
