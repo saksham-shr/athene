@@ -747,32 +747,43 @@ against. Researched before scoping a build issue, same pattern as Discovery's pr
 
 **Real launch case studies, 2014-2016 era (still the most detailed, if dated):**
 - **Product Hunt's own 2014 launch** — seeded the community with hand-picked early users
-  *before* going public, since a community's early culture is very hard to change once set;
-  reached 2,000 users in 20 days via manual, non-scalable tactics, not paid acquisition.
+  *before* going public, since a community's early culture is very hard to change once set.
+  Milestones at three distinct points: 400 users by the end of the public launch's first day,
+  then 2,000 users 20 days after the earlier *private* launch (not 20 days after going public) —
+  via manual, non-scalable tactics, not paid acquisition.
+  Source: [Ryan Hoover — Product Hunt's first 2,000 users](https://www.ryanhoover.me/post/how-we-got-our-first-2-000-users-doing-things-that-dont-scale).
 - **Happenstance (2016)** — a Product Hunt launch brought 1,200+ signups in 24h at ~50%
   conversion. A newsletter push to 400 existing users *before* that launch only got 17 upvotes —
   a warm list doesn't guarantee launch-day votes.
-- **Dropbox** — the canonical product-led referral case: 500MB free storage per successful
-  referral (both sides), reportedly growing 100k→4M users in 15 months.
-- **Airbnb** — built a tool letting hosts auto-cross-post Airbnb listings to Craigslist (plus a
-  reported $100 travel-voucher incentive for doing so); rode Craigslist's existing demand until
-  Craigslist patched the integration.
+- **Dropbox** — the canonical product-led referral case: during the 100k→4M-user growth period
+  (through January 2010), the reward was 250MB free storage per successful referral (both sides);
+  Dropbox doubled it to 500MB in a later, separate 2012 promotion — don't attribute the later
+  amount to the earlier growth period. Source:
+  [Dropbox's own 2012 announcement](https://blog.dropbox.com/topics/company/dropbox-referrals-are-now-twice-as-nice).
+- **Airbnb** — two separate growth mechanisms, not one: a tool letting hosts auto-cross-post
+  Airbnb listings to Craigslist (rode Craigslist's existing demand until Craigslist patched the
+  integration), and, separately, a referral program offering up to $100 in combined credit ($25
+  for a guest referral, $75 for a host referral) — the $100 figure was never a Craigslist
+  cross-posting incentive. Source:
+  [The Next Web — Airbnb's referral program](https://thenextweb.com/news/airbnbs-new-referral-program-could-double-its-member-base).
 - **Harry's** — a pre-launch referral waitlist collected 100k emails in one week, showing each
   signup their queue position, referral count, and unlocked rewards.
-- Sources: [Ryan Hoover — Product Hunt's first 2,000 users](https://www.ryanhoover.me/post/how-we-got-our-first-2-000-users-doing-things-that-dont-scale),
-  growth-hacking roundups covering Dropbox/Airbnb/Harry's (multiple secondary sources, figures
-  self-reported by the companies — not independently verified against primary disclosures).
+- These figures are self-reported by the companies or by secondary write-ups, not independently
+  verified against primary disclosures beyond the two sources cited above — treat as directional.
 
 **2025-2026 update — confirms some findings, revises others (general web research, 2026-11-04):**
 - **Product Hunt benchmarks by category:** consumer apps typically get 500-1,500 signups from a
-  good launch; B2B SaaS gets a few dozen to a few hundred. A spring-2026 cohort of 5 SaaS PH
-  launches: 7-day signups ranged ~71-450 (median ~115).
-- **Rank doesn't predict revenue.** All 4 of that cohort with complete data finished top-6 by
-  rank, but rank didn't predict revenue — the spread came from the audience each founder already
-  brought to launch day, not from Product Hunt's own distribution. Same underlying finding as
-  the 2016 "warm list doesn't guarantee votes" case, from the other direction: a founder's own
-  pre-existing audience is what actually converts; the launch platform is the stage, not the
-  cause.
+  good launch; B2B SaaS gets a few dozen to a few hundred. Source:
+  [shno.co Product Hunt launch statistics 2026](https://www.shno.co/marketing-statistics/product-hunt-launch-statistics).
+- **Early-conversion/rank divergence, not a revenue claim.** A spring-2026 report of five SaaS PH
+  founders (four with complete datasets, self-reported, non-comparable conversion windows, one
+  signup total that includes LinkedIn activity) found 7-day signups ranged ~71-450 (median ~115),
+  and that rank didn't track early *paid conversion* specifically — this is directional, not a
+  revenue study, and doesn't establish that founder audience is the sole converting factor or
+  that Product Hunt distribution has no causal effect; treat "a founder's own audience matters
+  more than platform rank" as a hypothesis the data is consistent with, not a proven conclusion.
+  Still echoes the 2016 "warm list doesn't guarantee votes" case directionally. Source:
+  [happysupport.ai — Product Hunt launch roundup 2026](https://www.happysupport.ai/en/blog/product-hunt-launch-roundup-2026).
 - **Founder survey (Nov 2025):** 50% saw some registration increase post-launch, 30% a
   significant increase, 16% no noticeable spike — roughly a coin-flip whether a PH launch does
   anything measurable at all.
@@ -786,9 +797,10 @@ against. Researched before scoping a build issue, same pattern as Discovery's pr
 - **Smaller, trust-based communities often beat large audiences** for leads, trust, or repeat
   buyers — consistent with the 2016-era "niche channels once pain-point language is validated"
   finding.
-- Sources: [shno.co Product Hunt launch statistics 2026](https://www.shno.co/marketing-statistics/product-hunt-launch-statistics),
-  multiple 2025-2026 build-in-public/TikTok-for-startups marketing guides (vendor/agency blogs —
-  figures are self-reported and directional, not an independent benchmark study).
+- The founder-survey, AI-saturation, and channel-fit figures above come from multiple 2025-2026
+  vendor/agency marketing blogs (self-reported, directional, not an independent benchmark study) —
+  no single named source covers all of them; verify a specific figure against its own post before
+  relying on it for anything beyond illustration.
 
 **Channel-selection method — the real gap in the existing draft.** Gabriel Weinberg's **Bullseye
 Framework** (from *Traction*) is the missing method:
@@ -821,8 +833,12 @@ to Launch's "Build the launch plan" section as the channel-selection method it c
 Add the "launch-day traffic is a feedback spike, not a retention channel" finding to "Choose
 validation and metrics" or "Learn, decide, repeat" — respond to comments and validate pain-point
 language first, then move to niche/community channels, rather than treating the launch-day number
-itself as the signal. Cite real case studies (above) when illustrating expected-outcome ranges,
-with the self-reported-figures caveat carried forward, not presented as verified fact. Not yet
+itself as the signal. Cite real case studies (above) as illustrative tactics, not as a comparable
+benchmark range — they measure different things (users, signups, referral growth, Craigslist
+demand, waitlist emails) over different time windows, so don't average or range them together as
+if they were one metric. Where Launch gives an expected-outcome range, use the one same-metric,
+same-window source that actually supports it (e.g. the Product Hunt category benchmarks above),
+not a blend across case studies. Carry the self-reported-figures caveat forward regardless. Not yet
 scoped into a build issue — this section is the research and decision record.
 
 ## Left to the builder
