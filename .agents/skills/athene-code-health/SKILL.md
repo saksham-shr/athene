@@ -49,7 +49,35 @@ process docs, changes nothing.
    near-copies that must change together (merge), one function doing several unrelated jobs
    (split by job, never by line count).
 
-## 3. Check before reporting
+## 3. Quantified checks, where a tool already exists
+
+Three dimensions above (missing test, scale/duplication under Lean) have a numeric version. Run
+it only if the repo already has a tool that computes it — never add new tooling or a new
+dependency to run these; that's the problem these checks exist to catch, not solve with more of
+it. If no matching tool is found for a dimension, say so in `Not checked:` rather than silently
+skipping it or guessing a number.
+
+- **Complexity + coverage risk (CRAP score):** if an existing CRAP/complexity-and-coverage tool is
+  already configured (a runnable project command, CI job, or config — not just a prior report),
+  run it fresh against the current revision and flag any function scoring `>= 10` — a Should fix,
+  Must fix only if the function is also on a path from "Look for" above. A prior report on disk
+  is only supporting evidence if it's tied to the current revision; it's never a substitute for
+  running the tool. CRAP combines cyclomatic complexity with how little of the function is
+  covered, so it catches "complex and untested," not complexity alone.
+- **Structural duplication:** if an existing structural-duplication tool is already configured
+  (e.g. a CPD-style tool reporting pairwise Jaccard structural similarity, not a raw text diff),
+  run it and flag any pair scoring `>= 0.8` minimum pairwise Jaccard similarity for merging — this
+  is Athene's own proposed threshold for "worth merging," not a given tool's default; a tool
+  reporting a different similarity metric doesn't satisfy this check, note the tool's actual
+  default alongside it if different. Same finding as a near-copy under "Lean," just with a number
+  behind it instead of eyeballing it.
+- **Mutation testing:** if an existing mutation-testing setup is already configured for this
+  stack, run it and report two results separately where the tool distinguishes them: surviving
+  mutants (code a test exercises but doesn't actually verify) and no-coverage mutants (no test
+  exercises the mutated code at all) — plus any dead code it surfaces along the way. No numeric
+  pass threshold — report each group as a Should fix, don't gate the whole report on a score.
+
+## 4. Check before reporting
 
 - Every finding needs a concrete case: "this input or situation leads to this wrong result." No
   case, no finding.
@@ -61,7 +89,7 @@ process docs, changes nothing.
   framework, or config the problem doesn't need.
 - No style taste, no "consider," no vague worry without a concrete case behind it.
 
-## 4. Output
+## 5. Output
 
 Plain English: short sentences, everyday words, explain a technical term the first time it's
 used — the reader may never have seen this code.
