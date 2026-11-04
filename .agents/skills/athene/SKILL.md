@@ -49,7 +49,12 @@ model this project's planning already settled on:
    dedicated sections below.
 4. **Implementation** — supported toolchains, reproducible bootstrap/lint/targeted-test/docs-
    preview/debugging paths. Focused diffs, risk-proportionate tests, docs/release impact
-   assessed.
+   assessed. **Comment discipline:** detect and run an existing project linter that flags
+   AI-comment-slop patterns (a comment restating the line below it, a docstring that only
+   expands the function name into a sentence, a vague TODO with no approach named) where one's
+   already configured for the language — never add new tooling to do this. No matching tool for
+   the language: flag the gap in Decisions made rather than silently skipping the dimension, and
+   lean on the self-review subagent's proof-test (see "Governance artifacts" below) instead.
 5. **PR intake** — drafts until ready. Non-trivial external work needs an accepted issue or a
    named sponsor, a concise human-written summary, compatibility disclosure, performance
    evidence where relevant. Run CLA/license/security checks early.
@@ -164,7 +169,14 @@ more thorough.
 `scripts/set-review-gate.sh`, and follow `references/review-gate.md` for what it does and the
 default-off rationale — don't run it unprompted. Every PR this skill authors gets a self-review
 subagent pass first, then waits on whoever's configured as reviewer before merge; that queue
-discipline holds regardless of the toggle. Offer the toggle, note the result in Decisions made, and
+discipline holds regardless of the toggle. The self-review pass includes a comment proof-test:
+every comment surviving in the diff needs proof — a genuinely external constraint outside the
+project's own control. A constraint the project itself controls gets converted into real
+enforcement (a type, a runtime assertion, a test, a CI lint rule) before the comment justifying it
+is deleted — replace the comment's job with something that actually enforces it, don't just
+delete and hope. A comment explaining the fix/change itself ("fixed the bug where X") fails the
+proof test outright; that belongs in the commit message, not the diff. Offer the toggle, note the
+result in Decisions made, and
 only run `set-review-gate.sh ... on` if the user asks for it turned on now — but first confirm a
 real CODEOWNERS owner is in place (see above) and that at least one eligible reviewer other than
 whoever authors this skill's PRs can actually approve them; a solo-writer repo with the gate on
