@@ -137,7 +137,9 @@ location across skills.
 
 **Framing and risk tier** — same indirect-question approach as Audit, not a form: check
 `.athene/state.md`'s Decisions made first — if Athene: Product Discovery already recorded a
-framing decision on its way out, read it back rather than re-asking. Otherwise infer from what
+framing decision on its way out, read it back rather than re-asking. Decisions made is
+append-only, so if more than one framing entry exists, the most recent one governs — a later
+entry means the framing was revisited, not that an earlier one is still live. Otherwise infer from what
 Design has already surfaced (stack choices, who the repo is for, whether payments/auth/PII are in
 scope); ask once, conversationally, only when genuinely ambiguous. Use
 `references/governance-doc-set-mapping.md`'s own criteria directly — don't restate them here, that
