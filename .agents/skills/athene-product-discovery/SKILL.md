@@ -71,10 +71,27 @@ When research, repository inspection, customer material, or market comparison wo
 reduce uncertainty, propose the narrow research question and source scope before doing it.
 Distinguish evidence, user-stated facts, assumptions, and open questions in the result.
 
+## Map and score opportunities
+
+Before comparing solutions, decide *which problem* is worth solving — don't jump straight to
+comparing solutions for whatever came up first. From the desired outcome already surfaced above,
+map 3-7 customer opportunities: pains or needs framed from the user's own perspective ("I
+struggle to...", "I wish I could..."), never as features.
+
+Score each opportunity with `Importance × (1 − Satisfaction)` (Dan Olsen's formula, both
+normalized 0-1) when the conversation has real evidence behind both inputs. Otherwise rank
+qualitatively and record the evidence gap in Open questions rather than inventing normalized
+numbers from an interview-only conversation — a confident-looking score with no real evidence
+behind it is worse than an honest qualitative ranking.
+
+Carry only the top 1-2 scored opportunities into "Generate and choose options" below — comparing
+solutions for a low-scored opportunity wastes the comparison on the wrong problem.
+
 ## Generate and choose options
 
 Think broadly privately, discard weak ideas, and present two or three genuinely different viable
-approaches only when a choice matters. For each, state:
+approaches for the top-scored opportunity/opportunities above only when a choice matters. For
+each, state:
 
 - The target user and core value.
 - What it deliberately excludes.
