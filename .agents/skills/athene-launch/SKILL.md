@@ -75,8 +75,9 @@ Channels and assets: where the cohort already pays attention and what each needs
 Launch sequence: pre-launch, opening, first 72 hours, follow-up
 Instrumentation and dashboard: activation, retention, conversion, quality/support signals
 Readiness: quality, privacy/security, legal, accessibility, support, incident/rollback owner
-Decision dates: continue / change positioning-onboarding / fix the core workflow / test a new
+Decision options: continue / change positioning-onboarding / fix the core workflow / test a new
   hypothesis / expand the cohort / stop
+Review window: when the decision above gets made (ties to "Learn, decide, repeat" below)
 ```
 
 Select a few channels where the defined audience exists. Match the asset to the channel: a
