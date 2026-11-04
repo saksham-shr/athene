@@ -16,6 +16,28 @@ directly, or for a specification the user has already approved.
 The goal is shared understanding, not an interrogation or a theatrical specification. Make the
 user's product judgment stronger; don't substitute this skill's preferences for it.
 
+## Check for an already-tracked repo first
+
+Before starting discovery from zero, look for `.athene/state.md` at the repo root.
+
+- **Not found:** this is a genuinely fresh idea with no Athene footprint yet. Continue below.
+- **Found:** don't restart discovery from scratch just because this skill was invoked directly.
+  Ask instead, conversationally: "Is this a new feature on top of what's already here, or a new
+  idea/direction overall?"
+  - **New feature on the existing project:** still goes through the discovery flow below, but
+    framed against what's already built rather than from a blank slate — read the state file's
+    `Decisions made` first so earlier choices aren't re-litigated. This path does update
+    `.athene/state.md` as usual (see "State handling" below), since the feature belongs to the
+    same tracked initiative.
+  - **New idea/direction overall:** a separate initiative. Run discovery for it in conversation
+    only — don't write to `.athene/state.md` while exploring it. That file is this repo's single,
+    shared record of whichever initiative currently owns it; writing to it mid-discovery for a
+    second, unrelated initiative would overwrite or fork the existing project's own ownership
+    record, and a later Resume or `athene` run would have no way to tell which initiative it's
+    actually continuing. Only touch `.athene/state.md` once the new idea is approved and the user
+    has explicitly decided it should take over this repo going forward — at that point it's a
+    deliberate handoff, not a side effect of running discovery.
+
 ## Discover the intent
 
 Start from the context already supplied. If a material gap remains, ask one natural,
@@ -29,6 +51,21 @@ high-leverage question at a time. Prefer concrete prompts such as:
 Learn only what changes the recommendation: audience, problem/job, current workaround, desired
 outcome, constraints, evidence, risks, timing, and who decides. State useful assumptions so the
 user can correct them. Treat guesses as hypotheses, not facts.
+
+**Only on the existing-project branch above:** if `.athene/state.md`'s Decisions made already
+holds a framing decision, reuse it and skip this question — don't re-litigate it. On the
+new-idea/new-direction branch, the existing project's framing (if any) doesn't apply to this
+separate initiative — determine framing fresh in conversation, and keep the result out of
+`.athene/state.md` until the user explicitly approves
+takeover (see above), recording it as part of that handoff rather than mid-discovery. Otherwise
+ask the project-framing question early — `opensource`, `startup`, `personal`, or `research` —
+conversationally, never by reciting those four category names (same indirect approach as
+`skills/athene-audit/SKILL.md`'s "Determine framing and risk tier"): *"One thing before I go
+further — who's this really for: just you right now, outside contributors or users you don't
+control, a team or customers depending on it, or is it feeding research or coursework?"* Map the
+answer to a category yourself; don't make the user pick a label. Record the result and why in
+`.athene/state.md`'s Decisions made — `athene`'s own framing/risk-tier determination (see its
+"Governance artifacts" section) reads this back rather than re-asking it from scratch.
 
 When research, repository inspection, customer material, or market comparison would materially
 reduce uncertainty, propose the narrow research question and source scope before doing it.
