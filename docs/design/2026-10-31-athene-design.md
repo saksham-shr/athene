@@ -480,8 +480,10 @@ ub-mode reviews above:
    **outcome** → 3-7 customer **opportunities** (framed as "I struggle to..."/"I wish I could...",
    never as features) → 3+ **solutions** per opportunity (compare multiple before picking one,
    avoid the first-idea trap) → 1-2 **experiments** per solution (hypothesis, method, metric,
-   success threshold). Opportunities get ranked by an **Opportunity Score**
-   (`Importance × (1 − Satisfaction)`, both normalized 0-1) rather than gut feel. Athene's own
+   success threshold). Opportunities get ranked by an **Opportunity Score** (Dan Olsen's formula,
+   `Importance × (1 − Satisfaction)`, both normalized 0-1) when the conversation has evidence to
+   support both inputs; otherwise use a qualitative ranking and record the evidence gap rather
+   than inventing normalized numbers from an interview-only conversation. Athene's own
    draft's "Generate and choose options" section already does the solutions-comparison part (2-3
    genuinely different approaches, smallest disproving test) but has no explicit outcome →
    opportunity → solution → experiment structure above it, and no prioritization formula for
@@ -490,8 +492,8 @@ ub-mode reviews above:
    runs, first map the outcome (from the framing/success-signal work already in "Discover the
    intent") to a short, scored list of opportunities, and only then generate/compare solutions for
    the top 1-2 — closes a real sequencing gap, not a new feature.
-2. **Same repo and `ncklrs/startup-os-skills`'s `product-discovery` skill — explicit
-   anti-pattern list, worth adopting.** Both name a recurring set of discovery failure modes:
+2. **`ncklrs/startup-os-skills`'s `product-discovery` skill — explicit
+   anti-pattern list, worth adopting.** It names a recurring set of discovery failure modes:
    solution-first discovery (falling for a solution before the problem's validated — Athene's
    draft's product-quality checks implicitly guards this but never names it), leading the witness,
    confirmation bias, sample-of-one (deciding from one interview/one user), proxy research (asking
