@@ -75,7 +75,8 @@ Channels and assets: where the cohort already pays attention and what each needs
 Launch sequence: pre-launch, opening, first 72 hours, follow-up
 Instrumentation and dashboard: activation, retention, conversion, quality/support signals
 Readiness: quality, privacy/security, legal, accessibility, support, incident/rollback owner
-Decision dates: continue, iterate, expand, pause, or stop
+Decision dates: continue / change positioning-onboarding / fix the core workflow / test a new
+  hypothesis / expand the cohort / stop
 ```
 
 Select a few channels where the defined audience exists. Match the asset to the channel: a
@@ -125,8 +126,9 @@ path). Write it at the end of this skill's turn/session, not mid-task:
   `validation-metrics`, `launch-plan`, `release`, `learn-decide`), while `Active skill` is
   `athene-launch`.
 - **Decisions made:** bullet list, append-only. What was chosen and why, in the order decided —
-  the launch hypothesis, scope cuts, channel choices, the final continue/iterate/expand/stop
-  decision.
+  the launch hypothesis, scope cuts, channel choices, and the final decision from "Learn, decide,
+  repeat" below (continue / change positioning-onboarding / fix the core workflow / test a new
+  hypothesis / expand the cohort / stop).
 - **Open questions:** bullet list. Anything genuinely unresolved. `none` if nothing's outstanding.
 
 ## Handoff

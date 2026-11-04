@@ -740,10 +740,13 @@ already-done piece of this same research.
 
 ## Launch case studies and channel-selection method (researched 2026-11-04)
 
-**Why.** Skill 3 (Athene: Launch) already exists as a standalone draft (see "Intent and why"
-above), but its "Build the launch plan" section says to "select a few channels where the audience
-exists" with no method for choosing, and cites no real launch outcomes to calibrate expectations
+**Why.** Skill 3 (Athene: Launch) already existed as a standalone draft (see "Intent and why"
+above), but its "Build the launch plan" section said to "select a few channels where the audience
+exists" with no method for choosing, and cited no real launch outcomes to calibrate expectations
 against. Researched before scoping a build issue, same pattern as Discovery's prior-art review.
+**Core scaffold now built** (#61): `skills/athene-launch/SKILL.md` exists. The Bullseye
+Framework channel-selection method (#62) and the launch-day-spike/illustrative-case-study
+findings below (#63) are still open follow-ups, same split pattern as Discovery's #49-51.
 
 **Real launch case studies, 2014-2016 era (still the most detailed, if dated):**
 - **Product Hunt's own 2014 launch** — seeded the community with hand-picked early users
