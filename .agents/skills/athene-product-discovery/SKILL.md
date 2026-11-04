@@ -52,10 +52,14 @@ Learn only what changes the recommendation: audience, problem/job, current worka
 outcome, constraints, evidence, risks, timing, and who decides. State useful assumptions so the
 user can correct them. Treat guesses as hypotheses, not facts.
 
-If `.athene/state.md`'s Decisions made already holds a framing decision, reuse it and skip this
-question — don't re-litigate it. Otherwise ask the project-framing question early — `opensource`,
-`startup`, `personal`, or `research` — conversationally, never by reciting those four category
-names (same indirect approach as
+**Only on the existing-project branch above:** if `.athene/state.md`'s Decisions made already
+holds a framing decision, reuse it and skip this question — don't re-litigate it. On the
+new-idea/new-direction branch, or when no `.athene/state.md` exists at all, the existing project's
+framing (if any) doesn't apply to this separate initiative — determine framing fresh in
+conversation, and keep the result out of `.athene/state.md` until the user explicitly approves
+takeover (see above), recording it as part of that handoff rather than mid-discovery. Otherwise
+ask the project-framing question early — `opensource`, `startup`, `personal`, or `research` —
+conversationally, never by reciting those four category names (same indirect approach as
 `skills/athene-audit/SKILL.md`'s "Determine framing and risk tier"): *"One thing before I go
 further — who's this really for: just you right now, outside contributors or users you don't
 control, a team or customers depending on it, or is it feeding research or coursework?"* Map the
