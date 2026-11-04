@@ -122,12 +122,12 @@ path). Write it at the end of this skill's turn/session, not mid-task:
 
 ## Handoff
 
-Once the brief is approved, update `.athene/state.md`: set `Active skill` to `athene` and
-`Current phase` to `handoff` — the shared reserved value both skills agree means "just arrived,
-haven't started your own stages yet" (see `docs/state-schema.md`), not one of this skill's own
-phase names, which would belong to a lifecycle `athene` doesn't run.
+Once the brief is approved, confirm the `athene` skill file is packaged where this skill is
+installed. If it isn't, say so explicitly and stop there rather than claiming a handoff that
+can't happen, instead of guessing at `athene`'s behavior.
 
-Then read and follow the `athene` skill file directly — a plain read-and-follow instruction, not a
-platform-specific invoke call. If it isn't packaged where this skill is installed, say so
-explicitly and stop there rather than claiming a handoff that can't happen, instead of guessing at
-`athene`'s behavior.
+If it is packaged, update `.athene/state.md`: set `Active skill` to `athene` and `Current phase`
+to `handoff` — the shared reserved value both skills agree means "just arrived, haven't started
+your own stages yet", not one of this skill's own phase names, which would belong to a lifecycle
+`athene` doesn't run. Then read and follow the `athene` skill file directly — a plain
+read-and-follow instruction, not a platform-specific invoke call.
