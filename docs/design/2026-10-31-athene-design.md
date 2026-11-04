@@ -738,6 +738,93 @@ layer + per-language gap flag) and its "Governance artifacts" self-review pass (
 Also catches slop already shipped via `athene-code-health`'s "Lean" category (#53), a separate,
 already-done piece of this same research.
 
+## Launch case studies and channel-selection method (researched 2026-11-04)
+
+**Why.** Skill 3 (Athene: Launch) already exists as a standalone draft (see "Intent and why"
+above), but its "Build the launch plan" section says to "select a few channels where the audience
+exists" with no method for choosing, and cites no real launch outcomes to calibrate expectations
+against. Researched before scoping a build issue, same pattern as Discovery's prior-art review.
+
+**Real launch case studies, 2014-2016 era (still the most detailed, if dated):**
+- **Product Hunt's own 2014 launch** — seeded the community with hand-picked early users
+  *before* going public, since a community's early culture is very hard to change once set;
+  reached 2,000 users in 20 days via manual, non-scalable tactics, not paid acquisition.
+- **Happenstance (2016)** — a Product Hunt launch brought 1,200+ signups in 24h at ~50%
+  conversion. A newsletter push to 400 existing users *before* that launch only got 17 upvotes —
+  a warm list doesn't guarantee launch-day votes.
+- **Dropbox** — the canonical product-led referral case: 500MB free storage per successful
+  referral (both sides), reportedly growing 100k→4M users in 15 months.
+- **Airbnb** — built a tool letting hosts auto-cross-post Airbnb listings to Craigslist (plus a
+  reported $100 travel-voucher incentive for doing so); rode Craigslist's existing demand until
+  Craigslist patched the integration.
+- **Harry's** — a pre-launch referral waitlist collected 100k emails in one week, showing each
+  signup their queue position, referral count, and unlocked rewards.
+- Sources: [Ryan Hoover — Product Hunt's first 2,000 users](https://www.ryanhoover.me/post/how-we-got-our-first-2-000-users-doing-things-that-dont-scale),
+  growth-hacking roundups covering Dropbox/Airbnb/Harry's (multiple secondary sources, figures
+  self-reported by the companies — not independently verified against primary disclosures).
+
+**2025-2026 update — confirms some findings, revises others (general web research, 2026-11-04):**
+- **Product Hunt benchmarks by category:** consumer apps typically get 500-1,500 signups from a
+  good launch; B2B SaaS gets a few dozen to a few hundred. A spring-2026 cohort of 5 SaaS PH
+  launches: 7-day signups ranged ~71-450 (median ~115).
+- **Rank doesn't predict revenue.** All 4 of that cohort with complete data finished top-6 by
+  rank, but rank didn't predict revenue — the spread came from the audience each founder already
+  brought to launch day, not from Product Hunt's own distribution. Same underlying finding as
+  the 2016 "warm list doesn't guarantee votes" case, from the other direction: a founder's own
+  pre-existing audience is what actually converts; the launch platform is the stage, not the
+  cause.
+- **Founder survey (Nov 2025):** 50% saw some registration increase post-launch, 30% a
+  significant increase, 16% no noticeable spike — roughly a coin-flip whether a PH launch does
+  anything measurable at all.
+- **AI-category saturation:** 1,111 AI launches on Product Hunt in Q2 2026 alone, +46% YoY — the
+  "AI product on Product Hunt" lane specifically is now extremely crowded.
+- **Channel fit now splits clearly by audience type:** X/Twitter remains the default for
+  build-in-public (long-form threads, weekly metric updates) and skews developer/B2B. TikTok/
+  Reels/short-form skews consumer/visual products — and the winning format flipped from polished
+  sizzle reels to a quick, visible win shown in the first 1-2 seconds; narration-style "Day N of
+  building my app" posts mostly underperform on TikTok specifically.
+- **Smaller, trust-based communities often beat large audiences** for leads, trust, or repeat
+  buyers — consistent with the 2016-era "niche channels once pain-point language is validated"
+  finding.
+- Sources: [shno.co Product Hunt launch statistics 2026](https://www.shno.co/marketing-statistics/product-hunt-launch-statistics),
+  multiple 2025-2026 build-in-public/TikTok-for-startups marketing guides (vendor/agency blogs —
+  figures are self-reported and directional, not an independent benchmark study).
+
+**Channel-selection method — the real gap in the existing draft.** Gabriel Weinberg's **Bullseye
+Framework** (from *Traction*) is the missing method:
+1. **Brainstorm** all 19 traction channels (viral marketing, PR, unconventional PR, SEM, social/
+   display ads, offline ads, SEO, content marketing, email marketing, engineering as marketing,
+   business development, sales, affiliate programs, existing platforms, trade shows, offline
+   events, speaking engagements, community building, targeting blogs) — sketch how each could
+   plausibly work for *this* product, including unlikely-looking ones.
+2. **Test** the top 3-5 cheaply for real signal before committing real time or money.
+3. **Focus** resources on whichever one channel clearly outperforms; stop spreading effort thin
+   across several.
+- Prefilter by audience type before brainstorming, per the 2025-2026 update above: a developer/
+  B2B audience weights the brainstorm toward X + community-building + sales/business development;
+  a consumer/visual-product audience weights it toward short-form video + existing platforms
+  (Product Hunt-style) — not a replacement for the three-step process, a better starting point
+  for step 1.
+- Source: [grahammann.net — Traction book notes](https://grahammann.net/book-notes/traction-gabriel-weinberg)
+  (the 19-channel list and three-step process; the book itself is the primary source, this is a
+  reliable secondary summary cross-checked against it).
+
+**Prior-art agent skill checked:** `phuryn/pm-skills`' `gtm-strategy` skill has a 5-category
+channel taxonomy (digital marketing, content/inbound, sales/outbound, community/grassroots,
+product-led/viral) and a "focus on a few channels excellently" philosophy, but **no scoring
+method** — exactly what Bullseye fills. Its separate `growth-loops` skill covers viral-loop
+mechanics (sharing trigger, incentive, loop coefficient) once a loop-shaped channel is already
+chosen — a different, complementary concern, not channel selection itself.
+
+**Decision.** Add the Bullseye Framework (brainstorm → test 3-5 → focus, audience-type-prefiltered)
+to Launch's "Build the launch plan" section as the channel-selection method it currently lacks.
+Add the "launch-day traffic is a feedback spike, not a retention channel" finding to "Choose
+validation and metrics" or "Learn, decide, repeat" — respond to comments and validate pain-point
+language first, then move to niche/community channels, rather than treating the launch-day number
+itself as the signal. Cite real case studies (above) when illustrating expected-outcome ranges,
+with the self-reported-figures caveat carried forward, not presented as verified fact. Not yet
+scoped into a build issue — this section is the research and decision record.
+
 ## Left to the builder
 
 - ~~Implement the include-directive expansion in `scripts/mirror-skills.sh`~~ — **done**, #25/#26.
