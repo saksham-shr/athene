@@ -842,7 +842,8 @@ chosen — a different, complementary concern, not channel selection itself.
 
 **Decision.** Add the Bullseye Framework (brainstorm → test 3-5 → focus, audience-type-prefiltered)
 to Launch's "Build the launch plan" section as the channel-selection method it currently lacks.
-Add the "launch-day traffic is a feedback spike, not a retention channel" finding to "Choose
+**Done** (#62). Add the "launch-day traffic is a feedback spike, not a retention channel" finding
+to "Choose
 validation and metrics" or "Learn, decide, repeat" — respond to comments and validate pain-point
 language first, then move to niche/community channels, rather than treating the launch-day number
 itself as the signal. Cite real case studies (above) as illustrative tactics, not as a comparable

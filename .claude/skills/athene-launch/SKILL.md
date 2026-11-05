@@ -80,11 +80,26 @@ Decision options: continue / change positioning-onboarding / fix the core workfl
 Review window: when the decision above gets made (ties to "Learn, decide, repeat" below)
 ```
 
-Select a few channels where the defined audience exists. Match the asset to the channel: a
-landing page/demo for discovery, onboarding/email for activation, a case study or testimonial
-only with truthful consent, release notes/community post for existing users. Write claims that
-can be supported by current evidence; never invent urgency, customer quotes, performance results,
-or security guarantees.
+**Choose channels with the Bullseye Framework** (Gabriel Weinberg, *Traction*), not by picking
+whichever one comes to mind first:
+1. **Brainstorm** all 19 traction channels — viral marketing, PR, unconventional PR, SEM, social/
+   display ads, offline ads, SEO, content marketing, email marketing, engineering as marketing,
+   business development, sales, affiliate programs, existing platforms, trade shows, offline
+   events, speaking engagements, community building, targeting blogs — sketch how each could
+   plausibly work for *this* product, including unlikely-looking ones.
+2. **Test** the top 3-5 cheaply for real signal before committing real time or money.
+3. **Focus** resources on whichever one channel clearly outperforms; stop spreading effort thin
+   across several.
+
+**Prefilter by audience type before brainstorming** — not a replacement for the three steps
+above, a better starting point for step 1: a developer/B2B audience weights the brainstorm toward
+X/Twitter + community-building + sales/business development; a consumer/visual-product audience
+weights it toward short-form video + existing platforms (Product Hunt-style).
+
+Match the asset to the channel chosen: a landing page/demo for discovery, onboarding/email for
+activation, a case study or testimonial only with truthful consent, release notes/community post
+for existing users. Write claims that can be supported by current evidence; never invent urgency,
+customer quotes, performance results, or security guarantees.
 
 ## Release responsibly
 
