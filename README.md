@@ -31,9 +31,13 @@ Live, in [`skills/`](skills/):
   brief, then hands off to `athene`: discover the intent, map and score opportunities (Opportunity
   Solution Tree sequencing), generate and choose options, scope deliberately, named discovery
   anti-patterns, product-quality checks.
+- **`athene-launch`** (skill 3) — cuts scope to the smallest learning release, validates the
+  riskiest assumptions, defines release readiness, runs the post-launch review. Core scaffold
+  built; the Bullseye Framework channel-selection method and two launch-case-study findings are
+  still open follow-ups (#62, #63).
 
-Planned, not yet built:
-- **Athene: Launch** — define the smallest launchable slice, confirm release readiness.
+All six skills from the design doc now exist in some form — the full Discovery → Build → Launch
+chain is scaffolded, though chaining itself (Phase 5) isn't wired yet.
 
 ## Reference specs
 
