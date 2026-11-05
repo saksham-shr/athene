@@ -208,14 +208,15 @@ incomplete decision list:
 
 ## Handoff
 
-Once the repo foundation, decision records, and governance artifacts are in place, update
-`.athene/state.md`: set `Active skill` to `athene-launch` and `Current phase` to `handoff` — not
-a Build-lifecycle value like "release and post-merge," which belongs to this skill's own
-vocabulary, not Launch's. Launch defines its own lifecycle; `handoff` is the one shared value
-both skills agree means "just arrived, haven't started your own stages yet," so Launch (or
-Resume reading on Launch's behalf) never receives a phase name from a lifecycle it doesn't run.
+Once the repo foundation, decision records, and governance artifacts are in place, confirm the
+`athene-launch` skill file is packaged where this skill is installed. If it isn't, say so
+explicitly and stop there rather than claiming a handoff that can't happen, instead of guessing
+at Launch's behavior.
 
-Then read and follow the Athene: Launch skill file directly — a plain read-and-follow
-instruction, not a platform-specific invoke call. That skill doesn't exist in this repo yet; if
-it isn't packaged where this skill is installed, say so explicitly and stop there rather than
-claiming a handoff that can't happen, instead of guessing at Launch's behavior.
+If it is packaged, update `.athene/state.md`: set `Active skill` to `athene-launch` and `Current
+phase` to `handoff` — not a Build-lifecycle value like "release and post-merge," which belongs to
+this skill's own vocabulary, not Launch's. Launch defines its own lifecycle; `handoff` is the one
+shared value both skills agree means "just arrived, haven't started your own stages yet," so
+Launch (or Resume reading on Launch's behalf) never receives a phase name from a lifecycle it
+doesn't run. Then read and follow the Athene: Launch skill file directly — a plain
+read-and-follow instruction, not a platform-specific invoke call.
