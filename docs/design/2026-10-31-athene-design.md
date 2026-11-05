@@ -744,9 +744,9 @@ already-done piece of this same research.
 above), but its "Build the launch plan" section said to "select a few channels where the audience
 exists" with no method for choosing, and cited no real launch outcomes to calibrate expectations
 against. Researched before scoping a build issue, same pattern as Discovery's prior-art review.
-**Core scaffold now built** (#61): `skills/athene-launch/SKILL.md` exists. The Bullseye
-Framework channel-selection method (#62) and the launch-day-spike/illustrative-case-study
-findings below (#63) are still open follow-ups, same split pattern as Discovery's #49-51.
+**Core scaffold now built** (#61): `skills/athene-launch/SKILL.md` exists. The
+launch-day-spike/illustrative-case-study findings below (#63) are still an open follow-up, same
+split pattern as Discovery's #49-51.
 
 **Real launch case studies, 2014-2016 era (still the most detailed, if dated):**
 - **Product Hunt's own 2014 launch** — seeded the community with hand-picked early users
