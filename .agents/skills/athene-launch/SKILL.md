@@ -65,10 +65,8 @@ friend/employee praise, impressions alone, or an unsegmented visitor count.
 **Launch-day traffic is a feedback spike, not a retention channel.** A Product Hunt/Show HN-style
 launch-day number measures attention, not any of the assumptions in the table above. Respond to
 comments and validate which pain-point language resonates first; then prioritize testing
-niche/community channels. Most of a launch-day spike doesn't stick around regardless of the
-channel. 100 real signups that convert beats 1,000
-upvotes that convert nobody — don't record the raw spike number itself as validation for "demand
-is real."
+niche/community channels. 100 real signups that convert beats 1,000 upvotes that convert nobody
+— don't record the raw spike number itself as validation for "demand is real."
 
 ## Build the launch plan
 
