@@ -117,8 +117,8 @@ self-reported-figures caveat rather than presenting a secondhand number as verif
 `~/.athene/<repo-slug>/launch-plans/<timestamp>-<topic-slug>.md` — local-only, uncommitted, not
 synced anywhere (same pattern as `athene-product-discovery`'s brief storage and the design doc's
 "Discovery brief / Launch plan storage" decision). `<repo-slug>` derivation (folder name, or a
-hash if collisions matter) is left to the builder. Record the plan and this file's path — not
-its full content — in `.athene/state.md`'s Decisions made.
+hash if collisions matter) is left to the builder. Record the launch decision and this file's
+path — not the launch plan's content — in `.athene/state.md`'s Decisions made.
 
 ## Release responsibly
 
