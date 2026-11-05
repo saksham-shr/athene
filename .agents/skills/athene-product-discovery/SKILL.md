@@ -143,6 +143,13 @@ Present the brief back in plain language. Before starting production implementat
 explicit approval for the product shape, scope, material tradeoffs, and any irreversible/external
 commitment.
 
+**Store the approved brief locally, not in the target repo.** Write it to
+`~/.athene/<repo-slug>/briefs/<timestamp>-<topic-slug>.md` — local-only, uncommitted, not synced
+anywhere (same pattern as gstack's `/spec` skill, not superpowers' commit-into-the-repo approach;
+see the design doc's "Discovery brief / Launch plan storage" decision). `<repo-slug>` derivation
+(folder name, or a hash if collisions matter) is left to the builder. Record the approval decision
+and this file's path — not the brief's full content — in `.athene/state.md`'s Decisions made.
+
 ## Product-quality checks
 
 Before calling discovery complete, verify that:
