@@ -880,8 +880,8 @@ benchmark range — they measure different things (users, signups, referral grow
 demand, waitlist emails) over different time windows, so don't average or range them together as
 if they were one metric. Where Launch gives an expected-outcome range, use the one same-metric,
 same-window source that actually supports it (e.g. the Product Hunt category benchmarks above),
-not a blend across case studies. Carry the self-reported-figures caveat forward regardless. Not yet
-scoped into a build issue — this section is the research and decision record.
+not a blend across case studies. Carry the self-reported-figures caveat forward regardless.
+**Done** (#63).
 
 ## Left to the builder
 
