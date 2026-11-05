@@ -113,6 +113,13 @@ waitlist emails) over different time windows — don't blend them into one range
 same-metric, same-window source that actually supports a given range, and carry forward any
 self-reported-figures caveat rather than presenting a secondhand number as verified fact.
 
+**Store the launch plan locally, not in the target repo.** Write it to
+`~/.athene/<repo-slug>/launch-plans/<timestamp>-<topic-slug>.md` — local-only, uncommitted, not
+synced anywhere (same pattern as `athene-product-discovery`'s brief storage and the design doc's
+"Discovery brief / Launch plan storage" decision). `<repo-slug>` derivation (folder name, or a
+hash if collisions matter) is left to the builder. Record the launch decision and this file's
+path — not the launch plan's content — in `.athene/state.md`'s Decisions made.
+
 ## Release responsibly
 
 Use the smallest suitable delivery control: internal preview, design partners, invite-only beta,

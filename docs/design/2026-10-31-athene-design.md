@@ -155,7 +155,9 @@ carried over from gstack's own: losing the local file loses the brief's full det
 here since the decisions that matter are already captured in `.athene/state.md` regardless.
 
 `<repo-slug>` derivation (folder name, or a hash if collisions matter) is left to the builder —
-not solving a problem that hasn't shown up yet. Not yet scoped into a build issue.
+not solving a problem that hasn't shown up yet. **Done** (#67): wired into both
+`athene-product-discovery`'s "Produce the handoff" and `athene-launch`'s "Build the launch plan"
+sections.
 
 ## Issue and PR conventions (for this repo's own build, researched 2026-10-31)
 
