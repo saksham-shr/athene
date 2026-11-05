@@ -744,9 +744,9 @@ already-done piece of this same research.
 above), but its "Build the launch plan" section said to "select a few channels where the audience
 exists" with no method for choosing, and cited no real launch outcomes to calibrate expectations
 against. Researched before scoping a build issue, same pattern as Discovery's prior-art review.
-**Core scaffold now built** (#61): `skills/athene-launch/SKILL.md` exists. The Bullseye
-Framework channel-selection method (#62) and the launch-day-spike/illustrative-case-study
-findings below (#63) are still open follow-ups, same split pattern as Discovery's #49-51.
+**Core scaffold now built** (#61): `skills/athene-launch/SKILL.md` exists. The
+launch-day-spike/illustrative-case-study findings below (#63) are still an open follow-up, same
+split pattern as Discovery's #49-51.
 
 **Real launch case studies, 2014-2016 era (still the most detailed, if dated):**
 - **Product Hunt's own 2014 launch** — seeded the community with hand-picked early users
@@ -842,7 +842,8 @@ chosen — a different, complementary concern, not channel selection itself.
 
 **Decision.** Add the Bullseye Framework (brainstorm → test 3-5 → focus, audience-type-prefiltered)
 to Launch's "Build the launch plan" section as the channel-selection method it currently lacks.
-Add the "launch-day traffic is a feedback spike, not a retention channel" finding to "Choose
+**Done** (#62). Add the "launch-day traffic is a feedback spike, not a retention channel" finding
+to "Choose
 validation and metrics" or "Learn, decide, repeat" — respond to comments and validate pain-point
 language first, then move to niche/community channels, rather than treating the launch-day number
 itself as the signal. Cite real case studies (above) as illustrative tactics, not as a comparable
