@@ -159,7 +159,9 @@ path). Write it at the end of this skill's turn/session, not mid-task:
   handoff below (otherwise the cycle ends here and no handoff happens at all).
 - **Current phase:** one of this skill's own stages above (`launch-question`, `cut-scope`,
   `validation-metrics`, `launch-plan`, `release`, `learn-decide`), while `Active skill` is
-  `athene-launch`.
+  `athene-launch`. `handoff` is also a valid, transient value — the shared reserved value another
+  skill (e.g. `athene`) leaves when handing off here; treat it as equivalent to `launch-question`
+  and overwrite it with a real phase name as soon as this skill's own flow starts.
 - **Decisions made:** bullet list, append-only. What was chosen and why, in the order decided —
   the launch hypothesis, scope cuts, channel choices, and the final decision from "Learn, decide,
   repeat" below (continue / change positioning-onboarding / fix the core workflow / test a new
