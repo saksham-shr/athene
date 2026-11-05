@@ -33,7 +33,8 @@ Live, in [`skills/`](skills/):
   anti-patterns, product-quality checks.
 - **`athene-launch`** (skill 3) — cuts scope to the smallest learning release, validates the
   riskiest assumptions, defines release readiness, runs the post-launch review, channel selection
-  via the Bullseye Framework. Two launch-case-study findings are still an open follow-up (#63).
+  via the Bullseye Framework. All six design-doc skills now have a built core — chaining (Phase
+  5) and the brief/launch-plan local storage (#67) are the remaining gaps.
 
 All six skills from the design doc now exist in some form — the full Discovery → Build → Launch
 chain is scaffolded, though chaining itself (Phase 5) isn't wired yet.

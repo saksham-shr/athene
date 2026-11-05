@@ -62,6 +62,12 @@ Avoid vanity metrics. Measure a behavior close to delivered value, segment by in
 source, and record sample size, caveats, and qualitative feedback. Don't claim validation from
 friend/employee praise, impressions alone, or an unsegmented visitor count.
 
+**Launch-day traffic is a feedback spike, not a retention channel.** A Product Hunt/Show HN-style
+launch-day number measures attention, not any of the assumptions in the table above. Respond to
+comments and validate which pain-point language resonates first; then prioritize testing
+niche/community channels. 100 real signups that convert beats 1,000 upvotes that convert nobody
+— don't record the raw spike number itself as validation for "demand is real."
+
 ## Build the launch plan
 
 Create a concise plan with:
@@ -100,6 +106,12 @@ Match the asset to the channel chosen: a landing page/demo for discovery, onboar
 activation, a case study or testimonial only with truthful consent, release notes/community post
 for existing users. Write claims that can be supported by current evidence; never invent urgency,
 customer quotes, performance results, or security guarantees.
+
+**Treat case studies as illustrative tactics, not a comparable benchmark** when setting an
+expected-outcome range. Real launches measure different things (users, signups, referral growth,
+waitlist emails) over different time windows — don't blend them into one range. Use the one
+same-metric, same-window source that actually supports a given range, and carry forward any
+self-reported-figures caveat rather than presenting a secondhand number as verified fact.
 
 ## Release responsibly
 
