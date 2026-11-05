@@ -128,6 +128,35 @@ Exact location/format (e.g. `.athene/state.md`) is left to the builder; constrai
 be readable by Resume and Audit, and should not block normal repo tooling (likely committed, plain
 markdown, not gitignored, so it survives across machines/agents/sessions).
 
+## Discovery brief / Launch plan storage (decided 2026-11-05)
+
+Distinct from `.athene/state.md` above (always committed, inside the target repo): the actual
+product brief Discovery produces and the launch plan Launch produces had no defined storage
+location in either skill's draft — only the *decision* to approve them gets recorded in
+`.athene/state.md`, never the document itself.
+
+Compared two real patterns before deciding: `superpowers:brainstorming` commits its design docs
+*inside* the target repo at `docs/superpowers/specs/YYYY-MM-DD-<topic>-design.md`, versioned and
+visible to every collaborator. gstack's `/spec` skill instead archives specs *outside* the repo,
+in a local per-machine state root (`$GSTACK_STATE_ROOT/projects/<slug>/specs/<timestamp>-
+<slug>.md`), uncommitted and not synced anywhere unless the user opts in via `--sync-archive` —
+the GitHub issue it files is the shared/durable artifact; the local file is just the agent's own
+copy.
+
+**Decision: follow gstack's pattern, not superpowers'.** Write the brief/plan to a local,
+per-machine directory outside the target repo's git tree — `~/.athene/<repo-slug>/briefs/
+<timestamp>-<topic-slug>.md` for Discovery, `~/.athene/<repo-slug>/launch-plans/<timestamp>-
+<topic-slug>.md` for Launch. Not committed, not synced anywhere. `.athene/state.md`'s Decisions
+made records only the decision and this file's path, not the brief's full content — same
+"durable record is small, full detail lives in the local copy" split gstack uses, minus gstack's
+issue-filing step (Discovery hands off straight to `athene`; there's no GitHub issue per brief
+here), so the path in Decisions made is the only pointer that exists. Known, accepted limitation
+carried over from gstack's own: losing the local file loses the brief's full detail — acceptable
+here since the decisions that matter are already captured in `.athene/state.md` regardless.
+
+`<repo-slug>` derivation (folder name, or a hash if collisions matter) is left to the builder —
+not solving a problem that hasn't shown up yet. Not yet scoped into a build issue.
+
 ## Issue and PR conventions (for this repo's own build, researched 2026-10-31)
 
 Standard across most open-source repos, and used for Athene's own build issues from Phase 0 on:
