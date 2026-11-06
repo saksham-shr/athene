@@ -170,6 +170,16 @@ Standard across most open-source repos, and used for Athene's own build issues f
   `- [ ]` checklist; GitHub renders it as progress and one issue should cover one coherent piece of
   work, not several), **Acceptance criteria** (specific, observable, testable — not "write good
   code"), **Depends on** (links to issues that must land first, or "none").
+- **Every `- [ ]` checklist item stays one line (found 2026-11-06, #84/#85).** GitHub renders a
+  top-level `- [ ]` item as a tracked-task row with a drag handle and an overflow menu reserved on
+  the right, regardless of how much text the item holds. A multi-line item (a long task description
+  that wraps) leaves that reserved space sitting empty next to a short first line — looks like a
+  rendering bug, isn't one; it's GitHub's own fixed-width chrome for that row. Fix is content, not
+  markdown syntax: keep each item to one concrete action on one line; move anything needing more
+  explanation up into Context or Proposal and leave the checklist item as a short pointer back to
+  it. Now documented in both `CONTRIBUTING.md` templates' "Issue/PR checklist items stay one line"
+  section — the same rule this repo's own issues follow (per "this is the same shape the
+  fixed-baseline issue templates generate" above) applies to Athene's own build issues too.
 - PRs reference the issue they close (`Closes #N`) rather than restating its content.
 - **`Closes #N` goes in the PR description, never in a commit message.** GitHub auto-closes on
   that keyword the moment the commit lands on the default branch — if work is committed straight
