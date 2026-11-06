@@ -58,9 +58,13 @@ Give the subagent the PR number and this scope:
 
 - **Pin the PR head and base commit before reading anything else.** `gh pr diff <number>` doesn't
   check out the PR — it diffs against whatever ref `gh` resolves, independent of the local working
-  tree's current branch. Resolve the PR's head commit and base *commit* first (`gh pr view
-  <number> --json headRefOid,baseRefOid -q '{head: .headRefOid, base: .baseRefOid}'`) — the base
-  commit, not just `baseRefName`: the base branch name can stay `main` while `main` itself keeps
+  tree's current branch. Resolve the PR's head commit and base *commit* first via the REST API,
+  not `gh pr view --json`: `gh api repos/{owner}/{repo}/pulls/<number> --jq '{head: .head.sha,
+  base: .base.sha}'` (`gh api` reads the GitHub REST API's `pulls` object directly — `head.sha` /
+  `base.sha` have been stable fields on that object for years; `gh pr view --json baseRefOid`
+  needs a recent `gh` CLI release the caller's environment may not have, so query the API
+  directly instead of depending on `gh`'s own `--json` field coverage). The base commit, not just
+  `base.ref` (the branch name): the base branch name can stay `main` while `main` itself keeps
   advancing underneath the PR, so the branch name alone doesn't catch that. Read all surrounding
   code at that exact pinned head commit (e.g. `git show <headRefOid>:<path>`), never off the
   caller's current checkout — if the user is on a different branch locally, reading files straight
@@ -119,9 +123,10 @@ Cap at 20 findings; if more were found, say how many were left out, same as Code
 
 ## 5. Post the comment, with disclosure
 
-Before posting, re-check the PR's current head and base commit (`gh pr view <number> --json
-headRefOid,baseRefOid -q '{head: .headRefOid, base: .baseRefOid}'`) against what was pinned in
-step 3. A head change means new commits landed; a base-commit change means either a retarget to a
+Before posting, re-check the PR's current head and base commit (same `gh api
+repos/{owner}/{repo}/pulls/<number> --jq '{head: .head.sha, base: .base.sha}'` call as step 3)
+against what was pinned there. A head change means new commits landed; a base-commit change means
+either a retarget to a
 different branch or the existing base branch advancing underneath the PR — either way the diff the
 findings describe may no longer be the PR's actual diff, even if the head commit itself didn't
 move. Don't post as if nothing happened: tell the user what changed and either restart against the
