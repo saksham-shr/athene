@@ -85,7 +85,19 @@ model this project's planning already settled on:
    configured for the language — no matching tool exists for it at all, or one exists but isn't
    set up in this repo — flag the gap in Decisions made rather than silently skipping the
    dimension, and lean on the self-review subagent's proof-test (see "Governance artifacts"
-   below) as the fallback either way.
+   below) as the fallback either way. **Pre-write ladder check:** before writing any new code,
+   climb ponytail's ladder — does this need to exist at all → already in the codebase → stdlib →
+   native platform feature → already-installed dependency → one line → only then new code. This is
+   the same judgment `athene-code-health`'s "Lean" category applies, moved to before the diff
+   exists instead of after. **Dependency maintenance check:** before writing new code against a
+   library already in use (not a new stack choice — see "Stack decisions" above, which only fires
+   there), check its current maintenance/deprecation status (changelog, deprecation notice,
+   archived repo) rather than assuming it's still the right call. **Precedence:** both checks scope
+   to implementation code only — never to a required governance artifact (the fixed baseline docs,
+   the review gate; see "Governance artifacts" below). If a leaner persona such as ponytail is
+   active in the same session, its own "does this need to exist at all? skip it" reflex could
+   otherwise tempt skipping a mandated governance doc on a repo that looks low-need — it can't:
+   Athene's governance mandates always win over a leaner persona's own judgment call.
 5. **PR intake** — drafts until ready. Non-trivial external work needs an accepted issue or a
    named sponsor, a concise human-written summary, compatibility disclosure, performance
    evidence where relevant. Run CLA/license/security checks early.
