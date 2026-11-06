@@ -14,6 +14,23 @@ Use this skill when the user is preparing to launch, validate, beta-test, announ
 product/feature. Designed to counter feature accumulation: prioritize a fast, safe learning loop
 over a larger build.
 
+## Check for existing Athene footprint first
+
+On start, scan the target repo for `.athene/state.md`.
+
+- **Not found:** a genuinely standalone launch conversation with no Athene footprint yet —
+  continue below. Unlike `athene`, Launch doesn't require a prior Audit retrofit first; a launch
+  plan can be produced for a repo Athene has never touched.
+- **Found:** read all four sections before doing anything else — don't just confirm the file
+  exists and barge into the lifecycle below. Check `Active skill`:
+  - **`athene-launch`:** continue below, picking up at whatever `Current phase` names. If
+    `Current phase` is `handoff` (the reserved value a handing-off skill like `athene` leaves),
+    treat it as equivalent to **`launch-question`**, this skill's own first stage, rather than an
+    unrecognized phase.
+  - **Anything else:** this skill doesn't own the repo right now. Read and follow whichever
+    skill file `Active skill` names instead — stop and say so if that file isn't packaged where
+    this skill is installed. Don't start deciding work or touching state another skill owns.
+
 ## Start with the launch question
 
 Establish the smallest decision the launch should inform. Examples: "Will this audience sign
