@@ -10,7 +10,7 @@
     {
       "name": "athene",
       "description": "Discover what's worth building, set the repo up properly, launch small enough to learn.",
-      "source": "./",
+      "source": "./.claude",
       "category": "productivity"
     }
   ]
