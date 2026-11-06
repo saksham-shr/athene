@@ -1,0 +1,13 @@
+# Per-skill OpenAI-platform (Codex) packaging for this skill.
+# Mirrored to .agents/skills/athene-product-discovery/agents/openai.yaml and
+# .claude/skills/athene-product-discovery/agents/openai.yaml by scripts/mirror-skills.sh.
+display_name: "Athene: Product Discovery"
+description: >-
+  Turn an ambiguous product idea or feature request into an approved product brief - problem,
+  user, outcome, scope, validation plan - then hand off to the Athene build skill.
+invocation:
+  mode: implicit
+  use_when: the desired outcome or tradeoffs are materially unclear, before building
+  skip_when: >-
+    a precise, low-risk task that can be done directly, or an already-approved specification
+required_tools: [read_file, write_file, edit_file, grep, glob, shell]

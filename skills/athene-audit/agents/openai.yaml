@@ -1,0 +1,12 @@
+# Per-skill OpenAI-platform (Codex) packaging for this skill.
+# Mirrored to .agents/skills/athene-audit/agents/openai.yaml and
+# .claude/skills/athene-audit/agents/openai.yaml by scripts/mirror-skills.sh.
+display_name: "Athene: Audit"
+description: >-
+  Adopt Athene onto a repo never set up with it - scan structure, policies, CI, and ownership
+  signals, write fixed-baseline governance docs, and bootstrap .athene/state.md.
+invocation:
+  mode: implicit
+  use_when: a repo has no .athene/state.md yet
+  skip_when: ".athene/state.md already exists (use Athene: Resume instead)"
+required_tools: [read_file, write_file, edit_file, grep, glob, shell]

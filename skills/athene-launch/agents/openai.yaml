@@ -1,0 +1,15 @@
+# Per-skill OpenAI-platform (Codex) packaging for this skill.
+# Mirrored to .agents/skills/athene-launch/agents/openai.yaml and
+# .claude/skills/athene-launch/agents/openai.yaml by scripts/mirror-skills.sh.
+display_name: "Athene: Launch"
+description: >-
+  Prepare a product or feature for an early, evidence-seeking launch: cut scope to the
+  smallest learning release, validate the riskiest assumptions, define release readiness, and
+  run the post-launch review.
+invocation:
+  mode: implicit
+  use_when: >-
+    the user is preparing to launch, validate, beta-test, announce, or market a
+    product/feature
+  skip_when: null
+required_tools: [read_file, write_file, edit_file, grep, glob, shell]

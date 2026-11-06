@@ -1,0 +1,13 @@
+# Per-skill OpenAI-platform (Codex) packaging for this skill.
+# Mirrored to .agents/skills/athene-code-health/agents/openai.yaml and
+# .claude/skills/athene-code-health/agents/openai.yaml by scripts/mirror-skills.sh.
+display_name: "Athene: Code Health"
+description: >-
+  Rank a repo's code quality - bugs, security holes, scale limits, missing tests, slow paths,
+  bloat. One-shot report, changes nothing.
+invocation:
+  mode: implicit
+  use_when: '"audit this codebase", "review the whole repo"'
+  skip_when: >-
+    process/governance setup (use Athene: Audit instead) or a single-file/diff review
+required_tools: [read_file, grep, glob, shell]
