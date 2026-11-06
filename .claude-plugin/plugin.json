@@ -7,5 +7,6 @@
     "url": "https://github.com/saksham-shr"
   },
   "repository": "https://github.com/saksham-shr/athene",
+  "license": "MIT",
   "keywords": ["product-discovery", "engineering-practice", "governance", "launch"]
 }
