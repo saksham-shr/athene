@@ -41,3 +41,29 @@ uses both skills.
 
 Commit messages and PR descriptions never carry an AI attribution or co-author trailer,
 regardless of which agent wrote them. This applies equally to every contributor, human or AI.
+
+## Issue/PR checklist items stay one line
+
+GitHub renders every top-level `- [ ]` item in an issue/PR body as a tracked-task row: a drag
+handle and an overflow menu on the right, in space reserved regardless of how much text the item
+holds. A checklist item long enough to wrap to two or more lines leaves that reserved space empty
+next to a short first line and a second line underneath it — reads as a layout bug, isn't one.
+
+Keep each `- [ ]` item to one line, one concrete action. A task that needs more explanation than
+that fits on one line belongs in `## Context` or `## Proposal` above the checklist, with the
+checklist item itself staying a short pointer back to it — not the explanation stuffed into the
+checklist line itself.
+
+## Write issue/PR paragraphs as one line, let the browser wrap them
+
+GitHub renders a single newline inside an issue or PR body as an actual line break — unlike a
+`.md` file committed to the repo (a README, this file), where a soft newline inside a paragraph
+just collapses into a space when rendered. Hand-wrapping a paragraph at ~70-80 characters — the
+habit that makes a `.md` file or a terminal heredoc readable in a source editor — produces a wall
+of short, forced lines on GitHub's issue/PR view instead of one flowing paragraph: each source
+line becomes its own visually separate line, with empty space on the right and the next sentence
+appearing to start on a new line even when it's a direct continuation.
+
+Write each paragraph in an issue or PR body as a single unbroken line in the source, however long
+that line gets — don't wrap it by hand. A blank line still separates paragraphs normally; only the
+within-paragraph wrapping habit is different here from every other Markdown file in this repo.

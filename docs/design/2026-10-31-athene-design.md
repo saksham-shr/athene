@@ -1117,7 +1117,13 @@ reviews above, just restating the load-bearing summary for this gap pass):**
    failure mode, but only as a read-only, after-the-fact report on a repo that already has the
    bloat in it — reactive, not preventive. The cheapest fix is the cheapest point to apply it:
    before the diff exists, not after. Candidate fix: fold ponytail's ladder into Implementation as
-   a check run before any new code is written, not a new skill.
+   a check run before any new code is written, not a new skill. **Done** (#89): added as a
+   "Pre-write ladder check" sub-paragraph directly inside `athene`'s Implementation lifecycle-stage
+   item (same shape as "Comment discipline"), plus a new "Dependency maintenance check" covering
+   the separate, previously-untracked gap that reuse of an already-chosen library never gets a
+   deprecation/maintenance check (the stack-decision flow only fires at *new* stack choices), and a
+   precedence note that both checks scope to implementation code only and can never cause a
+   mandated governance artifact to be skipped.
 3. **No explicit "make it work, then make it right" sequencing in Implementation.** The stage
    mentions tests and focused diffs but doesn't sequence them — nothing stops an agent from
    reaching for the "right" design before a single passing test exists, which is exactly the
