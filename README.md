@@ -1,4 +1,14 @@
-# Athene
+<div align="center">
+  <img src="docs/assets/athene-logo.svg" alt="Athene logo" width="140">
+
+  # Athene
+
+  **Turn any AI coding agent into a disciplined engineering team.**
+
+  [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+  [![Discord](https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white)](https://discord.gg/CT6wsqa2Ct)
+  [![LinkedIn](https://img.shields.io/badge/LinkedIn-connect-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/saksham-sharma-292ba51bb)
+</div>
 
 Athene is a set of connected AI-agent skills that make a coding agent work like a disciplined
 engineering team by default — not just a code generator.
@@ -121,6 +131,11 @@ calls beyond what your agent already makes.
 **What if my agent isn't listed above?**
 If it can read a `SKILL.md`-style instruction file, point it at the one you want from
 [`.agents/skills/`](.agents/skills/) directly.
+
+## Community
+
+Questions, ideas, or just want to see what's being built next — [join the Discord](https://discord.gg/CT6wsqa2Ct).
+Connect on [LinkedIn](https://www.linkedin.com/in/saksham-sharma-292ba51bb).
 
 ## License
 
