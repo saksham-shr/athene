@@ -77,6 +77,9 @@ from [`.agents/skills/`](.agents/skills/) or [`.claude/skills/`](.claude/skills/
 stubs — into your project's `.agents/skills/` or `.claude/skills/` directory, or point your agent
 at that folder directly.
 
+Keep the [`LICENSE`](LICENSE) notice alongside whatever you copy — it's MIT, so a copy needs the
+copyright and permission notice to travel with it.
+
 ## The six skills
 
 ```
