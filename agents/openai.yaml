@@ -23,7 +23,7 @@ skills:
     invocation:
       mode: implicit
       use_when: a repo has no .athene/state.md yet
-      skip_when: .athene/state.md already exists (use Athene: Resume instead)
+      skip_when: ".athene/state.md already exists (use Athene: Resume instead)"
     required_tools: [read_file, write_file, edit_file, grep, glob, shell]
 
   - id: athene-code-health
@@ -72,5 +72,5 @@ skills:
     invocation:
       mode: implicit
       use_when: starting a session on a repo that may already have Athene state in it
-      skip_when: .athene/state.md doesn't exist (hands off to Athene: Audit instead)
+      skip_when: ".athene/state.md doesn't exist (hands off to Athene: Audit instead)"
     required_tools: [read_file, write_file, edit_file, grep, glob, shell]
