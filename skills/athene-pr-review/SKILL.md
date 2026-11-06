@@ -27,13 +27,16 @@ scope to diff scope. Code Health itself is unchanged by this skill — don't edi
 
 ## 1. Fetch candidate PRs
 
-Run both, don't guess at flags:
+Run both, don't guess at flags, and don't rely on the default page size — `gh pr list` returns at
+most 30 PRs per call, silently omitting older matches past that:
 ```
-gh pr list --author @me
-gh pr list --search "review-requested:@me"
+gh pr list --author @me --limit 200
+gh pr list --search "review-requested:@me" --limit 200
 ```
 These are two different relationships (yours vs. requested of you) — show both lists, labeled,
-so the user knows which is which.
+so the user knows which is which. `--limit 200` is a practical ceiling, not a guarantee every
+possible PR is covered — if either list comes back exactly at the limit, say so, since that's a
+sign there may be more.
 
 ## 2. Let the user pick one
 
@@ -52,10 +55,18 @@ picking and comment-posting work, not absorbed into it.
 
 Give the subagent the PR number and this scope:
 
+- **Pin the PR head before reading anything else.** `gh pr diff <number>` doesn't check out the
+  PR — it diffs against whatever ref `gh` resolves, independent of the local working tree's
+  current branch. Resolve the PR's head commit first (`gh pr view <number> --json headRefOid -q
+  .headRefOid`) and read all surrounding code at that exact commit (e.g. `git show
+  <headRefOid>:<path>`), never off the caller's current checkout — if the user is on a different
+  branch locally, reading files straight off disk traces stale code and produces wrong findings
+  or a false "no findings" comment. Confirm the diff and the surrounding-code reads reference the
+  same pinned revision before reporting anything.
 - **Map first, diff-scoped:** `gh pr diff <number>` for the changed lines; read enough
-  surrounding code to trace each changed flow end to end — where the changed data comes in, what
-  it touches, what goes out. Not the whole repo: only what the diff's flows actually pass
-  through. Say what wasn't read.
+  surrounding code (at the pinned head above) to trace each changed flow end to end — where the
+  changed data comes in, what it touches, what goes out. Not the whole repo: only what the diff's
+  flows actually pass through. Say what wasn't read.
 - **Look for**, same six categories as Code Health, same meaning, applied to what changed:
   1. **Bug** — wrong result, crash, missed edge case, callers that disagree with what the
      changed function actually returns.
@@ -107,11 +118,14 @@ gh pr comment <number> --body "..."
 Open the comment body with a disclosure line naming the tool and Athene as reviewer:
 
 ```
-Reviewed by Athene (automated code-health review) via Claude Code.
+Reviewed by Athene (automated code-health review) via <tool>.
 ```
 
-(Decision, not left open: exact wording above — names the tool, names Athene, names what kind of
-review it was, one line.)
+`<tool>` is whichever agent is actually running this skill — Claude Code, Codex, or Cursor — not
+a hardcoded name. This skill is packaged for all three (see `docs/skill-packaging.md`); a Codex
+or Cursor run claiming "via Claude Code" would misstate who actually reviewed the PR. (Decision,
+not left open: the line's shape — names the tool, names Athene, names what kind of review it
+was, one line — is fixed; only `<tool>` varies.)
 
 This disclosure is deliberate and does **not** contradict this repo's own no-AI-attribution rule
 (see `skills/athene/templates/CONTRIBUTING.md`'s "No AI attribution" section). That rule governs
