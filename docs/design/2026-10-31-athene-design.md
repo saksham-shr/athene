@@ -1033,3 +1033,123 @@ docs (`code.claude.com`, `learn.chatgpt.com`/`developers.openai.com`, `cursor.co
     proven on one platform.
 11. Benchmark harness, then broader platform reach/distribution — both after the build skill
     ships and is stable, not before.
+
+## Gap analysis vs. prior art and current build state (researched 2026-11-06)
+
+Re-checked three prior-art skills against Athene's *current* repo state (not the design intent) —
+`git log`, every `SKILL.md` body, `docs/templates/*-snippet.md`, `scripts/debt-ledger.sh`,
+`agents/openai.yaml` — rather than against the design doc's own "Left to the builder" list, which
+is stale in both directions: some items it still lists as open are done (debt-ledger script, both
+bootstrap snippets with condensed quality-bar content, `agents/openai.yaml` fleshed for all six
+skills — not just a placeholder — per #79), and chaining (Phase 5) is done per #77/#78/#81, which
+the repo's own `README.md` doesn't yet reflect either.
+
+**What each prior-art skill actually does, confirmed (not re-describing the earlier prior-art
+reviews above, just restating the load-bearing summary for this gap pass):**
+- **`DietrichGebert/ponytail`** — a persona, not a process. Forces a "lazy senior developer" ladder
+  before writing any code: does this need to exist at all → already in the codebase → stdlib →
+  native platform feature → already-installed dependency → one line → only then new code. Marks
+  every deliberate corner cut with a `ponytail:`/`shortcut:` comment naming the ceiling and upgrade
+  path, greppable into a ledger via `/ponytail-debt`. Ships a benchmark harness (loc/cost/time/
+  tokens/coverage, with vs. without) and a compact `AGENTS.md` carrying the real ruleset, not just a
+  router. Athene already adopted the marker convention, the debt-ledger command, and condensed
+  bootstrap content (see "Prior-art review: ponytail" above) — the ladder discipline *itself* is
+  the one piece not adopted (see gap 2 below).
+- **Caveman** (this session's own active output-style skill, `caveman:caveman` and friends) — pure
+  communication-compression layer, not a build/governance skill. Drops articles, filler,
+  pleasantries, and hedging from assistant prose; keeps code/commands/paths/errors verbatim; applies
+  Simplified-Technical-English clarity rules (one idea per sentence, active voice, consistent
+  terminology); auto-suspends for security warnings, destructive-action confirmations, and anything
+  where compression itself would create ambiguity. Explicitly scoped to *chat output only* — commit
+  messages, PR/issue bodies, docs, and code comments stay normal prose per its own stated boundary.
+  Ships companion subagents (`cavecrew-builder`/`-investigator`/`-reviewer`) that apply the same
+  compression to bounded single-file edits, read-only lookups, and diff review respectively. Athene
+  has never evaluated this angle at all — it governs *what* gets built and *how rigorously*, never
+  *how verbosely the agent talks about it* (see gap 4 below).
+- **`unclebob/ub-mode`** — Uncle Bob's own TDD/Clean Code loop as a ~150-line skill: **First Make It
+  Work** (get a failing test green with the simplest code that works, no premature design) → **Then
+  Make It Right** (refactor mercilessly once green: remove duplication, fix names, apply SOLID,
+  shrink functions) → **Practice** (deliberate kata-style repetition to build the reflex). Pairs with
+  three companion tools for numeric gates: `crapper` (CRAP score `< 10` per function — cyclomatic
+  complexity weighted by how little of the function is covered), `dryer` (structural duplication,
+  Jaccard similarity `>= 0.82` flagged for merging), `mutator` (mutation testing — surviving mutants
+  vs. no-coverage mutants, plus dead-code surfacing). Also: "Keep a Log" (every action plus its
+  reason, reported at completion — finer-grained than a decisions-only record) and "Attack the
+  Premise" (when two independent fixes hit the same gate, stop and name the shared root premise
+  before trying a third). Athene adopted the numeric-gate *concept* into Code Health, guidance-only
+  (see gap 5 below) and explicitly deferred the log and Attack-the-Premise pieces (see "Prior-art
+  review: ub-mode" above) — the Work-then-Right *sequencing itself* was never evaluated as a gap
+  until now (see gap 3 below).
+
+**Real gaps this pass surfaces, not already tracked under "Left to the builder":**
+
+1. **README is out of date against the repo's own commit history.** It still reads "chaining
+   (Phase 5) isn't wired yet" and "`agents/openai.yaml` ... beyond the current placeholder" — both
+   false as of #77/#78/#79/#81. A README that undersells finished work erodes trust in every other
+   claim it makes. Fix: rewrite status section from current `git log`, not from the design doc's
+   own stale phase tracker.
+2. **No ponytail-style anti-overengineering ladder inside Implementation itself.** `athene`'s
+   Implementation stage (lifecycle stage 4) names focused diffs and risk-proportionate tests but
+   never asks "does this need to exist / is it already here / does stdlib or the platform already
+   do this" *before* code gets written. `athene-code-health`'s "Lean" category catches the same
+   failure mode, but only as a read-only, after-the-fact report on a repo that already has the
+   bloat in it — reactive, not preventive. The cheapest fix is the cheapest point to apply it:
+   before the diff exists, not after. Candidate fix: fold ponytail's ladder into Implementation as
+   a check run before any new code is written, not a new skill.
+3. **No explicit "make it work, then make it right" sequencing in Implementation.** The stage
+   mentions tests and focused diffs but doesn't sequence them — nothing stops an agent from
+   reaching for the "right" design before a single passing test exists, which is exactly the
+   premature-design trap ub-mode's First-Make-It-Work step exists to block. `superpowers:test-
+   driven-development` is already available in this environment and already describes this
+   discipline — Athene's Implementation stage doesn't reference or require it. Candidate fix:
+   Implementation names the red-green-refactor sequence explicitly and defers to that skill where
+   available, rather than silently assuming the agent already does this.
+4. **No stance on communication verbosity at all.** Every Athene skill governs *what* gets decided
+   and *how rigorously* (ADR template, quality bar, evidence citations) but says nothing about how
+   much prose the agent produces while doing it — a real axis for a skill explicitly built for
+   professional engineering teams, who want decisions and diffs, not narrated deliberation. This
+   was never on Athene's radar before this pass (caveman is a pure communication-style skill with
+   zero process content, so earlier prior-art reviews — scoped to process/governance skills — never
+   surfaced it as comparable). Not a recommendation to adopt caveman wholesale (compression is a
+   user preference, not an engineering-quality property) — the gap is that Athene has no opinion
+   here at all, including no guidance on PR-description or `.athene/state.md` terseness, where
+   verbosity actually does cost real review time.
+5. **Quantified code-quality gates are advisory-only, never enforced.** CRAP score, structural
+   duplication, and mutation-testing results (from `athene-code-health`, adopting ub-mode's
+   companion-tool concept) only ever appear in a one-shot report that "changes nothing," by that
+   skill's own explicit scope. Nothing in `athene`'s CI/CD architecture section (pre-merge checks,
+   change-aware expansion, post-merge/scheduled) ties these numbers to an actual pre-merge gate the
+   way `crapper`/`dryer`/`mutator` are designed to run in CI. A repo can fail every numeric
+   threshold Code Health reports and still merge cleanly. Not proposing an auto-fail gate (false
+   positives on a numeric threshold are a known risk) — the gap is that there's currently no
+   decision point where the user is even asked whether to wire one in.
+6. **Guest-contributor and contribution-receiving-maintainer decisions are recorded, not built.**
+   "External-repo personas" above records real decisions (don't impose Athene's own no-AI-
+   attribution rule on a repo Athene doesn't govern; scan the target's own AI-contribution policy
+   first; force disclosure for `opensource`-framed repos) — but neither `skills/athene/SKILL.md` nor
+   `skills/athene-audit/SKILL.md` contains any of this logic today. An agent running this skill
+   against someone else's repo right now would still apply Athene's own baseline unconditionally,
+   exactly the failure mode that research warned against. Highest-priority gap in this list, since
+   it's a documented behavior correctness issue, not a missing nice-to-have.
+7. **No concrete security-tooling decision flow, unlike every other stack choice.** `athene`'s
+   stack-decision flow (options table, self-hosted-vs-managed, pricing tier) exists for language/
+   hosting/DB/CI-CD — but "security/license/secret scans" in the CI/CD architecture section is a
+   bare bullet with no equivalent decision process: which secret scanner, which SCA/dependency-audit
+   tool, self-hosted vs. SaaS. The engineering-quality-bar section names the OWASP checklist
+   conceptually but never routes it through a concrete tool choice the way every other material
+   decision in this skill does.
+8. **Cursor packaging is unverified, not just unproven.** `.agents/skills/` exists and is read
+   natively by Cursor per the platform-mechanics research above, but no actual run against Cursor
+   has happened — "Left to the builder" already tracks this as deferred, restated here only because
+   this pass specifically checked for a `.cursor/` directory and found none, confirming the gap is
+   still fully open, not partially addressed by some undocumented workaround.
+9. **No empirical validation anywhere, still.** Restates the ponytail-benchmark gap already named
+   above — included here because it's the single largest claim-vs-evidence gap across all three
+   prior-art comparisons: ponytail publishes measured numbers backing its README's claims; Athene
+   has none backing its own, including the new README this task produces.
+
+**Not re-flagged as new gaps** (already correctly tracked and unchanged by this pass): the
+`athene:` marker/debt-ledger convention (done), condensed bootstrap snippets (done), benchmark
+harness and broader platform reach (already deferred, same reasoning holds), "Keep a Log" and
+"Attack the Premise" (already explicitly deferred with reasoning in the ub-mode review above — this
+pass found no new argument to revisit that call).
