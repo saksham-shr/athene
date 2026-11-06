@@ -107,15 +107,22 @@ Product Discovery ──► Athene (build) ──► Launch ──► (pivot) ba
    Audit ──(no state file found)
 ```
 
-| Skill | What it does |
-|---|---|
-| **Product Discovery** | Turns a vague idea into an approved product brief. Maps the real customer opportunities, scores which one is worth solving, compares 2-3 genuinely different solutions for it, and scopes a now/later/never release — instead of jumping straight to a feature list. |
-| **Athene (build)** | The core skill: repo lifecycle, ownership, CI/CD, stack decisions, architecture, governance, and the review gate. Every stack choice (language, hosting, database, CI/CD tool) gets a real options table and a self-hosted-vs-managed question — never a raw "what's your budget". Every nontrivial architecture decision gets backed by real evidence and a quality-bar check (security, latency, failure handling) before it's final. Writes the governance files your repo needs and runs a self-review pass before any PR waits on you. |
-| **Launch** | Cuts scope to the smallest release that can actually teach you something, picks the right channels to announce through, and runs the post-launch review: keep going, change direction, fix the core workflow, or stop. |
-| **Audit** | Onboarding for a repo Athene has never touched. Scans what's already there, figures out how risky/public the project is, and writes the matching governance set without overwriting anything that already works. |
-| **Resume** | Session-start continuity. Reads the state file and tells you exactly where things stand — current phase, decisions made, open questions — then picks up from there. |
-| **Code Health** | A one-time quality report on the whole repo: bugs, security risks, scale limits, missing tests, slow paths, and bloat, ranked by how much it matters. It's a report, not a fix — doesn't touch your source on purpose, though a configured mutation-testing tool it runs may still write its own cache/report files. |
-| **PR Review** | Pick an open PR you authored or were asked to review, and get the same kind of quality check Code Health runs — scoped to just that PR's changes — left as a real comment on the PR, disclosed as an automated review. One PR at a time, only when you ask for it. |
+You don't have to type any of these — just describe what you want and the right skill kicks in.
+Typing the slash command works too, if you'd rather call one directly:
+
+| Skill | Command | What it does |
+|---|---|---|
+| **Product Discovery** | `/athene-product-discovery` | Turns a vague idea into an approved product brief. Maps the real customer opportunities, scores which one is worth solving, compares 2-3 genuinely different solutions for it, and scopes a now/later/never release — instead of jumping straight to a feature list. |
+| **Athene (build)** | `/athene` | The core skill: repo lifecycle, ownership, CI/CD, stack decisions, architecture, governance, and the review gate. Every stack choice (language, hosting, database, CI/CD tool) gets a real options table and a self-hosted-vs-managed question — never a raw "what's your budget". Every nontrivial architecture decision gets backed by real evidence and a quality-bar check (security, latency, failure handling) before it's final. Writes the governance files your repo needs and runs a self-review pass before any PR waits on you. |
+| **Launch** | `/athene-launch` | Cuts scope to the smallest release that can actually teach you something, picks the right channels to announce through, and runs the post-launch review: keep going, change direction, fix the core workflow, or stop. |
+| **Audit** | `/athene-audit` | Onboarding for a repo Athene has never touched. Scans what's already there, figures out how risky/public the project is, and writes the matching governance set without overwriting anything that already works. |
+| **Resume** | `/athene-resume` | Session-start continuity. Reads the state file and tells you exactly where things stand — current phase, decisions made, open questions — then picks up from there. |
+| **Code Health** | `/athene-code-health` | A one-time quality report on the whole repo: bugs, security risks, scale limits, missing tests, slow paths, and bloat, ranked by how much it matters. It's a report, not a fix — doesn't touch your source on purpose, though a configured mutation-testing tool it runs may still write its own cache/report files. |
+| **PR Review** | `/athene-pr-review` | Pick an open PR you authored or were asked to review, and get the same kind of quality check Code Health runs — scoped to just that PR's changes — left as a real comment on the PR, disclosed as an automated review. One PR at a time, only when you ask for it. |
+
+Slash commands work in Claude Code once a skill is installed. Codex and Cursor invoke skills by
+description match or their own skill-mention syntax rather than a `/` prefix — see each one's own
+docs for the exact invocation.
 
 ## FAQ
 
