@@ -110,22 +110,38 @@ Cap at 20 findings; if more were found, say how many were left out, same as Code
 
 ## 5. Post the comment, with disclosure
 
-Post via:
+Before posting, re-check the PR's current head (`gh pr view <number> --json headRefOid -q
+.headRefOid`) against the head pinned in step 3. If it changed, the PR moved while the review was
+running — the findings below may not describe the current code. Don't post as if nothing happened:
+tell the user the head moved and either restart against the new head or post with that gap stated
+plainly, whichever they'd rather have.
+
+Write the comment body to a file first, then post it from the file — never interpolate findings
+text (file paths, code snippets, PR title/description) into a double-quoted shell string. A PR can
+legitimately contain a filename or diff line shaped like `$(id)` or backticked shell syntax; a
+shell building the comment from a quoted string would execute it while posting instead of treating
+it as literal text.
 ```
-gh pr comment <number> --body "..."
+gh pr comment <number> --body-file <path-to-written-file>
 ```
 
-Open the comment body with a disclosure line naming the tool and Athene as reviewer:
+Open the comment body with a disclosure line naming the tool, Athene as reviewer, and the exact
+commit reviewed:
 
 ```
-Reviewed by Athene (automated code-health review) via <tool>.
+Reviewed by Athene (automated code-health review) via <tool>, against <headRefOid>.
 ```
 
 `<tool>` is whichever agent is actually running this skill — Claude Code, Codex, or Cursor — not
 a hardcoded name. This skill is packaged for all three (see `docs/skill-packaging.md`); a Codex
-or Cursor run claiming "via Claude Code" would misstate who actually reviewed the PR. (Decision,
-not left open: the line's shape — names the tool, names Athene, names what kind of review it
-was, one line — is fixed; only `<tool>` varies.)
+or Cursor run claiming "via Claude Code" would misstate who actually reviewed the PR.
+
+`<headRefOid>` is the exact commit SHA the findings below are about — the one pinned in step 3 and
+reconfirmed at the top of this step. Naming it means a reader can tell, from the comment alone,
+whether it's still describing the PR's current state or was left behind by a later push; without
+it, a stale "no findings" comment reads as current when it isn't. (Decision, not left open: the
+line's shape — tool, Athene, review kind, reviewed commit, one line — is fixed; only `<tool>` and
+`<headRefOid>` vary.)
 
 This disclosure is deliberate and does **not** contradict this repo's own no-AI-attribution rule
 (see `skills/athene/templates/CONTRIBUTING.md`'s "No AI attribution" section). That rule governs
@@ -136,7 +152,7 @@ under a disclosed identity, not folded silently into another person's commit his
 `docs/design/2026-10-31-athene-design.md`'s "External-repo personas" section for the underlying
 disclosure-on-comment reasoning — don't re-derive it here.
 
-Nothing found: post `Reviewed by Athene (automated code-health review) via <tool>. No findings —
-diff looks healthy.` rather than skipping the comment.
+Nothing found: post `Reviewed by Athene (automated code-health review) via <tool>, against
+<headRefOid>. No findings — diff looks healthy.` rather than skipping the comment.
 
 One-shot review. Changes no code, posts one comment.
