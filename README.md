@@ -1,4 +1,14 @@
-# Athene
+<div align="center">
+  <img src="docs/assets/athene-logo.svg" alt="Athene logo" width="140">
+
+  # Athene
+
+  **Turn any AI coding agent into a disciplined engineering team.**
+
+  [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+  [![Discord](https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white)](https://discord.gg/CT6wsqa2Ct)
+  [![LinkedIn](https://img.shields.io/badge/LinkedIn-connect-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/saksham-sharma-292ba51bb)
+</div>
 
 Athene is a set of connected AI-agent skills that make a coding agent work like a disciplined
 engineering team by default — not just a code generator.
@@ -66,10 +76,19 @@ pass control to the next one on its own.
 /plugin install athene@athene
 ```
 
-**Codex:** copy the skill folder(s) you want from [`.agents/skills/`](.agents/skills/) — the
-fully expanded copies, not the source stubs under `skills/` — into your project's or user's
-`.agents/skills/` directory. [`agents/openai.yaml`](agents/openai.yaml) gives Codex each skill's
-display name and when to use it.
+**Codex**, as two separate prompts:
+
+```
+codex plugin marketplace add saksham-shr/athene
+```
+```
+codex plugin add athene@athene
+```
+
+The plugin install above pulls skill content from `.agents/skills/` — Codex reads each skill's
+selection description straight from its own `SKILL.md` there, same as the manual-copy path below.
+[`agents/openai.yaml`](agents/openai.yaml) at the repo root is a separate, repo-level reference
+(display names, invocation notes) — it isn't part of the installed plugin content.
 
 **Cursor, or any other agent that reads a `SKILL.md`-style file:** copy the skill(s) you want
 from [`.agents/skills/`](.agents/skills/) or [`.claude/skills/`](.claude/skills/) — not
@@ -88,15 +107,24 @@ Product Discovery ──► Athene (build) ──► Launch ──► (pivot) ba
    Audit ──(no state file found)
 ```
 
-| Skill | What it does |
-|---|---|
-| **Product Discovery** | Turns a vague idea into an approved product brief. Maps the real customer opportunities, scores which one is worth solving, compares 2-3 genuinely different solutions for it, and scopes a now/later/never release — instead of jumping straight to a feature list. |
-| **Athene (build)** | The core skill: repo lifecycle, ownership, CI/CD, stack decisions, architecture, governance, and the review gate. Every stack choice (language, hosting, database, CI/CD tool) gets a real options table and a self-hosted-vs-managed question — never a raw "what's your budget". Every nontrivial architecture decision gets backed by real evidence and a quality-bar check (security, latency, failure handling) before it's final. Writes the governance files your repo needs and runs a self-review pass before any PR waits on you. |
-| **Launch** | Cuts scope to the smallest release that can actually teach you something, picks the right channels to announce through, and runs the post-launch review: keep going, change direction, fix the core workflow, or stop. |
-| **Audit** | Onboarding for a repo Athene has never touched. Scans what's already there, figures out how risky/public the project is, and writes the matching governance set without overwriting anything that already works. |
-| **Resume** | Session-start continuity. Reads the state file and tells you exactly where things stand — current phase, decisions made, open questions — then picks up from there. |
-| **Code Health** | A one-time quality report on the whole repo: bugs, security risks, scale limits, missing tests, slow paths, and bloat, ranked by how much it matters. It's a report, not a fix — doesn't touch your source on purpose, though a configured mutation-testing tool it runs may still write its own cache/report files. |
-| **PR Review** | Reviews one open PR you authored or were asked to review, scoped to just its diff, and posts the findings as a real comment on GitHub — same bug/security/scale/test/speed/bloat categories as Code Health, disclosed as an AI review. You pick the PR; it doesn't sweep every open PR automatically. |
+You don't have to type any of these — just describe what you want and the right skill kicks in.
+Typing the slash command works too, if you'd rather call one directly:
+
+| Skill | Command | What it does |
+|---|---|---|
+| **Product Discovery** | `/athene-product-discovery` | Turns a vague idea into an approved product brief. Maps the real customer opportunities, scores which one is worth solving, compares 2-3 genuinely different solutions for it, and scopes a now/later/never release — instead of jumping straight to a feature list. |
+| **Athene (build)** | `/athene` | The core skill: repo lifecycle, ownership, CI/CD, stack decisions, architecture, governance, and the review gate. Every stack choice (language, hosting, database, CI/CD tool) gets a real options table and a self-hosted-vs-managed question — never a raw "what's your budget". Every nontrivial architecture decision gets backed by real evidence and a quality-bar check (security, latency, failure handling) before it's final. Writes the governance files your repo needs and runs a self-review pass before any PR waits on you. |
+| **Launch** | `/athene-launch` | Cuts scope to the smallest release that can actually teach you something, picks the right channels to announce through, and runs the post-launch review: keep going, change direction, fix the core workflow, or stop. |
+| **Audit** | `/athene-audit` | Onboarding for a repo Athene has never touched. Scans what's already there, figures out how risky/public the project is, and writes the matching governance set without overwriting anything that already works. |
+| **Resume** | `/athene-resume` | Session-start continuity. Reads the state file and tells you exactly where things stand — current phase, decisions made, open questions — then picks up from there. |
+| **Code Health** | `/athene-code-health` | A one-time quality report on the whole repo: bugs, security risks, scale limits, missing tests, slow paths, and bloat, ranked by how much it matters. It's a report, not a fix — doesn't touch your source on purpose, though a configured mutation-testing tool it runs may still write its own cache/report files. |
+| **PR Review** | `/athene-pr-review` | Pick an open PR you authored or were asked to review, and get the same kind of quality check Code Health runs — scoped to just that PR's changes — left as a real comment on the PR, disclosed as an automated review. One PR at a time, only when you ask for it. |
+
+The commands above work as-is in **Claude Code** and **Cursor** once a skill is installed — type
+`/athene-pr-review` (for example) in either one's chat. **Codex** doesn't use a `/` prefix per
+skill: mention one explicitly with `$athene-pr-review` in your prompt, or run `/skills` to browse
+everything installed. All three also pick the right skill on their own from what you describe,
+without typing anything explicit.
 
 ## FAQ
 
@@ -113,6 +141,11 @@ calls beyond what your agent already makes.
 **What if my agent isn't listed above?**
 If it can read a `SKILL.md`-style instruction file, point it at the one you want from
 [`.agents/skills/`](.agents/skills/) directly.
+
+## Community
+
+Questions, ideas, or just want to see what's being built next — [join the Discord](https://discord.gg/CT6wsqa2Ct).
+Connect on [LinkedIn](https://www.linkedin.com/in/saksham-sharma-292ba51bb).
 
 ## License
 
