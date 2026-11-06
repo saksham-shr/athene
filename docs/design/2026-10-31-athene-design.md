@@ -180,6 +180,18 @@ Standard across most open-source repos, and used for Athene's own build issues f
   it. Now documented in both `CONTRIBUTING.md` templates' "Issue/PR checklist items stay one line"
   section — the same rule this repo's own issues follow (per "this is the same shape the
   fixed-baseline issue templates generate" above) applies to Athene's own build issues too.
+- **Write Context/Proposal/Acceptance-criteria paragraphs as one unbroken line too (found
+  2026-11-06, #84/#89, separate root cause from the checklist-item fix above).** GitHub renders a
+  single newline inside an issue/PR body as an actual line break — unlike a `.md` file committed to
+  the repo, where a soft newline inside a paragraph just collapses into a space when rendered.
+  Hand-wrapping prose at ~70-80 characters, a habit that makes a `.md` file or a terminal heredoc
+  readable in a source editor, instead produces a wall of short, forced lines on GitHub's rendered
+  issue/PR view: a gap on the right of each line and the next sentence appearing to start on a new
+  line even when it's a direct continuation of the one above it. Looked like the same symptom as
+  the checklist-item gap at a glance, but it's a different cause and hits every paragraph in a body,
+  not just `- [ ]` items — don't fold the two fixes together. Now documented alongside the
+  checklist-item rule in both `CONTRIBUTING.md` templates, as its own "Write issue/PR paragraphs as
+  one line, let the browser wrap them" section.
 - PRs reference the issue they close (`Closes #N`) rather than restating its content.
 - **`Closes #N` goes in the PR description, never in a commit message.** GitHub auto-closes on
   that keyword the moment the commit lands on the default branch — if work is committed straight
