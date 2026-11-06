@@ -196,9 +196,7 @@ incomplete decision list:
 - Four headings, in this exact order, each required — `none`/`n/a` rather than omitting one:
   `## Active skill`, `## Current phase`, `## Decisions made`, `## Open questions`.
 - **Active skill:** `athene` — this skill's own frontmatter `name`, while this skill owns the
-  repo. Set to `athene-launch`'s frontmatter name once handed off (see below) — not yet a real
-  file in this repo, so until it exists, name it anyway and flag in Open questions that the
-  named skill isn't packaged yet, same pattern Audit and Resume already use for this exact gap.
+  repo. Set to `athene-launch`'s frontmatter name once handed off (see below).
 - **Current phase:** one of the lifecycle stages above, while `Active skill` is `athene`. Once
   handed off to Launch, this field belongs to Launch's own lifecycle, not this skill's — see
   the Handoff section below for what value to leave it at.
