@@ -31,8 +31,10 @@ On start, scan the target repo for `.athene/state.md`.
     overall?
     - **New feature on the existing project:** confirm explicitly that this is a handoff to
       Discovery, then update `.athene/state.md`: set `Active skill` to `athene-product-discovery`
-      and `Current phase` to `handoff`. Read and follow the Athene: Product Discovery skill file
-      directly.
+      and `Current phase` to `handoff`. Read the Athene: Product Discovery skill file, but start
+      directly at its "Discover the intent" section, framed against what's already built — the
+      user already answered the existing-project-vs-new-idea question here; don't ask it again
+      via Discovery's own "Check for an already-tracked repo first" section.
     - **New idea/direction overall:** a separate initiative. Don't touch `.athene/state.md` yet —
       changing `Active skill` now would overwrite this skill's own recorded phase for an idea
       nobody's approved as a takeover, and `.athene/state.md` would still show `athene` as owner
