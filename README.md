@@ -120,9 +120,11 @@ Typing the slash command works too, if you'd rather call one directly:
 | **Code Health** | `/athene-code-health` | A one-time quality report on the whole repo: bugs, security risks, scale limits, missing tests, slow paths, and bloat, ranked by how much it matters. It's a report, not a fix — doesn't touch your source on purpose, though a configured mutation-testing tool it runs may still write its own cache/report files. |
 | **PR Review** | `/athene-pr-review` | Pick an open PR you authored or were asked to review, and get the same kind of quality check Code Health runs — scoped to just that PR's changes — left as a real comment on the PR, disclosed as an automated review. One PR at a time, only when you ask for it. |
 
-Slash commands work in Claude Code once a skill is installed. Codex and Cursor invoke skills by
-description match or their own skill-mention syntax rather than a `/` prefix — see each one's own
-docs for the exact invocation.
+The commands above work as-is in **Claude Code** and **Cursor** once a skill is installed — type
+`/athene-pr-review` (for example) in either one's chat. **Codex** doesn't use a `/` prefix per
+skill: mention one explicitly with `$athene-pr-review` in your prompt, or run `/skills` to browse
+everything installed. All three also pick the right skill on their own from what you describe,
+without typing anything explicit.
 
 ## FAQ
 
