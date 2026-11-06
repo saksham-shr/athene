@@ -1,6 +1,9 @@
 ---
 name: athene
-description: Establish a repo's operating model, then build - lifecycle, ownership, CI/CD, stack decisions, governance. Use when starting a new build. Skip if no Athene footprint exists yet (hands off to Athene: Audit) or for a one-off coding task with no process implications.
+description: >-
+  Establish a repo's operating model, then build - lifecycle, ownership, CI/CD, stack decisions,
+  governance. Use when starting a new build. Skip if no Athene footprint exists yet (hands off to
+  Athene: Audit) or for a one-off coding task with no process implications.
 ---
 
 # Athene (repo + build + architecture)

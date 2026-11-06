@@ -1,6 +1,9 @@
 ---
 name: athene-audit
-description: Adopt Athene onto a repo never set up with it - scan structure, policies, CI, and ownership signals, write fixed-baseline governance docs, and bootstrap .athene/state.md. Skip if .athene/state.md already exists - use Athene: Resume instead.
+description: >-
+  Adopt Athene onto a repo never set up with it - scan structure, policies, CI, and ownership
+  signals, write fixed-baseline governance docs, and bootstrap .athene/state.md. Skip if
+  .athene/state.md already exists - use Athene: Resume instead.
 ---
 
 # Athene: Audit

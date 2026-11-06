@@ -1,6 +1,9 @@
 ---
 name: athene-resume
-description: Pick up an Athene-tracked repo exactly where it left off: read .athene/state.md for current phase, decisions made, and open questions, then continue from there. Skip when .athene/state.md doesn't exist - hand off to Athene: Audit instead.
+description: >-
+  Pick up an Athene-tracked repo exactly where it left off: read .athene/state.md for current
+  phase, decisions made, and open questions, then continue from there. Skip when
+  .athene/state.md doesn't exist - hand off to Athene: Audit instead.
 ---
 
 # Athene: Resume
