@@ -55,6 +55,24 @@ A few other things that come for free:
 No slash commands or manual hand-offs needed in the middle of a flow — each skill knows when to
 pass control to the next one on its own.
 
+## Install
+
+**Claude Code**, as two separate prompts:
+
+```
+/plugin marketplace add saksham-shr/athene
+```
+```
+/plugin install athene@athene
+```
+
+**Codex:** the skill folders work as-is; [`agents/openai.yaml`](agents/openai.yaml) gives Codex
+each skill's display name and when to use it.
+
+**Cursor, or any other agent that reads a `SKILL.md`-style file:** copy the skill(s) you want
+from [`skills/`](skills/) into your project's `.agents/skills/` or `.claude/skills/` directory,
+or point your agent at the skill folder directly.
+
 ## The six skills
 
 ```
@@ -73,10 +91,21 @@ Product Discovery ──► Athene (build) ──► Launch ──► (pivot) ba
 | **Launch** | Cuts scope to the smallest release that can actually teach you something, picks the right channels to announce through, and runs the post-launch review: keep going, change direction, fix the core workflow, or stop. |
 | **Audit** | Onboarding for a repo Athene has never touched. Scans what's already there, figures out how risky/public the project is, and writes the matching governance set without overwriting anything that already works. |
 | **Resume** | Session-start continuity. Reads the state file and tells you exactly where things stand — current phase, decisions made, open questions — then picks up from there. |
-| **Code Health** | A one-time, read-only quality report on the whole repo: bugs, security risks, scale limits, missing tests, slow paths, and bloat, ranked by how much it matters. Changes nothing — it's a report, not a fix.
+| **Code Health** | A one-time, read-only quality report on the whole repo: bugs, security risks, scale limits, missing tests, slow paths, and bloat, ranked by how much it matters. Changes nothing — it's a report, not a fix. |
 
-## Contributing
+## FAQ
 
-Conventional Commits types, PR template, issue templates: see
-[`skills/athene-audit/templates/`](skills/athene-audit/templates/) — the same baseline Athene
-writes into target repos.
+**Do I have to use all of it?**
+No. Each skill names when to skip itself — a precise, low-risk task never needs Discovery, and
+a one-off script doesn't need the full build lifecycle.
+
+**Does it phone home or need an account?**
+No. It's instructions your agent reads locally, nothing more.
+
+**What if my agent isn't listed above?**
+If it can read a `SKILL.md`-style instruction file, point it at the one you want from
+[`skills/`](skills/) directly.
+
+## License
+
+[MIT](LICENSE).

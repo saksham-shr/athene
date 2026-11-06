@@ -1,0 +1,11 @@
+{
+  "name": "athene",
+  "version": "0.1.0",
+  "description": "Discover what's worth building, set the repo up properly before the first line of code, and launch small enough to learn instead of guess.",
+  "author": {
+    "name": "saksham-shr",
+    "url": "https://github.com/saksham-shr"
+  },
+  "repository": "https://github.com/saksham-shr/athene",
+  "keywords": ["product-discovery", "engineering-practice", "governance", "launch"]
+}
