@@ -41,3 +41,15 @@ uses both skills.
 
 Commit messages and PR descriptions never carry an AI attribution or co-author trailer,
 regardless of which agent wrote them. This applies equally to every contributor, human or AI.
+
+## Issue/PR checklist items stay one line
+
+GitHub renders every top-level `- [ ]` item in an issue/PR body as a tracked-task row: a drag
+handle and an overflow menu on the right, in space reserved regardless of how much text the item
+holds. A checklist item long enough to wrap to two or more lines leaves that reserved space empty
+next to a short first line and a second line underneath it — reads as a layout bug, isn't one.
+
+Keep each `- [ ]` item to one line, one concrete action. A task that needs more explanation than
+that fits on one line belongs in `## Context` or `## Proposal` above the checklist, with the
+checklist item itself staying a short pointer back to it — not the explanation stuffed into the
+checklist line itself.
