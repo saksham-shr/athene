@@ -141,8 +141,8 @@ used during phases 0-5.
 **Deliverables:**
 - Mirroring step from the canonical `skills/<name>/SKILL.md` into `.agents/skills/` and
   `.claude/skills/` (per Phase 0's convention).
-- `agents/openai.yaml` fleshed out for all five skills (display metadata, implicit-invocation
-  policy, required-tool dependencies) beyond the current placeholder.
+- `agents/openai.yaml` built out for all six skills (display metadata, implicit-invocation
+  policy, required-tool dependencies).
 - Verification pass on Cursor (which reads `.agents/skills/` and `.claude/skills/` natively, so
   this is confirmation, not new packaging work) and on Codex.
 
