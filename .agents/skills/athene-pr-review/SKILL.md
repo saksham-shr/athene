@@ -28,6 +28,13 @@ scope to diff scope. Code Health itself is unchanged by this skill — don't edi
 
 ## 1. Fetch candidate PRs
 
+Resolve the repository's actual host first, once, and reuse it for every `gh api` call in this
+skill: `gh repo view --json url -q .url` and take the hostname from the result. `gh pr list` and
+`gh pr view` already resolve the correct host from the local repo context on their own — `gh api`
+does not, it defaults to `github.com` regardless of context, so every `gh api repos/...` call
+below needs an explicit `--hostname <resolved-host>` or it silently queries the wrong GitHub
+instance on an Enterprise repo.
+
 Run both, don't guess at flags, and don't rely on the default page size — `gh pr list` returns at
 most 30 PRs per call, silently omitting older matches past that:
 ```
@@ -59,8 +66,9 @@ Give the subagent the PR number and this scope:
 - **Pin the PR head and base commit before reading anything else.** `gh pr diff <number>` doesn't
   check out the PR — it diffs against whatever ref `gh` resolves, independent of the local working
   tree's current branch. Resolve the PR's head commit and base *commit* first via the REST API,
-  not `gh pr view --json`: `gh api repos/{owner}/{repo}/pulls/<number> --jq '{head: .head.sha,
-  base: .base.sha}'` (`gh api` reads the GitHub REST API's `pulls` object directly — `head.sha` /
+  not `gh pr view --json`: `gh api --hostname <resolved-host> repos/{owner}/{repo}/pulls/<number>
+  --jq '{head: .head.sha, base: .base.sha}'` (`gh api` reads the GitHub REST API's `pulls` object
+  directly — `head.sha` /
   `base.sha` have been stable fields on that object for years; `gh pr view --json baseRefOid`
   needs a recent `gh` CLI release the caller's environment may not have, so query the API
   directly instead of depending on `gh`'s own `--json` field coverage). The base commit, not just
@@ -123,10 +131,10 @@ Cap at 20 findings; if more were found, say how many were left out, same as Code
 
 ## 5. Post the comment, with disclosure
 
-Before posting, re-check the PR's current head and base commit (same `gh api
-repos/{owner}/{repo}/pulls/<number> --jq '{head: .head.sha, base: .base.sha}'` call as step 3)
-against what was pinned there. A head change means new commits landed; a base-commit change means
-either a retarget to a
+Before posting, re-check the PR's current head and base commit (same `gh api --hostname
+<resolved-host> repos/{owner}/{repo}/pulls/<number> --jq '{head: .head.sha, base: .base.sha}'`
+call as step 3, same resolved host from step 1) against what was pinned there. A head change
+means new commits landed; a base-commit change means either a retarget to a
 different branch or the existing base branch advancing underneath the PR — either way the diff the
 findings describe may no longer be the PR's actual diff, even if the head commit itself didn't
 move. Don't post as if nothing happened: tell the user what changed and either restart against the
