@@ -66,10 +66,19 @@ pass control to the next one on its own.
 /plugin install athene@athene
 ```
 
-**Codex:** copy the skill folder(s) you want from [`.agents/skills/`](.agents/skills/) — the
-fully expanded copies, not the source stubs under `skills/` — into your project's or user's
-`.agents/skills/` directory. [`agents/openai.yaml`](agents/openai.yaml) gives Codex each skill's
-display name and when to use it.
+**Codex**, as two separate prompts:
+
+```
+codex plugin marketplace add saksham-shr/athene
+```
+```
+codex plugin add athene@athene
+```
+
+The plugin install above pulls skill content from `.agents/skills/` — Codex reads each skill's
+selection description straight from its own `SKILL.md` there, same as the manual-copy path below.
+[`agents/openai.yaml`](agents/openai.yaml) at the repo root is a separate, repo-level reference
+(display names, invocation notes) — it isn't part of the installed plugin content.
 
 **Cursor, or any other agent that reads a `SKILL.md`-style file:** copy the skill(s) you want
 from [`.agents/skills/`](.agents/skills/) or [`.claude/skills/`](.claude/skills/) — not
