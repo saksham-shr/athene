@@ -1,10 +1,10 @@
 ---
 name: athene-pr-review
 description: >-
-  Review one open GitHub PR you authored or are requested to review, and post findings as a real
-  PR comment - bugs, security, scale, missing tests, speed, bloat, scoped to the diff. Use for
-  "review this PR", "review my open PRs", "what's wrong with PR #N". Skip for a whole-repo audit
-  (Athene: Code Health) or reviewing work before a PR exists (Athene's own self-review pass).
+  Review one open GitHub PR you authored or were asked to review, scoped to its diff, and post
+  findings as a PR comment. Use for "review this PR" / "review my open PRs" / "what's wrong with
+  PR #N". Skip for a whole-repo audit (Code Health) or reviewing work before a PR exists
+  (self-review pass).
 ---
 
 # Athene: PR Review
@@ -73,9 +73,13 @@ Give the subagent the PR number and this scope:
   API directly instead of depending on `gh`'s own `--json` field coverage). Don't trust `.base.sha`
   from this same `pulls` object as the base commit, though — GitHub doesn't guarantee it reflects
   the base branch's current tip, so it can itself lag. Resolve the base branch's actual tip
-  separately, from the branch ref directly: `gh api --hostname <resolved-host>
-  repos/{owner}/{repo}/git/ref/heads/<base_ref> --jq .object.sha`. That second call's result is the
-  pinned base commit — not `.base.sha` from the first call. The base commit, not just the base
+  separately, from the branch ref directly — URL-encode `<base_ref>` before building the path
+  (a branch name can legally contain `#`, `?`, or other characters a URL treats specially; an
+  unencoded `release#2` turns into a request for branch `release` with a URL fragment, silently
+  pinning the wrong branch if one happens to exist): `gh api --hostname <resolved-host>
+  "repos/{owner}/{repo}/git/ref/heads/$(jq -rn --arg r '<base_ref>' '$r|@uri')" --jq .object.sha`.
+  That second call's result is the pinned base commit — not `.base.sha` from the first call. The
+  base commit, not just the base
   branch's name: the branch name can stay `main` while `main` itself keeps advancing underneath the
   PR, so the branch name alone doesn't catch that. Read all surrounding
   code at that exact pinned head commit (e.g. `git show <headRefOid>:<path>`), never off the
