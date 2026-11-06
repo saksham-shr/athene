@@ -10,8 +10,9 @@ description: >-
 # Athene: PR Review
 
 Review one already-open GitHub PR the way a senior reviewer would, scoped to its diff, and leave
-the findings where a reviewer actually looks: a PR comment. User-invoked, one PR at a time — not
-a batch job and not a CI trigger.
+the findings as a general PR conversation comment (`gh pr comment` — not an inline diff comment),
+where a reviewer looking at the PR will still see it. User-invoked, one PR at a time — not a batch
+job and not a CI trigger.
 
 Distinct from two other things that look similar:
 - **Athene: Code Health** reviews the whole repo, one-shot, and changes nothing — no PR

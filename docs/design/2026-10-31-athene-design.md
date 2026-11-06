@@ -131,8 +131,10 @@ onboarding and session resume.
    review so the full diff plus traced flow never lands in the main thread doing the PR-picking
    work. Reuses Code Health's six finding categories, adapted to diff scope, but reports them in
    a compact `file:line: severity: problem. fix.` inline format instead of Code Health's
-   narrative block — a PR comment is read next to the diff, not top-to-bottom like a standalone
-   report. User-invoked, one-shot, no handoff to or from any other skill, same as Code Health.
+   narrative block — posted as a general PR conversation comment (`gh pr comment`, not an
+   inline diff comment), but still meant to be scanned finding-by-finding next to the PR's own
+   diff view, not read top-to-bottom like a standalone report. User-invoked, one-shot, no
+   handoff to or from any other skill, same as Code Health.
 
 ## Persistent state
 
