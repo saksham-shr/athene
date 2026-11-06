@@ -1,0 +1,16 @@
+{
+  "name": "athene",
+  "description": "Skills for proper engineering practice in an AI coding agent: discovery, build, launch.",
+  "owner": {
+    "name": "saksham-shr",
+    "url": "https://github.com/saksham-shr"
+  },
+  "plugins": [
+    {
+      "name": "athene",
+      "description": "Discover what's worth building, set the repo up properly, launch small enough to learn.",
+      "source": "./.agents",
+      "category": "productivity"
+    }
+  ]
+}
