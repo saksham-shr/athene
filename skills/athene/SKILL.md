@@ -90,7 +90,7 @@ model this project's planning already settled on:
    native platform feature → already-installed dependency → one line → only then new code. This is
    the same judgment `athene-code-health`'s "Lean" category applies, moved to before the diff
    exists instead of after. **Dependency maintenance check:** before writing new code against a
-   library already in use (not a new stack choice — see "Stack decisions" above, which only fires
+   library already in use (not a new stack choice — see "Stack decisions" below, which only fires
    there), check its current maintenance/deprecation status (changelog, deprecation notice,
    archived repo) rather than assuming it's still the right call. **Precedence:** both checks scope
    to implementation code only — never to a required governance artifact (the fixed baseline docs,
