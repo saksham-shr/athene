@@ -21,7 +21,7 @@ budget-aware stack decisions backed by real engineering sources, MCP/connector a
 generated repo-governance artifacts, a PR review gate, and two new skills for legacy-repo
 onboarding and session resume.
 
-## Skills (6) and the flow
+## Skills (7) and the flow
 
 1. **Athene: Product Discovery** — turns an idea into an approved product brief (problem, user,
    outcome, now/later/not-now scope, constraints, validation plan). Asks an indirect
@@ -119,6 +119,22 @@ onboarding and session resume.
    and ranks findings most-important-first. One-shot report, changes nothing. User-invoked
    (`/athene-code-health` or similar), not part of the Discovery → Build → Launch chain — doesn't
    hand off to or from any other skill.
+
+7. **Athene: PR Review** (new, added 2026-11-06 — see issue #85) — distinct from both Code
+   Health and from `athene`'s own pre-PR self-review subagent pass. Code Health reviews the whole
+   repo, one-shot, with no GitHub awareness; the self-review pass runs *before* a PR exists, on a
+   diff Athene is about to send for human review. This skill runs against a PR that's already
+   open on GitHub — someone else's, or the user's own — reviews only its diff, and posts the
+   findings as a disclosed PR comment via `gh pr comment`. Fetches candidates with
+   `gh pr list --author @me` and `gh pr list --search "review-requested:@me"`, lets the user pick
+   one PR per run (not a batch sweep), and dispatches a subagent to do the actual diff read and
+   review so the full diff plus traced flow never lands in the main thread doing the PR-picking
+   work. Reuses Code Health's six finding categories, adapted to diff scope, but reports them in
+   a compact `file:line: severity: problem. fix.` inline format instead of Code Health's
+   narrative block — posted as a general PR conversation comment (`gh pr comment`, not an
+   inline diff comment), but still meant to be scanned finding-by-finding next to the PR's own
+   diff view, not read top-to-bottom like a standalone report. User-invoked, one-shot, no
+   handoff to or from any other skill, same as Code Health.
 
 ## Persistent state
 
