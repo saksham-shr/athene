@@ -96,7 +96,7 @@ from [`.agents/skills/`](.agents/skills/) or [`.claude/skills/`](.claude/skills/
 stubs — into your project's `.agents/skills/` or `.claude/skills/` directory, or point your agent
 at that folder directly.
 
-## The six skills
+## The seven skills
 
 ```
 Product Discovery ──► Athene (build) ──► Launch ──► (pivot) back to Product Discovery
@@ -115,6 +115,7 @@ Product Discovery ──► Athene (build) ──► Launch ──► (pivot) ba
 | **Audit** | Onboarding for a repo Athene has never touched. Scans what's already there, figures out how risky/public the project is, and writes the matching governance set without overwriting anything that already works. |
 | **Resume** | Session-start continuity. Reads the state file and tells you exactly where things stand — current phase, decisions made, open questions — then picks up from there. |
 | **Code Health** | A one-time quality report on the whole repo: bugs, security risks, scale limits, missing tests, slow paths, and bloat, ranked by how much it matters. It's a report, not a fix — doesn't touch your source on purpose, though a configured mutation-testing tool it runs may still write its own cache/report files. |
+| **PR Review** | Pick an open PR you authored or were asked to review, and get the same kind of quality check Code Health runs — scoped to just that PR's changes — left as a real comment on the PR, disclosed as an automated review. One PR at a time, only when you ask for it. |
 
 ## FAQ
 
