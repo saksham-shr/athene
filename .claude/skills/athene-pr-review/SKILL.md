@@ -56,17 +56,22 @@ picking and comment-posting work, not absorbed into it.
 
 Give the subagent the PR number and this scope:
 
-- **Pin the PR head and base before reading anything else.** `gh pr diff <number>` doesn't check
-  out the PR — it diffs against whatever ref `gh` resolves, independent of the local working
-  tree's current branch. Resolve the PR's head commit and base branch first (`gh pr view <number>
-  --json headRefOid,baseRefName -q '{head: .headRefOid, base: .baseRefName}'`) and read all
-  surrounding code at that exact head commit (e.g. `git show <headRefOid>:<path>`), never off the
+- **Pin the PR head and base commit before reading anything else.** `gh pr diff <number>` doesn't
+  check out the PR — it diffs against whatever ref `gh` resolves, independent of the local working
+  tree's current branch. Resolve the PR's head commit and base *commit* first (`gh pr view
+  <number> --json headRefOid,baseRefOid -q '{head: .headRefOid, base: .baseRefOid}'`) — the base
+  commit, not just `baseRefName`: the base branch name can stay `main` while `main` itself keeps
+  advancing underneath the PR, so the branch name alone doesn't catch that. Read all surrounding
+  code at that exact pinned head commit (e.g. `git show <headRefOid>:<path>`), never off the
   caller's current checkout — if the user is on a different branch locally, reading files straight
   off disk traces stale code and produces wrong findings or a false "no findings" comment. Pinning
-  the base too matters because a PR can be retargeted to a different branch mid-review — that
-  changes the diff even when the head commit itself hasn't moved. Confirm the diff and the
-  surrounding-code reads reference the
-  same pinned revision before reporting anything.
+  the base commit matters for a second reason beyond a retarget: even with no retarget, the base
+  can advance in a way the diff doesn't show — e.g. the PR adds a call to `f(x)` while the base
+  separately changes `f` to require a second argument; the merge can succeed with no conflict, but
+  the code the PR actually adds would fail post-merge, and a head-only read reports it as fine.
+  Where feasible, also check the changed flows against what the PR would look like merged onto the
+  pinned base commit, not just the head commit in isolation. Confirm the diff and every
+  surrounding-code read reference the same pinned head and base before reporting anything.
 - **Map first, diff-scoped:** `gh pr diff <number>` for the changed lines; read enough
   surrounding code (at the pinned head above) to trace each changed flow end to end — where the
   changed data comes in, what it touches, what goes out. Not the whole repo: only what the diff's
@@ -114,13 +119,13 @@ Cap at 20 findings; if more were found, say how many were left out, same as Code
 
 ## 5. Post the comment, with disclosure
 
-Before posting, re-check the PR's current head and base (`gh pr view <number> --json
-headRefOid,baseRefName -q '{head: .headRefOid, base: .baseRefName}'`) against what was pinned in
-step 3. A head change means new commits landed; a base change means the PR was retargeted to a
-different branch — either way the diff the findings describe may no longer be the PR's actual
-diff, even if the head commit itself didn't move. Don't post as if nothing happened: tell the user
-what changed and either restart against the new head/base or post with that gap stated plainly,
-whichever they'd rather have.
+Before posting, re-check the PR's current head and base commit (`gh pr view <number> --json
+headRefOid,baseRefOid -q '{head: .headRefOid, base: .baseRefOid}'`) against what was pinned in
+step 3. A head change means new commits landed; a base-commit change means either a retarget to a
+different branch or the existing base branch advancing underneath the PR — either way the diff the
+findings describe may no longer be the PR's actual diff, even if the head commit itself didn't
+move. Don't post as if nothing happened: tell the user what changed and either restart against the
+new head/base or post with that gap stated plainly, whichever they'd rather have.
 
 Write the comment body to a file first, then post it from the file — never interpolate findings
 text (file paths, code snippets, PR title/description) into a double-quoted shell string. A PR can
@@ -158,13 +163,22 @@ under a disclosed identity, not folded silently into another person's commit his
 `docs/design/2026-10-31-athene-design.md`'s "External-repo personas" section for the underlying
 disclosure-on-comment reasoning — don't re-derive it here.
 
+**Disclose unread scope whenever it exists — whether or not findings were posted.** If anything
+from "Say what wasn't read" in step 3 above applies (a file too large, access denied, a
+surrounding-code path that couldn't be resolved), name it in the comment regardless of outcome. A
+reader seeing findings for the files that *were* read can otherwise mistake a partial review for a
+complete one just as easily as a "no findings" comment can read as "confirmed clean."
+
 Nothing found, and every changed file plus its surrounding code was actually read: post `Reviewed
 by Athene (automated code-health review) via <tool>, against <headRefOid>. No findings — diff
 looks healthy.` rather than skipping the comment.
 
-Nothing found, but something couldn't be read (a file too large, access denied, a surrounding-code
-path that couldn't be resolved — anything from "Say what wasn't read" in step 3 above): don't claim
-healthy. Post the same disclosure line, then name exactly what wasn't read instead of "diff looks
-healthy" — an unreviewed file reported as clean is worse than no comment at all.
+Nothing found, but something couldn't be read: don't claim healthy. Post the same disclosure line,
+then name exactly what wasn't read instead of "diff looks healthy" — an unreviewed file reported as
+clean is worse than no comment at all.
+
+Findings were posted, but something else in the diff couldn't be read: list the findings as usual,
+then add what wasn't read as its own line in the same comment — don't let real findings crowd out
+the disclosure just because there's already content in the comment.
 
 One-shot review. Changes no code, posts one comment.
