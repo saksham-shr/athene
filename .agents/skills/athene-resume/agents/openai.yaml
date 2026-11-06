@@ -1,0 +1,12 @@
+# Per-skill OpenAI-platform (Codex) packaging for this skill.
+# Mirrored to .agents/skills/athene-resume/agents/openai.yaml and
+# .claude/skills/athene-resume/agents/openai.yaml by scripts/mirror-skills.sh.
+display_name: "Athene: Resume"
+description: >-
+  Pick up an Athene-tracked repo exactly where it left off: read .athene/state.md for current
+  phase, decisions made, and open questions, then continue from there.
+invocation:
+  mode: implicit
+  use_when: starting a session on a repo that may already have Athene state in it
+  skip_when: ".athene/state.md doesn't exist (hands off to Athene: Audit instead)"
+required_tools: [read_file, write_file, edit_file, grep, glob, shell]

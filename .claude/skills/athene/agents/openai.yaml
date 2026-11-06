@@ -1,0 +1,14 @@
+# Per-skill OpenAI-platform (Codex) packaging for this skill.
+# Mirrored to .agents/skills/athene/agents/openai.yaml and
+# .claude/skills/athene/agents/openai.yaml by scripts/mirror-skills.sh.
+display_name: Athene
+description: >-
+  Establish a repo's operating model, then build - lifecycle, ownership, CI/CD, stack
+  decisions, governance.
+invocation:
+  mode: implicit
+  use_when: starting a new build
+  skip_when: >-
+    no Athene footprint exists yet (hands off to Athene: Audit instead), or for a one-off
+    coding task with no process implications
+required_tools: [read_file, write_file, edit_file, grep, glob, shell]

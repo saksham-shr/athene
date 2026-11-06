@@ -952,7 +952,11 @@ not a blend across case studies. Carry the self-reported-figures caveat forward 
   `docs/governance-doc-set-mapping.md`, wired into Audit as of #19/PR #22, and into `athene`'s
   "Governance artifacts" section (#38), bundled as `references/governance-doc-set-mapping.md` via
   the include-marker convention.
-- Fleshing out `agents/openai.yaml` for all five skills beyond the current placeholder.
+- ~~Fleshing out `agents/openai.yaml` for all five skills beyond the current placeholder.~~ —
+  **done**, fleshed for all six skills per #79, then relocated from a single root
+  `agents/openai.yaml` into one `skills/<name>/agents/openai.yaml` per skill per #91 — the root
+  aggregate didn't match the per-skill shape OpenAI's own docs describe
+  (`learn.chatgpt.com/docs/build-skills`).
 - ~~The concrete question set/template Athene asks at each architecture decision point to
   operationalize the engineering-quality-bar checklist above~~ — **done**, see
   `docs/architecture-decision-template.md` (#37), wired into `athene`'s "Evidence-backed

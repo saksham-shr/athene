@@ -87,8 +87,11 @@ codex plugin add athene@athene
 
 The plugin install above pulls skill content from `.agents/skills/` — Codex reads each skill's
 selection description straight from its own `SKILL.md` there, same as the manual-copy path below.
-[`agents/openai.yaml`](agents/openai.yaml) at the repo root is a separate, repo-level reference
-(display names, invocation notes) — it isn't part of the installed plugin content.
+Each skill also carries its own `agents/openai.yaml` (display name, invocation policy, tool
+dependencies, per [OpenAI's skill-packaging docs](https://learn.chatgpt.com/docs/build-skills)) —
+e.g. [`skills/athene/agents/openai.yaml`](skills/athene/agents/openai.yaml) — which mirrors into
+`.agents/skills/<name>/agents/openai.yaml` the same way `SKILL.md` does, so it *is* part of the
+installed plugin content.
 
 **Cursor, or any other agent that reads a `SKILL.md`-style file:** copy the skill(s) you want
 from [`.agents/skills/`](.agents/skills/) or [`.claude/skills/`](.claude/skills/) — not
