@@ -22,11 +22,36 @@ On start, scan the target repo for `.athene/state.md`.
   skill and Audit disambiguate without relying on how the user phrased the request.
 - **Found:** read all four sections before doing anything else — don't just confirm the file
   exists and barge into the lifecycle below. Check `Active skill`:
-  - **`athene`:** continue below, picking up at whatever `Current phase` names. If `Current
-    phase` is `handoff` (the reserved value a handing-off skill like Athene: Product Discovery
-    leaves — see `docs/state-schema.md`), that isn't one of this skill's own lifecycle stage
-    names: start at **Intake**, this lifecycle's first stage, rather than treating `handoff` as
-    an unrecognized phase.
+  - **`athene`:** if the incoming request is itself a new feature or new-direction idea whose
+    outcome or tradeoffs are materially unclear (the same trigger Athene: Product Discovery's own
+    frontmatter names), don't scope it directly in this lifecycle. First confirm the Athene:
+    Product Discovery skill file is packaged where this skill is installed — stop and say so if
+    it isn't, without touching `.athene/state.md`. Otherwise ask the user, same question Discovery
+    itself asks: is this a new feature on top of what's already here, or a new idea/direction
+    overall?
+    - **New feature on the existing project:** confirm explicitly that this is a handoff to
+      Discovery, then update `.athene/state.md`: set `Active skill` to `athene-product-discovery`
+      and `Current phase` to `handoff`. Read the Athene: Product Discovery skill file, but start
+      directly at its "Discover the intent" section, framed against what's already built — the
+      user already answered the existing-project-vs-new-idea question here; don't ask it again
+      via Discovery's own "Check for an already-tracked repo first" section.
+    - **New idea/direction overall:** a separate initiative. Don't touch `.athene/state.md` yet —
+      changing `Active skill` now would overwrite this skill's own recorded phase for an idea
+      nobody's approved as a takeover, and `.athene/state.md` would still show `athene` as owner
+      since this branch doesn't write it. Read the Athene: Product Discovery skill file, but
+      start directly at its "Discover the intent" section — skip its own "Check for an
+      already-tracked repo first" section, since this detour has already been explicitly
+      arbitrated here; re-running Discovery's own footprint check would see `Active skill:
+      athene` and bounce straight back here instead of running the conversation. Run Discovery's
+      flow in conversation only, exactly as Discovery documents for a separate initiative. Only
+      write `.athene/state.md` once the user explicitly approves the new idea taking over this
+      repo — a deliberate handoff, not a side effect of exploring it.
+    Don't touch state Discovery owns outside an explicit, user-approved handoff. Otherwise,
+    continue below, picking up at whatever `Current phase` names. If `Current phase` is
+    `handoff` (the reserved value a handing-off skill like Athene: Product Discovery leaves —
+    see `docs/state-schema.md`), that isn't one of this skill's own lifecycle stage names: start
+    at **Intake**, this lifecycle's first stage, rather than treating `handoff` as an
+    unrecognized phase.
   - **Anything else:** this skill doesn't own the repo right now. Read and follow whichever
     skill file `Active skill` names instead — stop and say so if that file isn't packaged where
     this skill is installed. Don't start deciding work or touching state another skill owns.
