@@ -21,9 +21,15 @@ user's product judgment stronger; don't substitute this skill's preferences for 
 Before starting discovery from zero, look for `.athene/state.md` at the repo root.
 
 - **Not found:** this is a genuinely fresh idea with no Athene footprint yet. Continue below.
-- **Found:** don't restart discovery from scratch just because this skill was invoked directly.
-  Ask instead, conversationally: "Is this a new feature on top of what's already here, or a new
-  idea/direction overall?"
+- **Found:** read all four sections before doing anything else — don't just confirm the file
+  exists and barge into the flow below. Check `Active skill`:
+  - **Anything other than `athene-product-discovery`:** this skill doesn't own the repo right
+    now. Read and follow whichever skill file `Active skill` names instead — stop and say so if
+    that file isn't packaged where this skill is installed. Don't start discovery or touch state
+    another skill owns.
+  - **`athene-product-discovery`:** don't restart discovery from scratch just because this skill
+    was invoked directly. Ask instead, conversationally: "Is this a new feature on top of what's
+    already here, or a new idea/direction overall?"
   - **New feature on the existing project:** still goes through the discovery flow below, but
     framed against what's already built rather than from a blank slate — read the state file's
     `Decisions made` first so earlier choices aren't re-litigated. This path does update
