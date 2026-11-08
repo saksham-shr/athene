@@ -65,6 +65,18 @@ A few other things that come for free:
 No slash commands or manual hand-offs needed in the middle of a flow — each skill knows when to
 pass control to the next one on its own.
 
+## Try it
+
+Use a prompt that matches the work you want to do. For example:
+
+- `I want to build a lightweight internal incident dashboard for our support team.`
+- `Audit this repository for bugs, security risks, missing tests, and performance problems.`
+- `Review my open pull requests and help me choose one to inspect.`
+
+GitHub-backed workflows, such as PR Review and Review Gate, run only when you explicitly ask for
+them. Before a workflow makes a GitHub change, review the proposed action and confirm that it is
+what you intend.
+
 ## Install
 
 **Claude Code**, as two separate prompts:
@@ -136,10 +148,11 @@ No. Each skill names when to skip itself — a precise, low-risk task never need
 a one-off script doesn't need the full build lifecycle.
 
 **Does it phone home or need an account?**
-Athene itself needs no account or server of its own — it's instructions your agent reads
-locally. Your agent still does whatever it normally does: sends prompts to its model, runs
-linters or live searches a skill tells it to when that's useful. Athene doesn't add any network
-calls beyond what your agent already makes.
+Athene itself needs no account or server of its own — it's instructions your agent reads locally.
+Your agent still does whatever it normally does: sends prompts to its model, runs linters or live
+searches a skill tells it to when that's useful. GitHub workflows run only when you request them
+and use GitHub access you have already authorized for the agent or its CLI. Read the
+[privacy policy](PRIVACY.md) for details.
 
 **What if my agent isn't listed above?**
 If it can read a `SKILL.md`-style instruction file, point it at the one you want from
@@ -149,6 +162,8 @@ If it can read a `SKILL.md`-style instruction file, point it at the one you want
 
 Questions, ideas, or just want to see what's being built next — [join the Discord](https://discord.gg/CT6wsqa2Ct).
 Connect on [LinkedIn](https://www.linkedin.com/in/saksham-sharma-292ba51bb).
+
+For installation help, bug reports, and security or privacy guidance, see [SUPPORT.md](SUPPORT.md).
 
 ## License
 
