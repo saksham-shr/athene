@@ -48,8 +48,12 @@ all — one eligible reviewer isn't enough if the resulting count is 2 or more. 
 **Require review from Code Owners** specifically needs a real CODEOWNERS owner (see
 `review-gate.md`'s Ownership section) — this is a durable branch-level setting, not scoped to
 whatever one PR happens to be in front of you right now, so judge it across the *whole* set of
-paths CODEOWNERS covers on this branch, not just what today's PR touches: if **any** covered path
-names an owner other than whoever usually authors this skill's PRs, keep the box checked — it's
+paths CODEOWNERS covers — on every branch the rule's confirmed pattern matches, not just the one
+branch named in the request, since CODEOWNERS content can genuinely differ between branches; if
+that's the case, disclose the difference to the user rather than judging only one branch and
+applying the result to all of them — not just what today's PR touches: if **any** covered path on
+any matched branch names an owner other than whoever usually authors this skill's PRs, keep the
+box checked — it's
 meaningfully enforced for that path going forward even on a PR that doesn't touch it today (e.g.
 Bob owning `/docs` still matters the next time someone's PR touches `/docs`, even if the PR in
 front of you right now only touches `/src`, which only Alice owns). Only skip the box when
