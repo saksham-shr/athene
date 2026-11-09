@@ -60,16 +60,22 @@ usually authors this skill's PRs, keep the box checked — it's
 meaningfully enforced for that path going forward even on a PR that doesn't touch it today (e.g.
 Bob owning `/docs` still matters the next time someone's PR touches `/docs`, even if the PR in
 front of you right now only touches `/src`, which only Alice owns). Only skip the box when
-CODEOWNERS has genuinely no path with an eligible owner at all. Say all of this plainly before
-turning anything on, don't let the user discover any of it later. For a wildcard-pattern rule
-specifically: if the box would be skipped today because no *current* branch has an eligible
-owner, say that a branch matching the pattern later — created after today, possibly with its own
-CODEOWNERS entries — would still inherit this rule with the box unchecked, getting no owner
-enforcement even if it turns out to have an eligible owner. Let the user choose whether to check
-the box anyway for that future case, rather than deciding it for them. If that's the case and
-enough general eligible reviewers still exist for `Require approvals`, turn on everything else
-and skip just that one box (and the matching manual step below) only if the user confirms that
-choice, or wait until an owner is added. This prerequisite
+CODEOWNERS has genuinely no path with an eligible owner at all. If no CODEOWNERS file exists for
+this branch at all, say so plainly too: checking this box would then be a pure no-op (nothing
+names any owner for anything, so it enforces nothing) rather than something that blocks PRs —
+different from the case where a file exists but today's eligible owners don't cover the paths in
+play, which *does* block.
+
+If the box would be skipped today for the latter reason (a file exists, just no current eligible
+owner for the relevant paths), say that an eligible owner could still appear later — either this
+same branch's CODEOWNERS gaining one, or, for a wildcard-pattern rule, a new branch matching the
+pattern being created with its own CODEOWNERS — and the rule would inherit whatever this box is
+set to today either way. Let the user choose whether to check it now in anticipation of that,
+rather than deciding it for them. If they decline and enough general eligible reviewers still
+exist for `Require approvals`, turn on everything else and skip just that one box (and the
+matching manual step below); if they want it checked now, say plainly that it can block every PR
+on this branch/pattern until an eligible owner actually exists. Say all of this plainly before
+turning anything on, don't let the user discover any of it later. This prerequisite
 applies to turning the gate on only — don't let it block turning an already-on gate back off (see
 below).
 
@@ -77,16 +83,20 @@ Explain in plain language before doing anything: *"This sets a branch protection
 `<branch>` requiring at least one approval before merge, dismisses stale approvals on new pushes,
 and removes the admin bypass — so this includes whoever's driving me. PRs can't be approved by
 their own author, so this needs at least one other eligible reviewer."* Then, depending on the
-prerequisite's outcome — the box will be **checked** in either of these two cases: *"A CODEOWNERS
-file exists and names an eligible owner, so approval from that owner is required for the paths it
-covers"*, or, if the user chose to require it for future matching branches despite no current
-eligible owner, *"no current branch has an eligible CODEOWNERS owner, but per your choice this
-box is still checked for branches that gain one later — until then, this can block every PR on
-this pattern"* (say this plainly, it's a real near-term cost of that choice). Otherwise the box
-will be **left unchecked**: *"this rule won't require Code Owners approval specifically"* —
-naming the real reason, either no CODEOWNERS file exists or none of its owners are eligible and
-you declined to require it for future branches — *"any eligible reviewer's approval satisfies it
-instead"*. Wait for explicit yes before doing anything.
+prerequisite's outcome, exactly one of:
+- *"A CODEOWNERS file exists and names an eligible owner, so approval from that owner is required
+  for the paths it covers."* (box **checked**, meaningfully enforced now)
+- *"No CODEOWNERS file exists for this branch, so checking this box wouldn't actually require
+  anyone's approval — it'd be a no-op, not a block."* (box **left unchecked** — nothing to check)
+- *"A CODEOWNERS file exists, but no current eligible owner covers the relevant paths. Per your
+  choice, this box is checked anyway in anticipation of an owner appearing later — until then,
+  this can block every PR on this branch/pattern."* (box **checked**, say the near-term cost
+  plainly)
+- *"A CODEOWNERS file exists, but no current eligible owner covers the relevant paths, and you
+  declined to require it in anticipation of one appearing later — so any eligible reviewer's
+  approval satisfies the rule instead."* (box **left unchecked**)
+
+Wait for explicit yes before doing anything.
 
 No suitable connector available — hand the user these manual steps (don't attempt the change through any
 local `gh`/API call as a fallback; this path is manual-only):
@@ -99,12 +109,12 @@ local `gh`/API call as a fallback; this path is manual-only):
 - Check **Require a pull request before merging**, and under it, **Require approvals** set to
   at least 1 (if a higher number is already set, leave it — never suggest lowering an existing
   stricter requirement).
-- Check **Require review from Code Owners** if the prerequisite found an eligible owner, *or* the
-  user chose to require it for future matching branches despite none existing now — both are
-  "checked" per the explanation above. Otherwise leave it unchecked, matching what you already
-  told the user. Checking it when neither applies would block every PR, contradicting the "any
-  eligible reviewer satisfies it" explanation already given; leaving it unchecked when the user
-  chose to require it for future branches would silently drop that choice.
+- Check **Require review from Code Owners** in exactly the two "checked" cases from the
+  explanation above (a current eligible owner exists, or the user chose to require it in
+  anticipation of one) — leave it unchecked in the other two (no CODEOWNERS file at all, or no
+  current owner and the user declined). Match whichever of the four you actually told the user;
+  checking it in a case you told them would be unchecked (or the reverse) drops the choice they
+  just confirmed.
 - Check **Dismiss stale pull request approvals when new commits are pushed**.
 - Check **Do not allow bypassing the above settings** (this closes the *admin*-bypass hole —
   without it, anyone with push access, including whoever's driving the AI agent, can merge
