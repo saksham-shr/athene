@@ -76,13 +76,17 @@ below).
 Explain in plain language before doing anything: *"This sets a branch protection rule on
 `<branch>` requiring at least one approval before merge, dismisses stale approvals on new pushes,
 and removes the admin bypass — so this includes whoever's driving me. PRs can't be approved by
-their own author, so this needs at least one other eligible reviewer."* Then, depending on
-whether the prerequisite above found an eligible CODEOWNERS owner: *"A CODEOWNERS file exists and
-names an eligible owner, so approval from that owner is required for the paths it covers"* (box
-will be checked), or *"this rule won't require Code Owners approval specifically"* — naming the
-real reason, either no CODEOWNERS file exists or none of its owners are eligible — *"any eligible
-reviewer's approval satisfies it instead"* (box will be left unchecked). Wait for explicit yes
-before doing anything.
+their own author, so this needs at least one other eligible reviewer."* Then, depending on the
+prerequisite's outcome — the box will be **checked** in either of these two cases: *"A CODEOWNERS
+file exists and names an eligible owner, so approval from that owner is required for the paths it
+covers"*, or, if the user chose to require it for future matching branches despite no current
+eligible owner, *"no current branch has an eligible CODEOWNERS owner, but per your choice this
+box is still checked for branches that gain one later — until then, this can block every PR on
+this pattern"* (say this plainly, it's a real near-term cost of that choice). Otherwise the box
+will be **left unchecked**: *"this rule won't require Code Owners approval specifically"* —
+naming the real reason, either no CODEOWNERS file exists or none of its owners are eligible and
+you declined to require it for future branches — *"any eligible reviewer's approval satisfies it
+instead"*. Wait for explicit yes before doing anything.
 
 No suitable connector available — hand the user these manual steps (don't attempt the change through any
 local `gh`/API call as a fallback; this path is manual-only):
@@ -95,10 +99,12 @@ local `gh`/API call as a fallback; this path is manual-only):
 - Check **Require a pull request before merging**, and under it, **Require approvals** set to
   at least 1 (if a higher number is already set, leave it — never suggest lowering an existing
   stricter requirement).
-- Check **Require review from Code Owners** *only if* the prerequisite above found an eligible
-  owner — otherwise leave it unchecked, matching what you already told the user. Checking it
-  despite no eligible owner existing would block every PR, contradicting the "any eligible
-  reviewer satisfies it" explanation already given.
+- Check **Require review from Code Owners** if the prerequisite found an eligible owner, *or* the
+  user chose to require it for future matching branches despite none existing now — both are
+  "checked" per the explanation above. Otherwise leave it unchecked, matching what you already
+  told the user. Checking it when neither applies would block every PR, contradicting the "any
+  eligible reviewer satisfies it" explanation already given; leaving it unchecked when the user
+  chose to require it for future branches would silently drop that choice.
 - Check **Dismiss stale pull request approvals when new commits are pushed**.
 - Check **Do not allow bypassing the above settings** (this closes the *admin*-bypass hole —
   without it, anyone with push access, including whoever's driving the AI agent, can merge
