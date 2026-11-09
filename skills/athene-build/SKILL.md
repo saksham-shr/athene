@@ -176,11 +176,10 @@ content); mirroring keeps each skill's `templates/` independent, so there's no s
 location across skills.
 
 **Fixed baseline — always written, regardless of framing or risk tier:**
-1. **`templates/CONTRIBUTING.md`** → target repo's `CONTRIBUTING.md`, plus
-   **`templates/debt-ledger.sh`** → target repo's `scripts/debt-ledger.sh` (copy both together —
-   CONTRIBUTING.md names the command, so it has to actually exist). Conventional Commits
+1. **`templates/CONTRIBUTING.md`** → target repo's `CONTRIBUTING.md`. Conventional Commits
    (`feat/fix/chore/docs/refactor/test/perf/ci/build`), no-AI-attribution, and the `athene:`
-   shortcut-marker convention.
+   shortcut-marker convention — the marker's own debt-ledger scan is something you run live
+   whenever asked (`references/debt-ledger-guide.md`), not a script copied into the target repo.
 2. **`templates/pull_request_template.md`** → `.github/pull_request_template.md`.
 3. **`templates/ISSUE_TEMPLATE/bug_report.md`** and **`templates/ISSUE_TEMPLATE/feature_request.md`**
    → `.github/ISSUE_TEMPLATE/`.
@@ -206,30 +205,28 @@ doc set the row names, nothing more: `templates/CODEOWNERS` (check `.github/CODE
 replace `@REPLACE_WITH_DEFAULT_OWNER` with a real owner who has repo write access and confirm the
 file no longer contains the placeholder — a CODEOWNERS file the review gate can see but that names
 no real owner satisfies the gate's existence check without actually routing review to anyone),
-`templates/SECURITY.md` (only list a channel confirmed to actually work), `templates/commitlint.config.mjs`
-+ `templates/workflows/commitlint.yml` (check the full documented commitlint config-file list before
-assuming none exists; leave an existing config unchanged; set `configFile` only for formats the
-action supports; skip and record the case if the detected format, its dependencies, or existing CI
-can't be supported — same handling as Audit's own commitlint step, not restated here), and
-`templates/RELEASE.md`. `none` is a valid, common result — don't add extra docs because it feels
-more thorough.
+`templates/SECURITY.md` (only list a channel confirmed to actually work), the commitlint config
+and workflow per `references/commitlint-setup.md` (check the full documented commitlint
+config-file list before assuming none exists; leave an existing config unchanged; set
+`configFile` only for formats the action supports; skip and record the case if the detected
+format, its dependencies, or existing CI can't be supported — same handling as Audit's own
+commitlint step, not restated here), and `templates/RELEASE.md`. `none` is a valid, common
+result — don't add extra docs because it feels more thorough.
 
-**Review/merge gate:** copy `templates/set-review-gate.sh` → target repo's
-`scripts/set-review-gate.sh`, and follow `references/review-gate.md` for what it does and the
-default-off rationale — don't run it unprompted. Every PR this skill authors gets a self-review
-subagent pass first, then waits on whoever's configured as reviewer before merge; that queue
-discipline holds regardless of the toggle. The self-review pass includes a comment proof-test:
-every comment surviving in the diff needs proof — a genuinely external constraint outside the
-project's own control. A constraint the project itself controls gets converted into real
-enforcement (a type, a runtime assertion, a test, a CI lint rule) before the comment justifying it
-is deleted — replace the comment's job with something that actually enforces it, don't just
-delete and hope. A comment explaining the fix/change itself ("fixed the bug where X") fails the
-proof test outright; that belongs in the commit message, not the diff. Offer the toggle, note the
-result in Decisions made, and
-only run `set-review-gate.sh ... on` if the user asks for it turned on now — but first confirm a
-real CODEOWNERS owner is in place (see above) and that at least one eligible reviewer other than
-whoever authors this skill's PRs can actually approve them; a solo-writer repo with the gate on
-blocks every PR until someone else is added or the gate is turned back off.
+**Review/merge gate:** follow `references/review-gate-setup.md` for how to offer and, if asked,
+actually set this up — no script involved, a confirm-before-acting guided flow instead. See
+`references/review-gate.md` for the default-off rationale. Every PR this skill authors gets a
+self-review subagent pass first, then waits on whoever's configured as reviewer before merge;
+that queue discipline holds regardless of the toggle. The self-review pass includes a comment
+proof-test: every comment surviving in the diff needs proof — a genuinely external constraint
+outside the project's own control. A constraint the project itself controls gets converted into
+real enforcement (a type, a runtime assertion, a test, a CI lint rule) before the comment
+justifying it is deleted — replace the comment's job with something that actually enforces it,
+don't just delete and hope. A comment explaining the fix/change itself ("fixed the bug where X")
+fails the proof test outright; that belongs in the commit message, not the diff. Offer the
+toggle, note the result in Decisions made, and only act on it — either direction — if the user
+asks; `references/review-gate-setup.md` has its own prerequisite check and full on/off
+procedure, don't restate or re-derive it here.
 
 ## State handling
 

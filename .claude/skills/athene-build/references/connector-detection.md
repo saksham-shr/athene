@@ -8,11 +8,28 @@ there as `references/connector-detection.md` via the include-marker convention, 
 
 ## Detection, per platform
 
-Read the agent's own config, don't ask first — only fall back to asking the user when detection
+Check the agent's own config, don't ask first — only fall back to asking the user when detection
 is genuinely inconclusive (a malformed file, an ambiguous name match), not as a default first
 step. These files can hold MCP auth headers, OAuth secrets, or stdio command arguments for
-*other* configured servers — pull only the specific server-name key being checked for
-(present/missing/inconclusive), never the file's full contents, into context or a reply.
+*other* configured servers, so **use a targeted search or structured query that returns only the
+determination, never the full file contents**. For Claude Code, use a structured query that
+checks the current project's Local, Project, and User `mcpServers` keys below specifically — not
+a blind grep for the server name across the whole file, which can match a *different project's*
+entry inside `~/.claude.json`'s `projects` map and misreport its scope; if the current project's
+scope can't be determined this way, report Inconclusive rather than guessing. For other
+platforms, use a structured query to check the exact server key (Codex's table key, Cursor's
+`mcpServers` key) — not a bare grep for the server name as free text, which can match it inside
+an unrelated field (a Cursor server's command/URL/args containing the same word) and misreport
+presence. If the exact key can't be determined, report Inconclusive rather than guessing.
+
+Even a targeted match isn't risk-free: a minified/single-line JSON config can put a server's auth
+header on the *same line* as its name, so a matching line can still carry a secret. Whatever
+method you use, treat any raw matched text as sensitive the instant you have it — derive the
+present/missing/inconclusive determination from it immediately, then discard the raw text; never
+paste the matched line, the full file, or any credential-shaped substring into a reply, a log, or
+`.athene/state.md`. If you can't get the determination without the raw match passing through
+somewhere that would be retained (e.g. by a hosted agent's own logging, outside your control),
+ask the user instead of reading or searching the file at all.
 
 ### Claude Code
 
@@ -40,9 +57,15 @@ explicitly allowed — every other user-added or plugin-provided server is block
 `claude mcp add` is rejected outright with `Cannot add MCP server: enterprise MCP configuration
 is active and has exclusive control over MCP servers`. **If this file is readable and parseable,
 stop — don't attempt auto-setup at all**, regardless of what the project/user/local scopes below
-say. Tell the user their organization controls MCP servers centrally and point them to their
-admin, don't try `claude mcp add` and fail, or worse, silently report "missing" for a server the
-org already provides or blocks on purpose.
+say. This stop is about *adding or changing* a server configuration, not about checking whether
+one's already there: still check whether the needed server is among what `managed-mcp.json` (or
+`managedMcpServers`, below) already provides, and use it if so. If neither source provides it,
+check the effective server list in a live session (`/mcp`) before concluding an admin change is
+required — an in-process server (an IDE extension's own, for instance) can be available without
+appearing in either managed file. Only route the user to their admin when the needed server is
+genuinely absent from all of that and would require a change this file blocks — don't try
+`claude mcp add` and fail, or silently report "missing" for a server the org already provides or
+blocks on purpose.
 
 If the path exists but the file can't be read or fails to parse, that's **Inconclusive**, not
 exclusive control — a stale-but-valid file still activates the hard stop above, but a broken one
@@ -67,7 +90,26 @@ Detection below only covers the three **file-backed** scopes (Local, Project, Us
 provided only by `managedMcpServers`, a plugin, or a claude.ai connector isn't visible to a file
 scan, and this method can't see it.
 
-**Present:** the needed server name exists in any of the three file-backed scopes above.
+**Present:** the needed server name exists in any of the three file-backed scopes above. This
+means *configured*, not necessarily *usable* — a listed server can still be pending approval,
+disabled, or disconnected. A "Present" result is good enough to act on when nothing yet depends
+on the server actually working; the moment something is about to rely on it (e.g. a skill about
+to call one of its tools), confirm it's actually connected first — `/mcp` in an interactive
+session, or the host's own session-status query for an SDK/non-interactive host (`/mcp` itself
+needs Claude Code v2.1.205+ to work in print mode; don't assume it's available below that
+without confirming the version). If the server is pending approval or disabled rather than
+simply absent, tell the user to review the server's actual source and configuration — including
+its command, for a stdio server — and only approve or re-enable it if they trust both; a server
+name matching what was expected doesn't by itself establish that the project defining it is
+trustworthy, its command runs locally once approved. In an interactive session, guide them
+through `/mcp` directly. In a non-interactive session (`claude -p` and similar) `/mcp` doesn't
+open that menu at
+all, so there's no in-session way to approve or re-enable it — tell the user to run an
+interactive session once to handle it, or use the host's own control if one is available, then
+check status again. Either way, don't add the server's configuration again — that doesn't change
+its approval/enabled state. Treat any status that still can't be confirmed as unavailable and
+fall back to the manual guide, rather than treating a configured-but-unusable server as a hard
+failure.
 **Missing:** it exists in none of those three files. This is **not** proof no server exists at
 all — `managedMcpServers`, a plugin, or a claude.ai connector could still provide it (and
 `managed-mcp.json`, checked separately above, could mean "missing" here is moot anyway). Don't

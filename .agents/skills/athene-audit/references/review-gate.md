@@ -14,51 +14,23 @@ protection to misconfigure, no "why is my push rejected" surprise.
 
 For experienced users who want this enforced, not just followed. Flipping it on must produce an
 actual GitHub branch-protection rule — a documented convention that can be skipped isn't a gate.
+At minimum: at least one approval required before merge (owner-specific via CODEOWNERS where one
+exists and covers the paths in question), stale approvals dismissed on new pushes, and the
+admin-bypass hole closed. **How this actually gets set is `review-gate-setup.md` (co-located with
+this file)** — a guided, confirm-before-acting flow using a connected GitHub capability if one
+exists, manual GitHub UI steps otherwise. No bundled script calls `gh api` on the user's behalf
+any more; see that file for why and for the exact steps.
 
-`scripts/set-review-gate.sh <owner/repo> <branch> on` sets:
-- `required_pull_request_reviews`: at least one approval required before merge — more if the
-  branch already required more (never silently lowers an existing stricter count). Owner-specific
-  approval is requested via `require_code_owner_reviews: true`, but **this only applies to paths a
-  `CODEOWNERS` file actually matches** (see Ownership below) — without one, any writer's approval
-  satisfies the rule regardless of this setting. The script warns on stderr if it can't find a
-  `CODEOWNERS` file before enabling, rather than silently granting a guarantee it can't back. Stale
-  approvals are dismissed on new pushes (`dismiss_stale_reviews: true` — without it, pushing new
-  commits after approval and merging without a fresh review is a real bypass). Preserves an
-  existing `dismissal_restrictions` setting (who can dismiss a required review) rather than
-  dropping it — without that, enabling the gate would let anyone with push access dismiss a
-  review that was supposed to be restricted.
-- `enforce_admins: true`: closes the default admin-bypass hole. Branch protection without this
-  is cosmetic — admins (including whoever's driving the AI agent) can merge around it by default.
-- Preserves the branch's existing protection settings where GitHub's API allows reading them back
-  and converting them to the shape the update endpoint expects — `required_status_checks`,
-  `restrictions`, and the flat booleans (`required_linear_history`, `allow_force_pushes`,
-  `allow_deletions`, `block_creations`, `required_conversation_resolution`, `lock_branch`,
-  `allow_fork_syncing`). GitHub's GET and PUT shapes for these disagree (GET returns richer
-  objects than PUT accepts), so the script converts rather than round-trips the raw GET response.
-- Distinguishes "branch genuinely has no protection yet" (HTTP 404) from a transient API/auth/
-  network failure while checking existing settings — a failure of the latter kind stops the
-  script instead of being silently treated as "nothing to preserve." The same distinction applies
-  on `off`: a 404 on the protection endpoint also happens for a nonexistent branch or a repo the
-  token can't access, so the script confirms the branch itself resolves before reporting "already
-  off" — it won't claim the gate is off just because it couldn't read the branch at all.
+**Known limitation — rulesets not handled.** The guidance only covers the classic branch-
+protection UI/API (`branches/:branch/protection`). GitHub's newer Rulesets feature is a separate
+mechanism that can also require reviews on a branch, independently of classic protection — a repo
+using rulesets could still require review after the gate is reported "off" (classic protection
+genuinely removed, but a ruleset still enforcing). If a repo uses them, verify review enforcement
+directly in GitHub's branch rules UI, not from this gate's state alone.
 
-**Known limitation — rulesets not handled.** This script only manages the classic branch-
-protection API (`branches/:branch/protection`). GitHub's newer Rulesets feature is a separate
-mechanism that can also require reviews on a branch, independently of classic protection — a
-repo using rulesets could still require review after this script reports the gate "off" (classic
-protection genuinely removed, but a ruleset still enforcing). Checking and reporting on rulesets
-is out of scope here; if a repo uses them, verify review enforcement directly in GitHub's branch
-rules UI/API, not through this script's output alone.
-
-`scripts/set-review-gate.sh <owner/repo> <branch> off` removes the protection rule entirely, back
-to discipline-only — same existence-check logic: a 404 means "already off" and exits cleanly,
-anything else (including a failed DELETE) stops the script rather than claiming success. Known
-limitation: `on` preserves whatever unrelated protection existed *at the moment it's turned on*,
-but `off` removes the whole rule rather than restoring exactly what was there before `on` was ever
-run — there's no snapshot of that earlier state. If a branch had unrelated protection before this
-script touched it, turning the gate off removes that too, not just this gate's additions.
-
-Requires `jq` (used to URL-encode the branch name and convert the protection payload).
+Turning it off removes the protection rule entirely, back to discipline-only — see
+`review-gate-setup.md` for the gentler option (unchecking just the four settings this gate adds,
+instead of deleting the whole rule) when the branch had other, unrelated protection worth keeping.
 
 ## Ownership
 
@@ -71,13 +43,14 @@ path. Separately, by default:
 
 ## Git host assumption
 
-v1 default and only supported target is **GitHub** — `scripts/set-review-gate.sh` calls `gh api`
-directly, and `CODEOWNERS` is GitHub's own format. Other hosts (GitLab, Bitbucket) would need
-their own equivalent script and ownership-file format; that's explicitly out of v1 scope, not a
-silent gap.
+v1 default and only supported target is **GitHub** — `review-gate-setup.md`'s UI steps and
+`CODEOWNERS` are both GitHub-specific. Other hosts (GitLab, Bitbucket) would need their own
+equivalent guidance and ownership-file format; that's explicitly out of v1 scope, not a silent
+gap.
 
 ## Wired into Audit
 
-Athene: Audit offers this toggle at the end of its run (copies the script, explains it) but
-never runs it itself — turning it on is always the user's call. Also wired into `athene-build`, the
-build skill — same offer, made during Design instead of at adoption time.
+Athene: Audit offers this toggle at the end of its run (explains what it does, per
+`review-gate-setup.md`) but never acts on it itself — turning it on is always the user's call.
+Also wired into `athene-build`, the build skill — same offer, made during Design instead of at
+adoption time.
