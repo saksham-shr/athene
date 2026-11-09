@@ -29,20 +29,23 @@ it's still open before reading it — don't review a PR that's already closed or
    skill. If present, use its PR-read tool instead of step 1 or 3 — it already carries whatever
    auth it needs, this skill never touches that credential directly.
 3. **Private repo and no MCP server, or step 1 returned 404/403:** tell the user step 1/2 didn't
-   work and ask to run `gh pr diff <owner>/<repo>#<number>` using **their own already-authenticated
-   `gh` session** — name the exact command before running it, run it only after they say yes. This
-   skill never reads, stores, or forwards a GitHub token itself; `gh` handles its own auth outside
-   this skill entirely, and each use is a fresh, visible, user-approved command, not a stored
-   credential or a bundled script.
+   work and ask to run `gh pr diff <number> -R <owner>/<repo>` using **their own
+   already-authenticated `gh` session** — name the exact command before running it, run it only
+   after they say yes. `-R <owner>/<repo>` is required so the command works even when run outside
+   a clone of the target repo. This skill never reads, stores, or forwards a GitHub token itself;
+   `gh` handles its own auth outside this skill entirely, and each use is a fresh, visible,
+   user-approved command, not a stored credential or a bundled script.
 4. **Still nothing:** ask the user to paste the diff directly.
 
 Also read whatever surrounding code the diff references, same as any code review — don't judge a
 changed line in isolation.
 
-## 3. Check the head before posting
+## 3. Check the head and base before posting
 
-Re-confirm the PR's current head SHA right before drafting the comment. If it changed since step
-2 fetched the diff, re-fetch — never comment against a diff that's gone stale mid-review.
+Record the PR's head SHA and base branch alongside the diff when fetching it in step 2. Right
+before drafting the comment, re-check both — a base-branch update can change the diff without
+changing the head SHA. If either changed, re-fetch the diff and re-review it before drafting;
+never comment against a diff that's gone stale.
 
 ## 4. Review, scoped to the diff
 
@@ -73,9 +76,16 @@ the comment regardless of outcome.
 
 ## 6. Post — only after explicit yes, one comment, one time
 
+Re-check the head SHA one more time right here, immediately before posting — time passed during
+step 5's confirmation. Changed: go back to step 4 with the new diff and get confirmation again
+before posting anything.
+
 - MCP server from step 2: use its comment-post tool.
-- Otherwise: ask to run `gh pr comment <owner>/<repo>#<number> --body "<exact text just shown>"`
-  — name the exact command, run only on explicit confirmation, never silently.
+- Otherwise: show the exact comment text and the exact command, then run
+  `gh pr comment <number> -R <owner>/<repo> --body-file -` with the comment text supplied on
+  stdin, run only on explicit confirmation. Never interpolate the comment text into a shell
+  command string (`--body "<text>"`) — text containing `` ` `` or `$(...)` would execute as shell
+  code; `--body-file -` with piped stdin passes it as data instead.
 - No path available (no MCP, no `gh`, user declines): give the user the exact comment text to
   post themselves and stop there. Don't fall back to any other write path.
 
