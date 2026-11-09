@@ -10,7 +10,9 @@ there as `references/connector-detection.md` via the include-marker convention, 
 
 Read the agent's own config, don't ask first — only fall back to asking the user when detection
 is genuinely inconclusive (a malformed file, an ambiguous name match), not as a default first
-step.
+step. These files can hold MCP auth headers, OAuth secrets, or stdio command arguments for
+*other* configured servers — pull only the specific server-name key being checked for
+(present/missing/inconclusive), never the file's full contents, into context or a reply.
 
 ### Claude Code
 
