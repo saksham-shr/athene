@@ -17,7 +17,10 @@ checks the current project's Local, Project, and User `mcpServers` keys below sp
 a blind grep for the server name across the whole file, which can match a *different project's*
 entry inside `~/.claude.json`'s `projects` map and misreport its scope; if the current project's
 scope can't be determined this way, report Inconclusive rather than guessing. For other
-platforms, grep for the specific server name or use an equivalent structured query.
+platforms, use a structured query to check the exact server key (Codex's table key, Cursor's
+`mcpServers` key) — not a bare grep for the server name as free text, which can match it inside
+an unrelated field (a Cursor server's command/URL/args containing the same word) and misreport
+presence. If the exact key can't be determined, report Inconclusive rather than guessing.
 
 Even a targeted match isn't risk-free: a minified/single-line JSON config can put a server's auth
 header on the *same line* as its name, so a matching line can still carry a secret. Whatever
@@ -56,10 +59,13 @@ is active and has exclusive control over MCP servers`. **If this file is readabl
 stop — don't attempt auto-setup at all**, regardless of what the project/user/local scopes below
 say. This stop is about *adding or changing* a server configuration, not about checking whether
 one's already there: still check whether the needed server is among what `managed-mcp.json` (or
-`managedMcpServers`, below) already provides, and use it if so. Only route the user to their
-admin when the needed server is genuinely absent even from the managed config and would require
-a change this file blocks — don't try `claude mcp add` and fail, or silently report "missing" for
-a server the org already provides or blocks on purpose.
+`managedMcpServers`, below) already provides, and use it if so. If neither source provides it,
+check the effective server list in a live session (`/mcp`) before concluding an admin change is
+required — an in-process server (an IDE extension's own, for instance) can be available without
+appearing in either managed file. Only route the user to their admin when the needed server is
+genuinely absent from all of that and would require a change this file blocks — don't try
+`claude mcp add` and fail, or silently report "missing" for a server the org already provides or
+blocks on purpose.
 
 If the path exists but the file can't be read or fails to parse, that's **Inconclusive**, not
 exclusive control — a stale-but-valid file still activates the hard stop above, but a broken one
@@ -88,9 +94,14 @@ scan, and this method can't see it.
 means *configured*, not necessarily *usable* — a listed server can still be pending approval,
 disabled, or disconnected. A "Present" result is good enough to act on when nothing yet depends
 on the server actually working; the moment something is about to rely on it (e.g. a skill about
-to call one of its tools), confirm it's actually connected inside a live session (`/mcp`) first,
-and treat a failed confirmation as unavailable — fall back to the manual guide rather than
-treating a configured-but-unusable server as a hard failure.
+to call one of its tools), confirm it's actually connected first — `/mcp` in an interactive
+session, or the host's own session-status query for an SDK/non-interactive host (`/mcp` itself
+needs Claude Code v2.1.205+ to work in print mode; don't assume it's available below that
+without confirming the version). If the server is pending approval or disabled rather than
+simply absent, guide the user to approve or re-enable it in `/mcp` — don't add its configuration
+again, that doesn't change its approval/enabled state. Treat any status that still can't be
+confirmed as unavailable and fall back to the manual guide, rather than treating a
+configured-but-unusable server as a hard failure.
 **Missing:** it exists in none of those three files. This is **not** proof no server exists at
 all — `managedMcpServers`, a plugin, or a claude.ai connector could still provide it (and
 `managed-mcp.json`, checked separately above, could mean "missing" here is moot anyway). Don't

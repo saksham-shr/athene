@@ -23,36 +23,46 @@ use — only when the user asks for the gate specifically.
 - **Check for a connector that can make this change** — same detection this repo's other
   GitHub-backed skills use (`references/connector-detection.md` if packaged alongside this
   skill, or the detection method in `docs/connector-detection.md` in Athene's own repo). If a
-  connected capability exists that can read and set branch protection, use it instead of the
-  manual steps below *for the actual API calls only* — every other step (the scope confirmation
-  above, the direction-specific prerequisite and explanation, what gets disclosed, and recording
-  the result) still applies exactly the same way; a connector changes how the setting gets
-  written, not whether this guidance's safeguards run.
+  connected capability exists that can read and set branch protection *for the confirmed scope*
+  (a wildcard pattern like `release/*` needs a connector that can actually address a pattern, not
+  just a single literal branch), use it instead of the manual steps below *for the actual API
+  calls only* — every other step (the scope confirmation above, the direction-specific
+  prerequisite and explanation, what gets disclosed, and recording the result) still applies
+  exactly the same way; a connector changes how the setting gets written, not whether this
+  guidance's safeguards run. If no available connector can address the confirmed scope, use the
+  manual steps instead, even if one exists for literal-branch rules.
 - **Act on whichever direction the user actually asked for** — on or off, never assume "offering
   the gate" means only turning it on; a user asking to turn an existing gate off needs this
   guidance too.
 
 ## Turning it on
 
-**Prerequisite, before explaining the change:** the core setting (`Require approvals` ≥ 1) needs
-no CODEOWNERS file at all — any approver satisfies it, and that alone is a valid, complete way to
-turn this gate on. CODEOWNERS only matters for the separate **Require review from Code Owners**
-checkbox below. Only if you're about to check that specific box: confirm a real CODEOWNERS owner
-is in place (see `review-gate.md`'s Ownership section) who is **not** the only person authoring
-this skill's PRs for the paths it covers — a second approver who isn't an eligible owner for
-those paths doesn't satisfy that box, and the author still can't approve their own PR. Say this
-plainly before checking that box, don't let the user discover it later; if there's no eligible
-owner yet, turn on everything else and skip just that one box, or wait until an owner is added.
-This prerequisite applies to turning the gate on only — don't let it block turning an already-on
-gate back off (see below).
+**Prerequisite, before explaining the change:** GitHub never lets a PR's own author approve it,
+regardless of any setting here — so even the core setting (`Require approvals` ≥ 1, no CODEOWNERS
+needed at all) blocks every PR in a repo with no eligible reviewer besides whoever authors this
+skill's PRs, unless an applicable bypass allowance covers them. Confirm at least one other
+eligible reviewer exists before turning this on at all. Separately, **Require review from Code
+Owners** specifically needs a real CODEOWNERS owner (see `review-gate.md`'s Ownership section)
+who is **not** the only person authoring this skill's PRs for the paths it covers — a second
+approver who isn't an eligible owner for those paths doesn't satisfy that box. Say both of these
+plainly before turning anything on, don't let the user discover either later; if there's no
+eligible CODEOWNERS owner specifically but a general eligible reviewer does exist, turn on
+everything else and skip just that one box, or wait until an owner is added. This prerequisite
+applies to turning the gate on only — don't let it block turning an already-on gate back off (see
+below).
 
 Explain in plain language before doing anything: *"This sets a branch protection rule on
 `<branch>` requiring at least one approval before merge, dismisses stale approvals on new pushes,
-and removes the admin bypass — so this includes whoever's driving me. If a CODEOWNERS file
-exists, approval from the owner it names is required for the paths it covers; without one, any
-approver satisfies the rule."* Wait for explicit yes before doing anything.
+and removes the admin bypass — so this includes whoever's driving me. PRs can't be approved by
+their own author, so this needs at least one other eligible reviewer."* Then, depending on
+whether the prerequisite above found an eligible CODEOWNERS owner: *"A CODEOWNERS file exists and
+names an eligible owner, so approval from that owner is required for the paths it covers"* (box
+will be checked), or *"this rule won't require Code Owners approval specifically"* — naming the
+real reason, either no CODEOWNERS file exists or none of its owners are eligible — *"any eligible
+reviewer's approval satisfies it instead"* (box will be left unchecked). Wait for explicit yes
+before doing anything.
 
-No connector available — hand the user these manual steps (don't attempt the change through any
+No suitable connector available — hand the user these manual steps (don't attempt the change through any
 local `gh`/API call as a fallback; this path is manual-only):
 
 - Go to the repo's **Settings → Branches**. Record whether a rule for `<branch>` already
@@ -89,7 +99,7 @@ removing protection you had before I touched anything — otherwise this removes
 entirely, back to discipline-only: the convention is still followed, but nothing technically
 blocks a merge."* Wait for explicit yes.
 
-No connector available:
+No suitable connector available:
 
 - **If "Turning it on" recorded that the rule itself didn't exist before this gate created it:**
   delete the whole rule. A classic protection rule carries its own defaults beyond this gate's
