@@ -41,17 +41,20 @@ use — only when the user asks for the gate specifically.
 regardless of any setting here — so even the core setting (no CODEOWNERS needed at all) blocks
 every PR in a repo with no eligible reviewer besides whoever authors this skill's PRs, unless an
 applicable bypass allowance covers them. Check what `Require approvals` will actually be set to —
-if a rule already exists, that's its current count, preserved as-is (see the manual steps below);
-for a brand new rule, it's 1. Confirm *at least that many* other eligible reviewers exist before
-turning this on at all — one eligible reviewer isn't enough if the preserved count is 2 or more.
-Separately, **Require review from Code Owners** specifically needs a real CODEOWNERS owner (see
-`review-gate.md`'s Ownership section) who is **not** the only person authoring this skill's PRs
-for the paths it covers — a second approver who isn't an eligible owner for those paths doesn't
-satisfy that box. Say all of this plainly before turning anything on, don't let the user discover
-any of it later; if there's no eligible CODEOWNERS owner specifically but enough general eligible
-reviewers do exist, turn on everything else and skip just that one box (and the matching manual
-step below), or wait until an owner is added. This prerequisite applies to turning the gate on
-only — don't let it block turning an already-on gate back off (see below).
+if a rule already exists, that's `max(1, its current count)` (the manual steps below always set
+at least 1, even starting from an existing count of 0 — GitHub allows 0); for a brand new rule,
+it's 1. Confirm *at least that many* other eligible reviewers exist before turning this on at
+all — one eligible reviewer isn't enough if the resulting count is 2 or more. Separately,
+**Require review from Code Owners** specifically needs a real CODEOWNERS owner (see
+`review-gate.md`'s Ownership section) who is eligible *for the specific paths this skill's PRs
+actually touch, by whoever actually authors them* — a repo-wide CODEOWNERS entry for a different
+path doesn't help (e.g. Bob owning `/docs` doesn't satisfy a PR from Alice, the sole owner of
+`/src`, touching only `/src`). Say all of this plainly before turning anything on, don't let the
+user discover any of it later; if there's no eligible CODEOWNERS owner for the paths actually in
+play but enough general eligible reviewers do exist, turn on everything else and skip just that
+one box (and the matching manual step below), or wait until an owner is added. This prerequisite
+applies to turning the gate on only — don't let it block turning an already-on gate back off (see
+below).
 
 Explain in plain language before doing anything: *"This sets a branch protection rule on
 `<branch>` requiring at least one approval before merge, dismisses stale approvals on new pushes,

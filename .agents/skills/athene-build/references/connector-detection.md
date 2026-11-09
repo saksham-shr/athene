@@ -98,8 +98,12 @@ to call one of its tools), confirm it's actually connected first — `/mcp` in a
 session, or the host's own session-status query for an SDK/non-interactive host (`/mcp` itself
 needs Claude Code v2.1.205+ to work in print mode; don't assume it's available below that
 without confirming the version). If the server is pending approval or disabled rather than
-simply absent: in an interactive session, guide the user to approve or re-enable it in `/mcp`
-directly. In a non-interactive session (`claude -p` and similar) `/mcp` doesn't open that menu at
+simply absent, tell the user to review the server's actual source and configuration — including
+its command, for a stdio server — and only approve or re-enable it if they trust both; a server
+name matching what was expected doesn't by itself establish that the project defining it is
+trustworthy, its command runs locally once approved. In an interactive session, guide them
+through `/mcp` directly. In a non-interactive session (`claude -p` and similar) `/mcp` doesn't
+open that menu at
 all, so there's no in-session way to approve or re-enable it — tell the user to run an
 interactive session once to handle it, or use the host's own control if one is available, then
 check status again. Either way, don't add the server's configuration again — that doesn't change
