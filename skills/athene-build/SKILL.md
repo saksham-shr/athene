@@ -24,7 +24,10 @@ On start, scan the target repo for `.athene/state.md`.
   was invoked directly — read and follow the Athene: Audit skill file first. This is how this
   skill and Audit disambiguate without relying on how the user phrased the request.
 - **Found:** read all four sections before doing anything else — don't just confirm the file
-  exists and barge into the lifecycle below. Check `Active skill`:
+  exists and barge into the lifecycle below. If `Active skill` is the pre-rename value `athene`
+  (a state file written before this skill was renamed to `athene-build`), treat it as this skill
+  and rewrite it to `athene-build` before continuing — same owner, same phase, same decisions;
+  only the stored name changes. Check `Active skill` (after that rewrite, if it applied):
   - **`athene-build`:** if the incoming request is itself a new feature or new-direction idea whose
     outcome or tradeoffs are materially unclear (the same trigger Athene: Product Discovery's own
     frontmatter names), don't scope it directly in this lifecycle. First confirm the Athene:
