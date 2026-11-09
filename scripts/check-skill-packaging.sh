@@ -37,6 +37,15 @@ check_dir_matches() {
     echo "$actual"
     exit 1
   fi
+  # A directory name matching isn't enough on its own - the canonical file
+  # inside it could be missing (e.g. deleted while references/ stayed behind).
+  local name
+  for name in "${expected[@]}"; do
+    if [ ! -f "$dir/$name/SKILL.md" ]; then
+      echo "FAIL: $dir/$name/ has no SKILL.md."
+      exit 1
+    fi
+  done
 }
 
 check_dir_matches skills
