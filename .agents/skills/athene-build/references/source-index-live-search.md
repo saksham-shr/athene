@@ -71,8 +71,10 @@ against Athene's own repo by default — this is a real constraint, not a local 
 **Concrete answer:** ask the user for a GitHub token scoped to create issues on Athene's repo —
 a fine-grained PAT with `Issues: write`, **and** the user's own access to that repo actually
 granted on the token (a fine-grained PAT can be limited to repos the token's owner has access
-to; `Issues: write` alone doesn't guarantee that access exists). Never ask for a broader token.
-Use it only for one explicit, non-interactive call. Set `GH_TOKEN` in the executor's own
+to; `Issues: write` alone doesn't guarantee that access exists), **and a short expiration** (a
+few days is enough — this is a one-off call, not a standing credential; a fine-grained PAT
+supports no-expiration, so ask for a dated one explicitly rather than assuming it). Never ask for
+a broader token. Use it only for one explicit, non-interactive call. Set `GH_TOKEN` in the executor's own
 environment for that call — never inline the token's value in the command text itself, it would
 land in shell history and process listings. Pass the title/body directly so `gh` never prompts
 (an agent without an interactive terminal would otherwise block waiting for input it can't give):

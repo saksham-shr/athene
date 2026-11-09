@@ -11,7 +11,10 @@ it's read, used for the task, and discarded. Two skills write committed files th
 the agent session: Product Discovery stores an approved brief under `~/.athene/`, and any
 lifecycle skill may write or update `.athene/state.md` (decisions made, open questions, current
 phase) in the target repo itself. Both are plain local files the user already has full access to
-and can delete; Athene has no copy of either anywhere else.
+and can delete; Athene has no copy of either anywhere else. `.athene/state.md` is meant to be
+committed — once it's pushed to a remote, its contents can remain in that remote's history and
+any clone even after the local file is later deleted or edited; deleting the local file alone
+doesn't remove it from Git history.
 
 ## GitHub workflows
 
