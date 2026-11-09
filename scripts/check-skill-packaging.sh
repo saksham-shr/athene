@@ -24,7 +24,9 @@ expected=(
 check_dir_matches() {
   local dir="$1"
   local actual
-  actual="$(find "$dir" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort)"
+  # -printf is GNU find only (no macOS/BSD find support) - list entries and
+  # filter to directories with -d instead, which both implementations accept.
+  actual="$(cd "$dir" && for e in */; do [ -d "$e" ] && printf '%s\n' "${e%/}"; done | sort)"
   local want
   want="$(printf '%s\n' "${expected[@]}" | sort)"
   if [ "$actual" != "$want" ]; then
@@ -41,10 +43,15 @@ check_dir_matches skills
 
 "$root/scripts/mirror-skills.sh" >/dev/null
 
-if ! git diff --quiet -- .agents/skills .claude/skills 2>/dev/null; then
+# git diff alone misses a brand-new file under skills/<name>/ whose mirror
+# copies mirror-skills.sh just created but nothing has committed yet - those
+# show up as untracked, not as a diff on an existing path. Check both.
+if ! git diff --quiet -- .agents/skills .claude/skills 2>/dev/null \
+   || [ -n "$(git status --porcelain -- .agents/skills .claude/skills 2>/dev/null)" ]; then
   echo "FAIL: .agents/skills/ and/or .claude/skills/ were stale — regenerating them"
-  echo "from skills/ just now produced a different result than what's committed."
-  echo "Review the diff with 'git diff -- .agents/skills .claude/skills', then commit it."
+  echo "from skills/ just now produced a different result than what's committed"
+  echo "(tracked changes, and/or new files mirror-skills.sh just created)."
+  echo "Review with 'git status -- .agents/skills .claude/skills', then commit it."
   exit 1
 fi
 
