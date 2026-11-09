@@ -11,13 +11,22 @@ there as `references/connector-detection.md` via the include-marker convention, 
 Check the agent's own config, don't ask first — only fall back to asking the user when detection
 is genuinely inconclusive (a malformed file, an ambiguous name match), not as a default first
 step. These files can hold MCP auth headers, OAuth secrets, or stdio command arguments for
-*other* configured servers, so **use a targeted search (grep for the specific server name, or an
-equivalent structured query) for the check itself, never a full read of the file** — limiting
-what you *repeat back* after a full read doesn't prevent the read itself from putting every other
-server's credentials into context; a grep-style match only ever returns the line(s) that matched,
-so the rest of the file's content never enters context in the first place. Fall back to reading
-the whole file only if no search tool is available at all, and even then, discard everything
-except the present/missing/inconclusive determination before it reaches a reply.
+*other* configured servers, so **use a targeted search or structured query that returns only the
+determination, never the full file contents**. For Claude Code, use a structured query that
+checks the current project's Local, Project, and User `mcpServers` keys below specifically — not
+a blind grep for the server name across the whole file, which can match a *different project's*
+entry inside `~/.claude.json`'s `projects` map and misreport its scope; if the current project's
+scope can't be determined this way, report Inconclusive rather than guessing. For other
+platforms, grep for the specific server name or use an equivalent structured query.
+
+Even a targeted match isn't risk-free: a minified/single-line JSON config can put a server's auth
+header on the *same line* as its name, so a matching line can still carry a secret. Whatever
+method you use, treat any raw matched text as sensitive the instant you have it — derive the
+present/missing/inconclusive determination from it immediately, then discard the raw text; never
+paste the matched line, the full file, or any credential-shaped substring into a reply, a log, or
+`.athene/state.md`. If you can't get the determination without the raw match passing through
+somewhere that would be retained (e.g. by a hosted agent's own logging, outside your control),
+ask the user instead of reading or searching the file at all.
 
 ### Claude Code
 
@@ -45,9 +54,12 @@ explicitly allowed — every other user-added or plugin-provided server is block
 `claude mcp add` is rejected outright with `Cannot add MCP server: enterprise MCP configuration
 is active and has exclusive control over MCP servers`. **If this file is readable and parseable,
 stop — don't attempt auto-setup at all**, regardless of what the project/user/local scopes below
-say. Tell the user their organization controls MCP servers centrally and point them to their
-admin, don't try `claude mcp add` and fail, or worse, silently report "missing" for a server the
-org already provides or blocks on purpose.
+say. This stop is about *adding or changing* a server configuration, not about checking whether
+one's already there: still check whether the needed server is among what `managed-mcp.json` (or
+`managedMcpServers`, below) already provides, and use it if so. Only route the user to their
+admin when the needed server is genuinely absent even from the managed config and would require
+a change this file blocks — don't try `claude mcp add` and fail, or silently report "missing" for
+a server the org already provides or blocks on purpose.
 
 If the path exists but the file can't be read or fails to parse, that's **Inconclusive**, not
 exclusive control — a stale-but-valid file still activates the hard stop above, but a broken one
@@ -72,7 +84,13 @@ Detection below only covers the three **file-backed** scopes (Local, Project, Us
 provided only by `managedMcpServers`, a plugin, or a claude.ai connector isn't visible to a file
 scan, and this method can't see it.
 
-**Present:** the needed server name exists in any of the three file-backed scopes above.
+**Present:** the needed server name exists in any of the three file-backed scopes above. This
+means *configured*, not necessarily *usable* — a listed server can still be pending approval,
+disabled, or disconnected. A "Present" result is good enough to act on when nothing yet depends
+on the server actually working; the moment something is about to rely on it (e.g. a skill about
+to call one of its tools), confirm it's actually connected inside a live session (`/mcp`) first,
+and treat a failed confirmation as unavailable — fall back to the manual guide rather than
+treating a configured-but-unusable server as a hard failure.
 **Missing:** it exists in none of those three files. This is **not** proof no server exists at
 all — `managedMcpServers`, a plugin, or a claude.ai connector could still provide it (and
 `managed-mcp.json`, checked separately above, could mean "missing" here is moot anyway). Don't

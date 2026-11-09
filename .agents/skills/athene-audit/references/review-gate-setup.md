@@ -22,24 +22,29 @@ use — only when the user asks for the gate specifically.
   not just the one branch name they asked about.
 - **Check for a connector that can make this change** — same detection this repo's other
   GitHub-backed skills use (`references/connector-detection.md` if packaged alongside this
-  skill, or the detection method in `docs/connector-detection.md` in Athene's own repo — use its
-  targeted, grep-style check, never a full read of a config file that can hold other servers'
-  secrets). If a connected capability exists that can read and set branch protection, use it,
-  show the user the exact settings it applied afterward, and stop here.
+  skill, or the detection method in `docs/connector-detection.md` in Athene's own repo). If a
+  connected capability exists that can read and set branch protection, use it instead of the
+  manual steps below *for the actual API calls only* — every other step (the scope confirmation
+  above, the direction-specific prerequisite and explanation, what gets disclosed, and recording
+  the result) still applies exactly the same way; a connector changes how the setting gets
+  written, not whether this guidance's safeguards run.
 - **Act on whichever direction the user actually asked for** — on or off, never assume "offering
   the gate" means only turning it on; a user asking to turn an existing gate off needs this
   guidance too.
 
 ## Turning it on
 
-**Prerequisite, before explaining the change:** confirm a real CODEOWNERS owner is in place (see
-`review-gate.md`'s Ownership section) who is **not** the only person authoring this skill's
-PRs — a second approver who isn't an eligible code owner for the paths in question doesn't
-satisfy `Require review from Code Owners`, and the author still can't approve their own PR. A
-solo-writer repo, or one where the only CODEOWNERS entry is the PR author, blocks every PR the
-moment this gate is on. Say this plainly before turning it on, don't let the user discover it
-later. This prerequisite applies to turning the gate on only — don't let it block turning an
-already-on gate back off (see below).
+**Prerequisite, before explaining the change:** the core setting (`Require approvals` ≥ 1) needs
+no CODEOWNERS file at all — any approver satisfies it, and that alone is a valid, complete way to
+turn this gate on. CODEOWNERS only matters for the separate **Require review from Code Owners**
+checkbox below. Only if you're about to check that specific box: confirm a real CODEOWNERS owner
+is in place (see `review-gate.md`'s Ownership section) who is **not** the only person authoring
+this skill's PRs for the paths it covers — a second approver who isn't an eligible owner for
+those paths doesn't satisfy that box, and the author still can't approve their own PR. Say this
+plainly before checking that box, don't let the user discover it later; if there's no eligible
+owner yet, turn on everything else and skip just that one box, or wait until an owner is added.
+This prerequisite applies to turning the gate on only — don't let it block turning an already-on
+gate back off (see below).
 
 Explain in plain language before doing anything: *"This sets a branch protection rule on
 `<branch>` requiring at least one approval before merge, dismisses stale approvals on new pushes,
@@ -50,11 +55,11 @@ approver satisfies the rule."* Wait for explicit yes before doing anything.
 No connector available — hand the user these manual steps (don't attempt the change through any
 local `gh`/API call as a fallback; this path is manual-only):
 
-- Go to the repo's **Settings → Branches**. If a rule for `<branch>` already exists, open it for
-  editing and note which of the settings below are already checked, before changing anything —
-  that list is what "Turning it off" below needs to restore correctly, not guess at. If none
-  exists, click **Add branch protection rule** and enter `<branch>` (or its exact existing
-  pattern, confirmed above) into **Branch name pattern**.
+- Go to the repo's **Settings → Branches**. Record whether a rule for `<branch>` already
+  exists — that single fact is what "Turning it off" below needs most. If one already exists,
+  open it for editing and also note which of the settings below are already checked, before
+  changing anything. If none exists, click **Add branch protection rule** and enter `<branch>`
+  (or its exact existing pattern, confirmed above) into **Branch name pattern**.
 - Check **Require a pull request before merging**, and under it, **Require approvals** set to
   at least 1 (if a higher number is already set, leave it — never suggest lowering an existing
   stricter requirement).
@@ -86,15 +91,20 @@ blocks a merge."* Wait for explicit yes.
 
 No connector available:
 
-- If you (or the user) noted which settings were already checked before this gate was turned on
-  (see "Turning it on" above): uncheck only the ones this gate added that weren't already
-  checked, leave the rest exactly as they were, then **Save changes**. This is always the safer
-  choice when that record exists.
-- If there's no such record — the gate predates this guidance, or the rule's prior state was
-  never captured — ask the user whether to delete the whole rule (matches this skill's own
-  historical default, simplest, but removes anything else on it too) or uncheck just the four
-  boxes this gate's "on" procedure adds, explaining that the second option risks leaving an
-  unrelated setting in whatever state it happened to be found in. Don't silently pick one.
+- **If "Turning it on" recorded that the rule itself didn't exist before this gate created it:**
+  delete the whole rule. A classic protection rule carries its own defaults beyond this gate's
+  four checkboxes (e.g. blocking force-pushes and branch deletion) — unchecking just those four
+  and leaving the rule in place doesn't actually return the branch to its pre-gate state;
+  deleting the rule this gate created is what does.
+- **If the rule existed before this gate touched it, and its prior checkbox state was
+  recorded:** uncheck only the ones this gate added that weren't already checked, leave the rest
+  (including any non-gate defaults already on the rule) exactly as they were, then **Save
+  changes**.
+- **If neither is known** — the gate predates this guidance, or the rule's prior state was never
+  captured: ask the user whether to delete the whole rule (simplest, but removes anything else on
+  it too) or uncheck just the four boxes this gate's "on" procedure adds, explaining that the
+  second option risks leaving an unrelated setting — including the rule's own non-gate
+  defaults — in whatever state they happened to be in. Don't silently pick one.
 - Record the result in `.athene/state.md`'s Decisions made.
 
 ## Known limitation — rulesets not handled
