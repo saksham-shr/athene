@@ -11,7 +11,8 @@ Community discussion is available in the [Athene Discord](https://discord.gg/CT6
 ## Security and privacy concerns
 
 Do not publish credentials, private repository contents, or other sensitive data in a public
-issue. Open a private GitHub security advisory for security vulnerabilities. For privacy concerns
+issue. Report a security vulnerability through GitHub's private vulnerability reporting for this
+repository (repository page → **Security** → **Report a vulnerability**). For privacy concerns
 that cannot be shared publicly, contact the maintainer through the GitHub profile listed in the
 repository metadata.
 

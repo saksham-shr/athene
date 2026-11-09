@@ -75,7 +75,9 @@ Use a prompt that matches the work you want to do. For example:
 
 GitHub-backed workflows, such as PR Review and Review Gate, run only when you explicitly ask for
 them. Before a workflow makes a GitHub change, review the proposed action and confirm that it is
-what you intend.
+what you intend. Review Gate specifically needs the `gh` CLI, `jq`, and admin access to the target
+repository to set branch protection — an authorized agent-to-GitHub connection alone isn't enough
+for it.
 
 ## Install
 

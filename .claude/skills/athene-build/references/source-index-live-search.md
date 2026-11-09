@@ -77,6 +77,9 @@ environment for that call — never inline the token's value in the command text
 land in shell history and process listings. Pass the title/body directly so `gh` never prompts
 (an agent without an interactive terminal would otherwise block waiting for input it can't give):
 
+Show the drafted title and body to the user and get explicit confirmation before running
+anything — same rule as any other disclosed external write this repo makes. Only then:
+
 ```
 gh issue create --repo saksham-shr/athene \
   --title "docs(source-index): propose adding <source name> for <topic>" \
