@@ -70,10 +70,9 @@ its own `templates/` directory rather than re-authoring the content.)
 
 1. **`templates/CONTRIBUTING.md`** → target repo's `CONTRIBUTING.md` — Conventional Commits
    convention (`feat/fix/chore/docs/refactor/test/perf/ci/build`), the no-AI-attribution rule, and
-   the `athene:` shortcut-marker convention, together in one doc, not split across files.
-   **`templates/debt-ledger.sh`** → target repo's `scripts/debt-ledger.sh` — copy this alongside
-   CONTRIBUTING.md, not separately; CONTRIBUTING.md names the command, so it has to actually exist
-   in the target repo or the instruction points at nothing.
+   the `athene:` shortcut-marker convention, together in one doc, not split across files. The
+   marker's debt-ledger scan (`references/debt-ledger-guide.md`) is something you run live
+   whenever asked — no script gets copied into the target repo for it.
 2. **`templates/pull_request_template.md`** → target repo's `.github/pull_request_template.md` —
    three sections: Summary, Why, Test plan.
 3. **`templates/ISSUE_TEMPLATE/bug_report.md`** and **`templates/ISSUE_TEMPLATE/feature_request.md`**
@@ -115,9 +114,10 @@ copy-if-not-already-present rule as the fixed baseline:
   the target repo, keep the email line only if the scan found a real address (never ship the
   placeholder domain as if it were live). If neither is confirmed, say so in the doc and flag it
   in Decisions made as still needing a real channel — don't advertise one you haven't verified.
-- **`templates/commitlint.config.mjs`** → target repo's `commitlint.config.mjs`, plus
-  **`templates/workflows/commitlint.yml`** → target repo's `.github/workflows/commitlint.yml` —
-  both together; the config alone does nothing without the CI step that runs it. First check for
+- **`references/commitlint-setup.md`** has the exact content to write to target repo's
+  `commitlint.config.mjs` and `.github/workflows/commitlint.yml` — write both yourself, no bundled
+  config file ships with this skill any more; both together, the config alone does nothing
+  without the CI step that runs it. First check for
   *any* existing commitlint config — don't match the literal filename `commitlint.config.mjs`
   only. commitlint's documented search covers exactly: `.commitlintrc`, `.commitlintrc.json`,
   `.commitlintrc.yaml`, `.commitlintrc.yml`, `.commitlintrc.js`, `.commitlintrc.cjs`,
@@ -133,8 +133,8 @@ copy-if-not-already-present rule as the fixed baseline:
   one its config search finds, which can silently override a different existing policy. If any
   form already exists, leave the config alone — same "don't overwrite a working existing
   convention" rule as everything else here. **The workflow needs the same care, separately:**
-  if an alternate config was found and CI doesn't already run commitlint, don't copy
-  `templates/workflows/commitlint.yml` unmodified — `wagoid/commitlint-github-action@v6` with no
+  if an alternate config was found and CI doesn't already run commitlint, don't write
+  `references/commitlint-setup.md`'s workflow content unmodified — `wagoid/commitlint-github-action@v6` with no
   `configFile` set only checks `./commitlint.config.mjs`; if an alternate-named config exists and
   isn't pointed to, the action silently falls back to `@commitlint/config-conventional` instead
   of the repo's real rules. Wire the detected path into `with: configFile:` only when that
@@ -151,12 +151,11 @@ copy-if-not-already-present rule as the fixed baseline:
 
 ## Offer the review-gate toggle
 
-Copy **`templates/set-review-gate.sh`** → target repo's `scripts/set-review-gate.sh` (same
-copy-if-not-already-present rule as the other templates). Tell the user it exists and what it
-does, per this skill's own `references/review-gate.md` — don't run it. Default is off: that's the
-right state for a repo that just got its baseline, and flipping it on is the user's call, not
-something Audit decides on their behalf. If they want it on now, run it per that doc's
-instructions; otherwise just note it was offered.
+Tell the user what the gate does, per this skill's own `references/review-gate.md` — no script
+to copy, nothing to run unprompted. Default is off: that's the right state for a repo that just
+got its baseline, and flipping it on is the user's call, not something Audit decides on their
+behalf. If they want it on now, follow `references/review-gate-setup.md`'s guided flow; otherwise
+just note it was offered.
 
 ## Bootstrap state
 

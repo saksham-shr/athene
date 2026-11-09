@@ -30,9 +30,10 @@ and upgrade path:
 Example: `# athene: global lock, per-account locks if throughput matters`.
 
 Use it for a real shortcut with a known limit - a naive algorithm, a global
-lock, a hardcoded cap - not every TODO. `scripts/debt-ledger.sh` greps the
-repo for this marker and flags any instance with no named upgrade path (no
-comma after the ceiling) as rot risk.
+lock, a hardcoded cap - not every TODO. Ask your AI agent for a debt-ledger
+report any time; it scans the repo live for this marker and flags any
+instance with no named upgrade path (no comma after the ceiling) as rot
+risk. No script to run yourself - it's a live scan, not a maintained tool.
 
 `athene:` stays distinguishable from `ponytail:`'s own marker in a repo that
 uses both skills.

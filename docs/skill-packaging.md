@@ -42,9 +42,13 @@ works — not a real Athene skill. Running the mirror script produces
 `.agents/skills/test/SKILL.md` and `.claude/skills/test/SKILL.md`, both
 identical to the source.
 
-`skills/athene-audit/references/*.md` and `templates/set-review-gate.sh` are
-real include-marker stubs proving the expansion works: their generated
-copies under `.agents/skills/` and `.claude/skills/` are byte-identical to
-`docs/governance-doc-set-mapping.md`, `docs/review-gate.md`, and
-`scripts/set-review-gate.sh` respectively, while the stubs under `skills/`
-itself stay one-line markers.
+`skills/athene-audit/references/*.md` are real include-marker stubs proving
+the expansion works: their generated copies under `.agents/skills/` and
+`.claude/skills/` are byte-identical to `docs/governance-doc-set-mapping.md`
+and `docs/review-gate.md`, while the stubs under `skills/` itself stay
+one-line markers. The Shell form of the marker (line above) has no live
+example in this repo at the moment — the two templates that used it
+(`set-review-gate.sh`, `debt-ledger.sh`) were removed when those features
+became agent-performed guidance instead of bundled scripts (see
+`docs/review-gate-setup.md` and `docs/debt-ledger-guide.md`) — but
+`scripts/mirror-skills.sh` still supports it the same way.
