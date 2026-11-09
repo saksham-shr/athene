@@ -35,20 +35,25 @@ it's still open before reading it — don't review a PR that's already closed or
    a clone of the target repo. This skill never reads, stores, or forwards a GitHub token itself;
    `gh` handles its own auth outside this skill entirely, and each use is a fresh, visible,
    user-approved command, not a stored credential or a bundled script.
-4. **Still nothing:** ask the user to paste the diff directly. This path has no way to verify
-   the pasted text is the complete diff — treat the reviewed scope as unverified in step 5's
+4. **Still nothing:** ask the user to paste the diff directly, and ask them to also confirm the
+   PR's current open/closed state, head SHA, and base branch at the same time — this path has no
+   other way to get those values, and step 3 below needs them. This path has no way to verify the
+   pasted text is the complete diff either — treat the reviewed scope as unverified in step 5's
    disclosure rather than claiming "diff looks healthy" on a result this skill can't confirm is
-   whole.
+   whole, and treat the head SHA disclosed in the comment as unverified too unless the user
+   reconfirms it immediately before posting (step 6).
 
 Also read whatever surrounding code the diff references, same as any code review — don't judge a
 changed line in isolation.
 
 ## 3. Check the head and base before posting
 
-Record the PR's head SHA and base branch alongside the diff when fetching it in step 2. Right
+Record the PR's head SHA and base branch alongside the diff when fetching it in step 2 — from the
+fetch response, the MCP tool's result, or, on the paste path, the values the user supplied. Right
 before drafting the comment, re-check both — a base-branch update can change the diff without
-changing the head SHA. If either changed, re-fetch the diff and re-review it before drafting;
-never comment against a diff that's gone stale.
+changing the head SHA. On the paste path, "re-check" means asking the user to reconfirm both
+values, since there's no API call to re-fetch from. Either changed: re-fetch (or re-ask) and
+re-review the diff before drafting; never comment against a diff that's gone stale.
 
 ## 4. Review, scoped to the diff
 
