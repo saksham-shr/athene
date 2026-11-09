@@ -1,0 +1,14 @@
+# Per-skill OpenAI-platform (Codex) packaging for this skill.
+# Mirrored to .agents/skills/athene-pr-review/agents/openai.yaml and
+# .claude/skills/athene-pr-review/agents/openai.yaml by scripts/mirror-skills.sh.
+display_name: "Athene: PR Review"
+description: >-
+  Review one named, open pull request and leave a single disclosed comment on it, scoped to
+  just that PR's diff. Never batches, approves, merges, or changes branch/CI settings.
+invocation:
+  mode: explicit
+  use_when: the user names one specific open PR to review
+  skip_when: >-
+    no PR named yet, more than one PR at a time, or a whole-repo report (use Athene: Code
+    Health instead)
+required_tools: [read_file, grep, glob, shell, web_fetch]
