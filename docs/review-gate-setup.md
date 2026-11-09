@@ -85,7 +85,9 @@ and removes the admin bypass — so this includes whoever's driving me. PRs can'
 their own author, so this needs at least one other eligible reviewer."* Then, depending on the
 prerequisite's outcome, exactly one of:
 - *"A CODEOWNERS file exists and names an eligible owner, so approval from that owner is required
-  for the paths it covers."* (box **checked**, meaningfully enforced now)
+  for the paths it covers"* — if a path names several owners, any one of them approving
+  satisfies the rule; it still just needs at least one eligible owner named, not all of them.
+  (box **checked**, meaningfully enforced now)
 - *"No CODEOWNERS file exists for this branch, so checking this box wouldn't actually require
   anyone's approval — it'd be a no-op, not a block."* (box **left unchecked** — nothing to check)
 - *"A CODEOWNERS file exists, but no current eligible owner covers the relevant paths. Per your
