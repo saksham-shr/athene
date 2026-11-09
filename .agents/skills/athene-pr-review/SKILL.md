@@ -35,7 +35,10 @@ it's still open before reading it — don't review a PR that's already closed or
    a clone of the target repo. This skill never reads, stores, or forwards a GitHub token itself;
    `gh` handles its own auth outside this skill entirely, and each use is a fresh, visible,
    user-approved command, not a stored credential or a bundled script.
-4. **Still nothing:** ask the user to paste the diff directly.
+4. **Still nothing:** ask the user to paste the diff directly. This path has no way to verify
+   the pasted text is the complete diff — treat the reviewed scope as unverified in step 5's
+   disclosure rather than claiming "diff looks healthy" on a result this skill can't confirm is
+   whole.
 
 Also read whatever surrounding code the diff references, same as any code review — don't judge a
 changed line in isolation.
@@ -68,16 +71,20 @@ prefer no comment at all in that case, so ask.
 **Disclose unread scope whenever it exists — whether or not findings were posted.** A file too
 large to fetch, an access-denied path, or surrounding code that couldn't be resolved: name it in
 the comment regardless of outcome.
-- Nothing found, and everything changed was actually read: "No findings — diff looks healthy."
-- Nothing found, but something couldn't be read: don't claim healthy — name what wasn't read
-  instead of "looks healthy." An unreviewed file reported as clean is worse than no comment.
+- Nothing found, and everything changed was actually read from a source that confirms full
+  coverage (fetched diff, not a pasted one): "No findings — diff looks healthy."
+- Nothing found, but something couldn't be read, or the diff came from step 2.4's paste fallback
+  with no way to confirm it's complete: don't claim healthy — say the reviewed scope is
+  unverified, or name what wasn't read. An unreviewed file reported as clean is worse than no
+  comment.
 - Findings were posted, but something else in the diff couldn't be read: list the findings as
   usual, then add what wasn't read as its own line — don't let real findings crowd it out.
 
 ## 6. Post — only after explicit yes, one comment, one time
 
-Re-check the head SHA one more time right here, immediately before posting — time passed during
-step 5's confirmation. Changed: go back to step 4 with the new diff and get confirmation again
+Re-check both the head SHA and the base branch one more time right here, immediately before
+posting — time passed during step 5's confirmation, and a retarget can change the diff without
+changing the head. Either changed: go back to step 4 with the new diff and get confirmation again
 before posting anything.
 
 - MCP server from step 2: use its comment-post tool.
