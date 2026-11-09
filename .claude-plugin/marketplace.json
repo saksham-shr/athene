@@ -1,5 +1,5 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "athene",
   "description": "Skills for proper engineering practice in an AI coding agent: discovery, build, launch.",
   "owner": {
