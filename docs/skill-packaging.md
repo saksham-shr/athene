@@ -36,11 +36,15 @@ generated mirrors get the expanded content. This is the same "edit the
 source, regenerate the output, never hand-edit generated files" rule the
 mirroring step above already follows, extended one level deeper.
 
-## Proof
-`skills/test/` is a fixture skill kept in the repo to prove the convention
-works — not a real Athene skill. Running the mirror script produces
-`.agents/skills/test/SKILL.md` and `.claude/skills/test/SKILL.md`, both
-identical to the source.
+## Packaging check
+`scripts/check-skill-packaging.sh` asserts three things in one run: `skills/`,
+`.agents/skills/`, and `.claude/skills/` each contain exactly the seven
+production skills (no fixture or stray directory leaked in, nothing missing),
+and the mirrors are current (it re-runs `scripts/mirror-skills.sh` and fails
+if that produces an uncommitted diff). A fixture skill once lived at
+`skills/test/` only to prove the mirroring convention worked; this check
+proves the same thing on every real skill instead, so the fixture was
+removed rather than shipped alongside the production set.
 
 `skills/athene-audit/references/*.md` and `templates/set-review-gate.sh` are
 real include-marker stubs proving the expansion works: their generated
