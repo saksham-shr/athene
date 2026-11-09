@@ -39,7 +39,7 @@ Before starting discovery from zero, look for `.athene/state.md` at the repo roo
     only — don't write to `.athene/state.md` while exploring it. That file is this repo's single,
     shared record of whichever initiative currently owns it; writing to it mid-discovery for a
     second, unrelated initiative would overwrite or fork the existing project's own ownership
-    record, and a later Resume or `athene` run would have no way to tell which initiative it's
+    record, and a later Resume or `athene-build` run would have no way to tell which initiative it's
     actually continuing. Only touch `.athene/state.md` once the new idea is approved and the user
     has explicitly decided it should take over this repo going forward — at that point it's a
     deliberate handoff, not a side effect of running discovery.
@@ -143,7 +143,7 @@ Acceptance criteria and launch/learning plan
 
 For software, add only the architectural choices the user actually made or that are necessary to
 estimate/plan responsibly: major integrations, data/privacy boundaries, compatibility, and
-operational requirements. Leave implementation detail to `athene` (the build skill).
+operational requirements. Leave implementation detail to `athene-build` (the build skill).
 
 Present the brief back in plain language. Before starting production implementation, obtain
 explicit approval for the product shape, scope, material tradeoffs, and any irreversible/external
@@ -200,7 +200,7 @@ path). Write it at the end of this skill's turn/session, not mid-task:
 - Four headings, in this exact order, each required — `none`/`n/a` rather than omitting one:
   `## Active skill`, `## Current phase`, `## Decisions made`, `## Open questions`.
 - **Active skill:** `athene-product-discovery` — this skill's own frontmatter `name`, while this
-  skill owns the repo. Set to `athene`'s frontmatter name once handed off (see below).
+  skill owns the repo. Set to `athene-build`'s frontmatter name once handed off (see below).
 - **Current phase:** one of this skill's own stages above (`discover-intent`,
   `map-score-opportunities`, `generate-options`, `scope`, `produce-handoff`, `quality-checks`),
   while `Active skill` is `athene-product-discovery`.
@@ -209,12 +209,12 @@ path). Write it at the end of this skill's turn/session, not mid-task:
 
 ## Handoff
 
-Once the brief is approved, confirm the `athene` skill file is packaged where this skill is
+Once the brief is approved, confirm the `athene-build` skill file is packaged where this skill is
 installed. If it isn't, say so explicitly and stop there rather than claiming a handoff that
-can't happen, instead of guessing at `athene`'s behavior.
+can't happen, instead of guessing at `athene-build`'s behavior.
 
-If it is packaged, update `.athene/state.md`: set `Active skill` to `athene` and `Current phase`
+If it is packaged, update `.athene/state.md`: set `Active skill` to `athene-build` and `Current phase`
 to `handoff` — the shared reserved value both skills agree means "just arrived, haven't started
 your own stages yet", not one of this skill's own phase names, which would belong to a lifecycle
-`athene` doesn't run. Then read and follow the `athene` skill file directly — a plain
+`athene-build` doesn't run. Then read and follow the `athene-build` skill file directly — a plain
 read-and-follow instruction, not a platform-specific invoke call.

@@ -1,12 +1,12 @@
 ---
-name: athene
+name: athene-build
 description: >-
   Establish a repo's operating model, then build - lifecycle, ownership, CI/CD, stack decisions,
   governance. Use when starting a new build. Skip if no Athene footprint exists yet (hands off to
   Athene: Audit) or for a one-off coding task with no process implications.
 ---
 
-# Athene (repo + build + architecture)
+# Athene: Build (repo + build + architecture)
 
 Establishes the repo's operating model before any code is written, then builds. Distinct from
 Athene: Audit, which retrofits process onto a repo that already exists — this skill is for a new
@@ -25,7 +25,7 @@ On start, scan the target repo for `.athene/state.md`.
   skill and Audit disambiguate without relying on how the user phrased the request.
 - **Found:** read all four sections before doing anything else — don't just confirm the file
   exists and barge into the lifecycle below. Check `Active skill`:
-  - **`athene`:** if the incoming request is itself a new feature or new-direction idea whose
+  - **`athene-build`:** if the incoming request is itself a new feature or new-direction idea whose
     outcome or tradeoffs are materially unclear (the same trigger Athene: Product Discovery's own
     frontmatter names), don't scope it directly in this lifecycle. First confirm the Athene:
     Product Discovery skill file is packaged where this skill is installed — stop and say so if
@@ -40,12 +40,12 @@ On start, scan the target repo for `.athene/state.md`.
       via Discovery's own "Check for an already-tracked repo first" section.
     - **New idea/direction overall:** a separate initiative. Don't touch `.athene/state.md` yet —
       changing `Active skill` now would overwrite this skill's own recorded phase for an idea
-      nobody's approved as a takeover, and `.athene/state.md` would still show `athene` as owner
+      nobody's approved as a takeover, and `.athene/state.md` would still show `athene-build` as owner
       since this branch doesn't write it. Read the Athene: Product Discovery skill file, but
       start directly at its "Discover the intent" section — skip its own "Check for an
       already-tracked repo first" section, since this detour has already been explicitly
       arbitrated here; re-running Discovery's own footprint check would see `Active skill:
-      athene` and bounce straight back here instead of running the conversation. Run Discovery's
+      athene-build` and bounce straight back here instead of running the conversation. Run Discovery's
       flow in conversation only, exactly as Discovery documents for a separate initiative. Only
       write `.athene/state.md` once the user explicitly approves the new idea taking over this
       repo — a deliberate handoff, not a side effect of exploring it.
@@ -235,9 +235,9 @@ incomplete decision list:
 
 - Four headings, in this exact order, each required — `none`/`n/a` rather than omitting one:
   `## Active skill`, `## Current phase`, `## Decisions made`, `## Open questions`.
-- **Active skill:** `athene` — this skill's own frontmatter `name`, while this skill owns the
+- **Active skill:** `athene-build` — this skill's own frontmatter `name`, while this skill owns the
   repo. Set to `athene-launch`'s frontmatter name once handed off (see below).
-- **Current phase:** one of the lifecycle stages above, while `Active skill` is `athene`. Once
+- **Current phase:** one of the lifecycle stages above, while `Active skill` is `athene-build`. Once
   handed off to Launch, this field belongs to Launch's own lifecycle, not this skill's — see
   the Handoff section below for what value to leave it at.
 - **Decisions made:** bullet list, append-only. What was chosen and why, in the order decided —

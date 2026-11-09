@@ -2,7 +2,7 @@
 
 The format skill 2 (Athene build) uses at every material build choice (language, hosting, DB,
 domain, CI/CD tool, at minimum) — per the design doc's "Stack decisions" and "Evidence-backed
-architecture" sections. **Wired into `athene`'s "Stack decisions and connector setup" section**
+architecture" sections. **Wired into `athene-build`'s "Stack decisions and connector setup" section**
 (#36) — this file is bundled there as `references/stack-decision-process.md` via the
 include-marker convention, same pattern `docs/governance-doc-set-mapping.md` followed when #19
 wired it into Audit.

@@ -2,7 +2,7 @@
 
 Operationalizes the engineering-quality-bar checklist from
 `docs/design/2026-10-31-athene-design.md`'s "Engineering quality bar: veteran-engineer posture"
-section into a real template, for skill 2 (`athene`) to use at each nontrivial design decision
+section into a real template, for skill 2 (`athene-build`) to use at each nontrivial design decision
 during the Design lifecycle stage — stack-decision-process.md's options table covers *stack
 choices* (database, hosting, etc.); this covers *architecture* decisions (how a feature's data
 flows, where state lives, how a system handles failure).

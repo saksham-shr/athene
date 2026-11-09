@@ -65,7 +65,7 @@ Copy these template files from this skill's own `templates/` directory into the 
 not already present there, adapting wording to fit what the scan above found rather than
 overwriting a working existing convention. (These templates are the one real source of this
 content — mirroring copies each skill's directory independently, so there's no shared-at-runtime
-location across skills yet. When the `athene` build skill is built, copy these same files into
+location across skills yet. When the `athene-build` build skill is built, copy these same files into
 its own `templates/` directory rather than re-authoring the content.)
 
 1. **`templates/CONTRIBUTING.md`** → target repo's `CONTRIBUTING.md` — Conventional Commits
@@ -166,10 +166,10 @@ own repo and isn't packaged alongside this skill when mirrored into a target rep
 
 - Four headings, in this exact order, each required — use `none`/`n/a` rather than omitting one:
   `## Active skill`, `## Current phase`, `## Decisions made`, `## Open questions`.
-- **Active skill:** `athene` — the build skill's frontmatter `name` (Athene: repo + build +
+- **Active skill:** `athene-build` — the build skill's frontmatter `name` (Athene: repo + build +
   architecture), not a descriptive title; Resume needs a real file to find. Audit's job is
   retrofit, not ongoing ownership — hand off once the baseline above is written. If this skill
-  was installed without `athene` alongside it (a partial install, not the usual case), say so
+  was installed without `athene-build` alongside it (a partial install, not the usual case), say so
   explicitly and report everything else in this file as-is, rather than claiming a handoff that
   can't actually happen.
 - **Current phase:** intake.

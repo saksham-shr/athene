@@ -73,7 +73,7 @@ pass control to the next one on its own.
 /plugin marketplace add saksham-shr/athene
 ```
 ```
-/plugin install athene@athene
+/plugin install athene-agent@athene
 ```
 
 **Codex**, as two separate prompts:
@@ -82,14 +82,14 @@ pass control to the next one on its own.
 codex plugin marketplace add saksham-shr/athene
 ```
 ```
-codex plugin add athene@athene
+codex plugin add athene-agent@athene
 ```
 
 The plugin install above pulls skill content from `.agents/skills/` — Codex reads each skill's
 selection description straight from its own `SKILL.md` there, same as the manual-copy path below.
 Each skill also carries its own `agents/openai.yaml` (display name, invocation policy, tool
 dependencies, per [OpenAI's skill-packaging docs](https://learn.chatgpt.com/docs/build-skills)) —
-e.g. [`skills/athene/agents/openai.yaml`](skills/athene/agents/openai.yaml) — which mirrors into
+e.g. [`skills/athene-build/agents/openai.yaml`](skills/athene-build/agents/openai.yaml) — which mirrors into
 `.agents/skills/<name>/agents/openai.yaml` the same way `SKILL.md` does, so it *is* part of the
 installed plugin content.
 
@@ -102,7 +102,7 @@ at that folder directly.
 ## The seven skills
 
 ```
-Product Discovery ──► Athene (build) ──► Launch ──► (pivot) back to Product Discovery
+Product Discovery ──► Athene: Build ──► Launch ──► (pivot) back to Product Discovery
         ▲                    ▲                             │ (otherwise: cycle ends)
         │                    │
    Resume ──reads state file──┘
@@ -116,7 +116,7 @@ Typing the slash command works too, if you'd rather call one directly:
 | Skill | Command | What it does |
 |---|---|---|
 | **Product Discovery** | `/athene-product-discovery` | Turns a vague idea into an approved product brief. Maps the real customer opportunities, scores which one is worth solving, compares 2-3 genuinely different solutions for it, and scopes a now/later/never release — instead of jumping straight to a feature list. |
-| **Athene (build)** | `/athene` | The core skill: repo lifecycle, ownership, CI/CD, stack decisions, architecture, governance, and the review gate. Every stack choice (language, hosting, database, CI/CD tool) gets a real options table and a self-hosted-vs-managed question — never a raw "what's your budget". Every nontrivial architecture decision gets backed by real evidence and a quality-bar check (security, latency, failure handling) before it's final. Writes the governance files your repo needs and runs a self-review pass before any PR waits on you. |
+| **Athene: Build** | `/athene-build` | The core skill: repo lifecycle, ownership, CI/CD, stack decisions, architecture, governance, and the review gate. Every stack choice (language, hosting, database, CI/CD tool) gets a real options table and a self-hosted-vs-managed question — never a raw "what's your budget". Every nontrivial architecture decision gets backed by real evidence and a quality-bar check (security, latency, failure handling) before it's final. Writes the governance files your repo needs and runs a self-review pass before any PR waits on you. |
 | **Launch** | `/athene-launch` | Cuts scope to the smallest release that can actually teach you something, picks the right channels to announce through, and runs the post-launch review: keep going, change direction, fix the core workflow, or stop. |
 | **Audit** | `/athene-audit` | Onboarding for a repo Athene has never touched. Scans what's already there, figures out how risky/public the project is, and writes the matching governance set without overwriting anything that already works. |
 | **Resume** | `/athene-resume` | Session-start continuity. Reads the state file and tells you exactly where things stand — current phase, decisions made, open questions — then picks up from there. |

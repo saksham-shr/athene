@@ -2,7 +2,7 @@
 
 The format skill 2 (Athene build) uses once a stack decision (`docs/stack-decision-process.md`)
 identifies a connector/MCP need — per the design doc's "MCP/connector setup" section. **Wired
-into `athene`'s "Stack decisions and connector setup" section** (#36) — this file is bundled
+into `athene-build`'s "Stack decisions and connector setup" section** (#36) — this file is bundled
 there as `references/connector-detection.md` via the include-marker convention, same pattern
 `docs/governance-doc-set-mapping.md` followed when #19 wired it into Audit.
 

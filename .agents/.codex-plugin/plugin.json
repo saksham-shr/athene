@@ -1,5 +1,5 @@
 {
-  "name": "athene",
+  "name": "athene-agent",
   "version": "0.1.0",
   "description": "Discover what's worth building, set the repo up properly before the first line of code, and launch small enough to learn instead of guess.",
   "author": {
