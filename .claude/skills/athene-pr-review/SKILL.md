@@ -57,10 +57,19 @@ makes it worse.
 ## 5. Draft, show, confirm
 
 Write the comment as plain English findings (same four-part shape as Code Health: what, problem,
-fix, if skipped), opening with one line disclosing it's an automated review from Athene. Show the
-full exact text to the user before posting anything. Nothing found: a short "Looks good" comment
-is still shown for confirmation, not skipped silently — the user may prefer no comment at all in
-that case, so ask.
+fix, if skipped), opening with one line disclosing it's an automated review from Athene and the
+commit SHA reviewed. Show the full exact text to the user before posting anything. Nothing found:
+a short "Looks good" comment is still shown for confirmation, not skipped silently — the user may
+prefer no comment at all in that case, so ask.
+
+**Disclose unread scope whenever it exists — whether or not findings were posted.** A file too
+large to fetch, an access-denied path, or surrounding code that couldn't be resolved: name it in
+the comment regardless of outcome.
+- Nothing found, and everything changed was actually read: "No findings — diff looks healthy."
+- Nothing found, but something couldn't be read: don't claim healthy — name what wasn't read
+  instead of "looks healthy." An unreviewed file reported as clean is worse than no comment.
+- Findings were posted, but something else in the diff couldn't be read: list the findings as
+  usual, then add what wasn't read as its own line — don't let real findings crowd it out.
 
 ## 6. Post — only after explicit yes, one comment, one time
 

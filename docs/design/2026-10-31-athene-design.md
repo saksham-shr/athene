@@ -21,7 +21,7 @@ budget-aware stack decisions backed by real engineering sources, MCP/connector a
 generated repo-governance artifacts, a PR review gate, and two new skills for legacy-repo
 onboarding and session resume.
 
-## Skills (6) and the flow
+## Skills (7) and the flow
 
 1. **Athene: Product Discovery** — turns an idea into an approved product brief (problem, user,
    outcome, now/later/not-now scope, constraints, validation plan). Asks an indirect
@@ -119,6 +119,13 @@ onboarding and session resume.
    and ranks findings most-important-first. One-shot report, changes nothing. User-invoked
    (`/athene-code-health` or similar), not part of the Discovery → Build → Launch chain — doesn't
    hand off to or from any other skill.
+
+7. **Athene: PR Review** (new, added 2026-11-09) — reviews one user-named, open PR with the same
+   six finding categories as Code Health, scoped to just that PR's diff, then posts a single
+   disclosed comment after explicit user confirmation. Fetches the diff via the public GitHub
+   `.diff` endpoint or a configured GitHub MCP server first; falls back to `gh` only on a per-call,
+   user-confirmed command, never a stored credential. One-shot, user-invoked
+   (`/athene-pr-review`), not part of the Discovery → Build → Launch chain.
 
 ## Persistent state
 
@@ -601,7 +608,7 @@ target repo. Two real personas fall outside that assumption and have no coverage
    Athene doesn't own or govern (someone else's open-source project). Imposing Athene's own
    baseline there is wrong; the target repo's existing rules govern, not Athene's.
 2. **Contribution-receiving maintainer** — the user owns a repo Athene governs, but it also takes
-   outside PRs. The "PR intake" lifecycle stage (see "Skills (6) and the flow" above) already
+   outside PRs. The "PR intake" lifecycle stage (see "Skills (7) and the flow" above) already
    says non-trivial external work needs an accepted issue or a named sponsor, but says nothing
    about DCO/CLA checks, first-time-contributor routing, or whether the repo even has a stated
    policy on AI-authored contributions — a live, consequential gap, not a hypothetical one (see
