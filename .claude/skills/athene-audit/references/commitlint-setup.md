@@ -34,7 +34,11 @@ export default {
 
 Write this exact content to the target repo's `.github/workflows/commitlint.yml` — only when CI
 doesn't already run commitlint some other way, same condition the skill wiring this in already
-checks:
+checks. Separately from that condition: **check whether a file already exists at this exact
+path first.** A workflow file named `commitlint.yml` that doesn't run commitlint — a custom job
+someone else named that way — is still a real, working workflow; overwriting it silently deletes
+those jobs. If something's already there, don't overwrite it — tell the user what exists at that
+path and either pick a different filename for this workflow or ask before replacing it.
 
 ```yaml
 name: commitlint

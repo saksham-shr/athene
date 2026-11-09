@@ -13,14 +13,33 @@ agent already has connected, or hand the user exact manual steps. Nothing here r
 transmits a credential, and no branch-protection change happens as a side effect of normal skill
 use — only when the user asks for the gate specifically.
 
-## Before offering either direction
+## Either direction, always
 
-Confirm a real CODEOWNERS owner is in place (see `review-gate.md`'s Ownership section) and that
-at least one eligible reviewer other than whoever authors this skill's PRs can actually approve
-them. A solo-writer repo with the gate on blocks every PR until someone else is added or the gate
-comes back off — say this plainly before turning it on, don't let the user discover it later.
+- **Confirm the actual branch-pattern scope before changing anything.** A classic protection rule
+  can be set on a pattern (`release/*`), not just one literal branch name — editing or deleting
+  "the rule for `<branch>`" can silently change protection for every other branch that pattern
+  also matches. Show the user the rule's actual pattern and get confirmation for that real scope,
+  not just the one branch name they asked about.
+- **Check for a connector that can make this change** — same detection this repo's other
+  GitHub-backed skills use (`references/connector-detection.md` if packaged alongside this
+  skill, or the detection method in `docs/connector-detection.md` in Athene's own repo — use its
+  targeted, grep-style check, never a full read of a config file that can hold other servers'
+  secrets). If a connected capability exists that can read and set branch protection, use it,
+  show the user the exact settings it applied afterward, and stop here.
+- **Act on whichever direction the user actually asked for** — on or off, never assume "offering
+  the gate" means only turning it on; a user asking to turn an existing gate off needs this
+  guidance too.
 
 ## Turning it on
+
+**Prerequisite, before explaining the change:** confirm a real CODEOWNERS owner is in place (see
+`review-gate.md`'s Ownership section) who is **not** the only person authoring this skill's
+PRs — a second approver who isn't an eligible code owner for the paths in question doesn't
+satisfy `Require review from Code Owners`, and the author still can't approve their own PR. A
+solo-writer repo, or one where the only CODEOWNERS entry is the PR author, blocks every PR the
+moment this gate is on. Say this plainly before turning it on, don't let the user discover it
+later. This prerequisite applies to turning the gate on only — don't let it block turning an
+already-on gate back off (see below).
 
 Explain in plain language before doing anything: *"This sets a branch protection rule on
 `<branch>` requiring at least one approval before merge, dismisses stale approvals on new pushes,
@@ -28,43 +47,55 @@ and removes the admin bypass — so this includes whoever's driving me. If a COD
 exists, approval from the owner it names is required for the paths it covers; without one, any
 approver satisfies the rule."* Wait for explicit yes before doing anything.
 
-1. **Check for a connector that can make this change** — same detection this repo's other
-   GitHub-backed skills use (`references/connector-detection.md` if packaged alongside this
-   skill, or the detection method in `docs/connector-detection.md` in Athene's own repo). If a
-   connected capability exists that can set branch protection, use it, show the user the exact
-   settings it applied afterward, and stop here.
-2. **Otherwise, hand the user these manual steps** — don't attempt the change through any local
-   `gh`/API call as a fallback; this path is manual-only:
-   - Go to the repo's **Settings → Branches**, and either edit the existing protection rule for
-     `<branch>` or add a new one if none exists.
-   - Check **Require a pull request before merging**, and under it, **Require approvals** set to
-     at least 1 (if a higher number is already set, leave it — never suggest lowering an existing
-     stricter requirement).
-   - Check **Require review from Code Owners** — only meaningfully enforces anything if a
-     CODEOWNERS file exists and covers the paths in question (see "Before offering" above).
-   - Check **Dismiss stale pull request approvals when new commits are pushed**.
-   - Check **Do not allow bypassing the above settings** (this is what closes the admin-bypass
-     hole — without it, anyone with push access, including whoever's driving the AI agent, can
-     merge around the rule).
-   - Leave every other existing setting on the rule as it already is — this toggle only adds the
-     four checks above, it doesn't reset or replace anything else configured there.
-   - Confirm back to the user once done, and record the result in `.athene/state.md`'s Decisions
-     made, same as any other decision this skill makes.
+No connector available — hand the user these manual steps (don't attempt the change through any
+local `gh`/API call as a fallback; this path is manual-only):
+
+- Go to the repo's **Settings → Branches**. If a rule for `<branch>` already exists, open it for
+  editing and note which of the settings below are already checked, before changing anything —
+  that list is what "Turning it off" below needs to restore correctly, not guess at. If none
+  exists, click **Add branch protection rule** and enter `<branch>` (or its exact existing
+  pattern, confirmed above) into **Branch name pattern**.
+- Check **Require a pull request before merging**, and under it, **Require approvals** set to
+  at least 1 (if a higher number is already set, leave it — never suggest lowering an existing
+  stricter requirement).
+- Check **Require review from Code Owners** — only meaningfully enforces anything if a
+  CODEOWNERS file exists, covers the paths in question, and names an owner other than the PR
+  author (see the prerequisite above).
+- Check **Dismiss stale pull request approvals when new commits are pushed**.
+- Check **Do not allow bypassing the above settings** (this closes the *admin*-bypass hole —
+  without it, anyone with push access, including whoever's driving the AI agent, can merge
+  around the rule). This does **not** cover a separate setting, **Allow specified actors to
+  bypass required pull requests** — if that list already names any user, team, or app, tell the
+  user explicitly that whoever's listed there can still bypass this gate regardless of the box
+  above, and ask whether that allowance should be removed too; don't report the gate as fully
+  enforced without disclosing it.
+- Leave every other existing setting on the rule as it already is — this toggle only adds the
+  checks above, it doesn't reset or replace anything else configured there.
+- Click **Create** (new rule) or **Save changes** (existing rule) — nothing above takes effect
+  until this is clicked.
+- Confirm back to the user once done, and record the result in `.athene/state.md`'s Decisions
+  made, same as any other decision this skill makes.
 
 ## Turning it off
 
-Explain first: *"This removes the branch protection rule for `<branch>` entirely — including any
-unrelated settings on it, not just the ones this gate added — back to discipline-only: the
-convention is still followed, but nothing technically blocks a merge."* Wait for explicit yes.
+Explain first: *"This removes `<branch>`'s branch protection rule's PR-review requirements. If
+any of the settings below predate this gate, I'll leave those as they already were rather than
+removing protection you had before I touched anything — otherwise this removes the rule
+entirely, back to discipline-only: the convention is still followed, but nothing technically
+blocks a merge."* Wait for explicit yes.
 
-1. Same connector check as above — if a connected capability can remove or edit branch
-   protection, use it and confirm the result; stop here.
-2. **Otherwise:** go to **Settings → Branches**, find the rule for `<branch>`, and delete it (or,
-   if the user wants to keep unrelated settings on that rule, just uncheck the four boxes listed
-   above instead of deleting the whole rule — offer this as the gentler option explicitly, since
-   deleting the rule is what matches this skill's own historical default behavior but isn't
-   always what the user actually wants).
-3. Record the result in `.athene/state.md`'s Decisions made.
+No connector available:
+
+- If you (or the user) noted which settings were already checked before this gate was turned on
+  (see "Turning it on" above): uncheck only the ones this gate added that weren't already
+  checked, leave the rest exactly as they were, then **Save changes**. This is always the safer
+  choice when that record exists.
+- If there's no such record — the gate predates this guidance, or the rule's prior state was
+  never captured — ask the user whether to delete the whole rule (matches this skill's own
+  historical default, simplest, but removes anything else on it too) or uncheck just the four
+  boxes this gate's "on" procedure adds, explaining that the second option risks leaving an
+  unrelated setting in whatever state it happened to be found in. Don't silently pick one.
+- Record the result in `.athene/state.md`'s Decisions made.
 
 ## Known limitation — rulesets not handled
 

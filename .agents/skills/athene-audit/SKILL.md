@@ -153,9 +153,9 @@ copy-if-not-already-present rule as the fixed baseline:
 
 Tell the user what the gate does, per this skill's own `references/review-gate.md` — no script
 to copy, nothing to run unprompted. Default is off: that's the right state for a repo that just
-got its baseline, and flipping it on is the user's call, not something Audit decides on their
-behalf. If they want it on now, follow `references/review-gate-setup.md`'s guided flow; otherwise
-just note it was offered.
+got its baseline, and flipping it either way is the user's call, not something Audit decides on
+their behalf. If they want a change now (on, or off if one already exists), follow
+`references/review-gate-setup.md`'s guided flow; otherwise just note it was offered.
 
 ## Bootstrap state
 

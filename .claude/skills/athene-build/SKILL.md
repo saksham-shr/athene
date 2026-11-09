@@ -224,11 +224,9 @@ real enforcement (a type, a runtime assertion, a test, a CI lint rule) before th
 justifying it is deleted — replace the comment's job with something that actually enforces it,
 don't just delete and hope. A comment explaining the fix/change itself ("fixed the bug where X")
 fails the proof test outright; that belongs in the commit message, not the diff. Offer the
-toggle per `references/review-gate-setup.md`, note the result in Decisions made, and only act on
-it if the user asks for it turned on now — but first confirm a real CODEOWNERS owner is in place
-(see above) and that at least one eligible reviewer other than whoever authors this skill's PRs
-can actually approve them; a solo-writer repo with the gate on blocks every PR until someone else
-is added or the gate is turned back off.
+toggle, note the result in Decisions made, and only act on it — either direction — if the user
+asks; `references/review-gate-setup.md` has its own prerequisite check and full on/off
+procedure, don't restate or re-derive it here.
 
 ## State handling
 

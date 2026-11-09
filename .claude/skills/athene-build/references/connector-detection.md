@@ -8,11 +8,16 @@ there as `references/connector-detection.md` via the include-marker convention, 
 
 ## Detection, per platform
 
-Read the agent's own config, don't ask first — only fall back to asking the user when detection
+Check the agent's own config, don't ask first — only fall back to asking the user when detection
 is genuinely inconclusive (a malformed file, an ambiguous name match), not as a default first
 step. These files can hold MCP auth headers, OAuth secrets, or stdio command arguments for
-*other* configured servers — pull only the specific server-name key being checked for
-(present/missing/inconclusive), never the file's full contents, into context or a reply.
+*other* configured servers, so **use a targeted search (grep for the specific server name, or an
+equivalent structured query) for the check itself, never a full read of the file** — limiting
+what you *repeat back* after a full read doesn't prevent the read itself from putting every other
+server's credentials into context; a grep-style match only ever returns the line(s) that matched,
+so the rest of the file's content never enters context in the first place. Fall back to reading
+the whole file only if no search tool is available at all, and even then, discard everything
+except the present/missing/inconclusive determination before it reaches a reply.
 
 ### Claude Code
 
