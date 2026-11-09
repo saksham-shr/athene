@@ -46,13 +46,18 @@ at least 1, even starting from an existing count of 0 — GitHub allows 0); for 
 it's 1. Confirm *at least that many* other eligible reviewers exist before turning this on at
 all — one eligible reviewer isn't enough if the resulting count is 2 or more. Separately,
 **Require review from Code Owners** specifically needs a real CODEOWNERS owner (see
-`review-gate.md`'s Ownership section) who is eligible *for the specific paths this skill's PRs
-actually touch, by whoever actually authors them* — a repo-wide CODEOWNERS entry for a different
-path doesn't help (e.g. Bob owning `/docs` doesn't satisfy a PR from Alice, the sole owner of
-`/src`, touching only `/src`). Say all of this plainly before turning anything on, don't let the
-user discover any of it later; if there's no eligible CODEOWNERS owner for the paths actually in
-play but enough general eligible reviewers do exist, turn on everything else and skip just that
-one box (and the matching manual step below), or wait until an owner is added. This prerequisite
+`review-gate.md`'s Ownership section) — this is a durable branch-level setting, not scoped to
+whatever one PR happens to be in front of you right now, so judge it across the *whole* set of
+paths CODEOWNERS covers on this branch, not just what today's PR touches: if **any** covered path
+names an owner other than whoever usually authors this skill's PRs, keep the box checked — it's
+meaningfully enforced for that path going forward even on a PR that doesn't touch it today (e.g.
+Bob owning `/docs` still matters the next time someone's PR touches `/docs`, even if the PR in
+front of you right now only touches `/src`, which only Alice owns). Only skip the box when
+CODEOWNERS has genuinely no path with an eligible owner at all. Say all of this plainly before
+turning
+anything on, don't let the user discover any of it later; if that's the case and enough general
+eligible reviewers still exist for `Require approvals`, turn on everything else and skip just
+that one box (and the matching manual step below), or wait until an owner is added. This prerequisite
 applies to turning the gate on only — don't let it block turning an already-on gate back off (see
 below).
 
