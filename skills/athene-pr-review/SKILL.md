@@ -24,7 +24,9 @@ it's still open before reading it — don't review a PR that's already closed or
 
 1. **Public repo, no credential needed:** fetch
    `https://patch-diff.githubusercontent.com/raw/<owner>/<repo>/pull/<number>.diff` (or the PR's
-   `.diff` URL) directly. Works for any public repo, reads nothing from the user's machine.
+   `.diff` URL) for the diff, and `https://api.github.com/repos/<owner>/<repo>/pulls/<number>`
+   (also unauthenticated, rate-limited, for public repos) for its `state`, `head.sha`, and
+   `base.ref` — step 3 below needs those. Reads nothing from the user's machine.
 2. **A GitHub MCP server is configured:** check per `references/connector-detection.md` in this
    skill. If present, use its PR-read tool instead of step 1 or 3 — it already carries whatever
    auth it needs, this skill never touches that credential directly.
