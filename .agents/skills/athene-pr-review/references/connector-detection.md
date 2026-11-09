@@ -98,10 +98,14 @@ to call one of its tools), confirm it's actually connected first — `/mcp` in a
 session, or the host's own session-status query for an SDK/non-interactive host (`/mcp` itself
 needs Claude Code v2.1.205+ to work in print mode; don't assume it's available below that
 without confirming the version). If the server is pending approval or disabled rather than
-simply absent, guide the user to approve or re-enable it in `/mcp` — don't add its configuration
-again, that doesn't change its approval/enabled state. Treat any status that still can't be
-confirmed as unavailable and fall back to the manual guide, rather than treating a
-configured-but-unusable server as a hard failure.
+simply absent: in an interactive session, guide the user to approve or re-enable it in `/mcp`
+directly. In a non-interactive session (`claude -p` and similar) `/mcp` doesn't open that menu at
+all, so there's no in-session way to approve or re-enable it — tell the user to run an
+interactive session once to handle it, or use the host's own control if one is available, then
+check status again. Either way, don't add the server's configuration again — that doesn't change
+its approval/enabled state. Treat any status that still can't be confirmed as unavailable and
+fall back to the manual guide, rather than treating a configured-but-unusable server as a hard
+failure.
 **Missing:** it exists in none of those three files. This is **not** proof no server exists at
 all — `managedMcpServers`, a plugin, or a claude.ai connector could still provide it (and
 `managed-mcp.json`, checked separately above, could mean "missing" here is moot anyway). Don't

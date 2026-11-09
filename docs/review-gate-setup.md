@@ -38,18 +38,20 @@ use — only when the user asks for the gate specifically.
 ## Turning it on
 
 **Prerequisite, before explaining the change:** GitHub never lets a PR's own author approve it,
-regardless of any setting here — so even the core setting (`Require approvals` ≥ 1, no CODEOWNERS
-needed at all) blocks every PR in a repo with no eligible reviewer besides whoever authors this
-skill's PRs, unless an applicable bypass allowance covers them. Confirm at least one other
-eligible reviewer exists before turning this on at all. Separately, **Require review from Code
-Owners** specifically needs a real CODEOWNERS owner (see `review-gate.md`'s Ownership section)
-who is **not** the only person authoring this skill's PRs for the paths it covers — a second
-approver who isn't an eligible owner for those paths doesn't satisfy that box. Say both of these
-plainly before turning anything on, don't let the user discover either later; if there's no
-eligible CODEOWNERS owner specifically but a general eligible reviewer does exist, turn on
-everything else and skip just that one box, or wait until an owner is added. This prerequisite
-applies to turning the gate on only — don't let it block turning an already-on gate back off (see
-below).
+regardless of any setting here — so even the core setting (no CODEOWNERS needed at all) blocks
+every PR in a repo with no eligible reviewer besides whoever authors this skill's PRs, unless an
+applicable bypass allowance covers them. Check what `Require approvals` will actually be set to —
+if a rule already exists, that's its current count, preserved as-is (see the manual steps below);
+for a brand new rule, it's 1. Confirm *at least that many* other eligible reviewers exist before
+turning this on at all — one eligible reviewer isn't enough if the preserved count is 2 or more.
+Separately, **Require review from Code Owners** specifically needs a real CODEOWNERS owner (see
+`review-gate.md`'s Ownership section) who is **not** the only person authoring this skill's PRs
+for the paths it covers — a second approver who isn't an eligible owner for those paths doesn't
+satisfy that box. Say all of this plainly before turning anything on, don't let the user discover
+any of it later; if there's no eligible CODEOWNERS owner specifically but enough general eligible
+reviewers do exist, turn on everything else and skip just that one box (and the matching manual
+step below), or wait until an owner is added. This prerequisite applies to turning the gate on
+only — don't let it block turning an already-on gate back off (see below).
 
 Explain in plain language before doing anything: *"This sets a branch protection rule on
 `<branch>` requiring at least one approval before merge, dismisses stale approvals on new pushes,
@@ -73,9 +75,10 @@ local `gh`/API call as a fallback; this path is manual-only):
 - Check **Require a pull request before merging**, and under it, **Require approvals** set to
   at least 1 (if a higher number is already set, leave it — never suggest lowering an existing
   stricter requirement).
-- Check **Require review from Code Owners** — only meaningfully enforces anything if a
-  CODEOWNERS file exists, covers the paths in question, and names an owner other than the PR
-  author (see the prerequisite above).
+- Check **Require review from Code Owners** *only if* the prerequisite above found an eligible
+  owner — otherwise leave it unchecked, matching what you already told the user. Checking it
+  despite no eligible owner existing would block every PR, contradicting the "any eligible
+  reviewer satisfies it" explanation already given.
 - Check **Dismiss stale pull request approvals when new commits are pushed**.
 - Check **Do not allow bypassing the above settings** (this closes the *admin*-bypass hole —
   without it, anyone with push access, including whoever's driving the AI agent, can merge
