@@ -56,5 +56,5 @@ anxiety of shipping production code.
 ## Where this plugs in
 
 Wired into Athene: Audit's generation step: Audit determines framing and risk tier, looks up the
-row here, and writes exactly that doc set. Also wired into `athene`, the build skill — same
+row here, and writes exactly that doc set. Also wired into `athene-build`, the build skill — same
 lookup, during Design rather than at adoption time.

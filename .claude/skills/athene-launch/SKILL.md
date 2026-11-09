@@ -19,12 +19,12 @@ over a larger build.
 On start, scan the target repo for `.athene/state.md`.
 
 - **Not found:** a genuinely standalone launch conversation with no Athene footprint yet —
-  continue below. Unlike `athene`, Launch doesn't require a prior Audit retrofit first; a launch
+  continue below. Unlike `athene-build`, Launch doesn't require a prior Audit retrofit first; a launch
   plan can be produced for a repo Athene has never touched.
 - **Found:** read all four sections before doing anything else — don't just confirm the file
   exists and barge into the lifecycle below. Check `Active skill`:
   - **`athene-launch`:** continue below, picking up at whatever `Current phase` names. If
-    `Current phase` is `handoff` (the reserved value a handing-off skill like `athene` leaves),
+    `Current phase` is `handoff` (the reserved value a handing-off skill like `athene-build` leaves),
     treat it as equivalent to **`launch-question`**, this skill's own first stage, rather than an
     unrecognized phase.
   - **Anything else:** this skill doesn't own the repo right now. Read and follow whichever
@@ -152,7 +152,7 @@ Before launch, confirm:
 - marketing claims, pricing, and eligibility match the product users receive;
 - known limitations are visible to affected users.
 
-Use `athene` for production-release mechanics, security, CI/CD, versioning, and rollback design.
+Use `athene-build` for production-release mechanics, security, CI/CD, versioning, and rollback design.
 Use `athene-product-discovery` when the audience, problem, or product shape is still unresolved.
 
 ## Learn, decide, repeat
@@ -177,7 +177,7 @@ path). Write it at the end of this skill's turn/session, not mid-task:
 - **Current phase:** one of this skill's own stages above (`launch-question`, `cut-scope`,
   `validation-metrics`, `launch-plan`, `release`, `learn-decide`), while `Active skill` is
   `athene-launch`. `handoff` is also a valid, transient value — the shared reserved value another
-  skill (e.g. `athene`) leaves when handing off here; treat it as equivalent to `launch-question`
+  skill (e.g. `athene-build`) leaves when handing off here; treat it as equivalent to `launch-question`
   and overwrite it with a real phase name as soon as this skill's own flow starts.
 - **Decisions made:** bullet list, append-only. What was chosen and why, in the order decided —
   the launch hypothesis, scope cuts, channel choices, and the final decision from "Learn, decide,

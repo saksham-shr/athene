@@ -8,7 +8,7 @@
   },
   "plugins": [
     {
-      "name": "athene",
+      "name": "athene-agent",
       "description": "Discover what's worth building, set the repo up properly, launch small enough to learn.",
       "source": "./.claude",
       "category": "productivity"

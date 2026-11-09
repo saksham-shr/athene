@@ -2,7 +2,7 @@
 
 The flow `docs/engineering-source-index.md`'s "How this gets used" step 5 names but doesn't
 fully spell out: what happens when a build decision's topic isn't in the curated index. Phase 4
-of `docs/design/2026-10-31-athene-build-phases.md`. **Wired into `athene`'s "Evidence-backed
+of `docs/design/2026-10-31-athene-build-phases.md`. **Wired into `athene-build`'s "Evidence-backed
 architecture and the engineering quality bar" section** (#37) — bundled there as
 `references/source-index-live-search.md` via the include-marker convention, same pattern
 `docs/stack-decision-process.md` and `docs/connector-detection.md` followed in #36.

@@ -39,6 +39,14 @@ Read all four sections and report them to the user before doing anything else:
 Then read and follow whichever skill file `Active skill` names, picking up at `Current phase`.
 Don't restart that skill's flow from its own beginning.
 
+- **If `Active skill` is the pre-rename value `athene`:** that's the build skill's old name —
+  resolve it to `athene-build`, but read that skill file starting from its own "Check for
+  existing Athene footprint first" section instead of jumping straight to `Current phase`. That
+  section is where `athene-build` resolves the legacy name in memory; it doesn't write the
+  corrected value yet, only at its own later state write. Skipping straight to `Current phase`
+  would skip that resolution entirely, leaving `athene` on disk indefinitely. Resume doesn't
+  write the rewrite itself (see "Update rule" below) — reading `athene-build` from its footprint
+  check is what gets the eventual correction to happen at all.
 - **If `Active skill` is `athene-resume` (this skill) itself:** that's a stale or hand-edited
   value — Resume has no lifecycle phase of its own to resume into. Tell the user the state file
   looks wrong, show them `Decisions made` and `Open questions` as-is, and ask which skill should

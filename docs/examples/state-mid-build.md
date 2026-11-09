@@ -1,7 +1,7 @@
 # Example `.athene/state.md` — mid-build
 
 ## Active skill
-athene
+athene-build
 
 ## Current phase
 implementation
