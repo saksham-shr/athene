@@ -61,10 +61,15 @@ meaningfully enforced for that path going forward even on a PR that doesn't touc
 Bob owning `/docs` still matters the next time someone's PR touches `/docs`, even if the PR in
 front of you right now only touches `/src`, which only Alice owns). Only skip the box when
 CODEOWNERS has genuinely no path with an eligible owner at all. Say all of this plainly before
-turning
-anything on, don't let the user discover any of it later; if that's the case and enough general
-eligible reviewers still exist for `Require approvals`, turn on everything else and skip just
-that one box (and the matching manual step below), or wait until an owner is added. This prerequisite
+turning anything on, don't let the user discover any of it later. For a wildcard-pattern rule
+specifically: if the box would be skipped today because no *current* branch has an eligible
+owner, say that a branch matching the pattern later — created after today, possibly with its own
+CODEOWNERS entries — would still inherit this rule with the box unchecked, getting no owner
+enforcement even if it turns out to have an eligible owner. Let the user choose whether to check
+the box anyway for that future case, rather than deciding it for them. If that's the case and
+enough general eligible reviewers still exist for `Require approvals`, turn on everything else
+and skip just that one box (and the matching manual step below) only if the user confirms that
+choice, or wait until an owner is added. This prerequisite
 applies to turning the gate on only — don't let it block turning an already-on gate back off (see
 below).
 
