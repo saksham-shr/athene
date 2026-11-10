@@ -81,7 +81,7 @@ skipping it or guessing a number.
   stack, run it and report two results separately where the tool distinguishes them: surviving
   mutants (code a test exercises but doesn't actually verify) and no-coverage mutants (no test
   exercises the mutated code at all) — plus any dead code it surfaces along the way. No numeric
-  pass threshold — report each group as a Should fix, don't gate the whole report on a score.
+  cutoff to gate on — report each group as a Should fix instead of scoring the whole report.
 
 ## 4. Check before reporting
 
