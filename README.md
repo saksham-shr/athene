@@ -81,7 +81,7 @@ for it.
 
 ## Install
 
-**Claude Code**, as two separate prompts:
+**Claude Code**, as three separate prompts:
 
 ```
 /plugin marketplace add saksham-shr/athene
@@ -89,14 +89,20 @@ for it.
 ```
 /plugin install athene-agent@athene
 ```
+```
+/athene-build
+```
 
-**Codex**, as two separate prompts:
+**Codex**, as three separate prompts:
 
 ```
 codex plugin marketplace add saksham-shr/athene
 ```
 ```
 codex plugin add athene-agent@athene
+```
+```
+$athene-build
 ```
 
 The plugin install above pulls skill content from `.agents/skills/` — Codex reads each skill's
