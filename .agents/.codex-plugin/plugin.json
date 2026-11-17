@@ -1,6 +1,6 @@
 {
   "name": "athene-agent",
-  "version": "1.1.0",
+  "version": "1.0.0",
   "description": "Discover what's worth building, set the repo up properly before the first line of code, and launch small enough to learn instead of guess.",
   "author": {
     "name": "saksham-shr",
